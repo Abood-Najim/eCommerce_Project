@@ -10,7 +10,7 @@ export default function Categories() {
   const {data,isLoading,isError,error} = useCategories();
   
   if (isLoading) return <CircularProgress/>
-  if (isError) return <Typography color='red'>{error}</Typography>
+  if (isError) return <Typography color='red'>{error.message}</Typography>
   return (
     <div>
       {data.response.data.map((category)=><Box> <Typography>{category.name}</Typography> </Box>)}
