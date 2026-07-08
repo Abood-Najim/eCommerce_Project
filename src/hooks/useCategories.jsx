@@ -5,7 +5,8 @@ import axiosInstance from '../api/axiosInstance';
 
 export default function useCategories() {
   const getCategories = async() => {
-    const response = await axiosInstance.get(`/Categories`); /* we wrote the full things we need in an api calle function so whenever we wnat to get things we just rote ther and it will automaticlly come here*/ 
+    const response = await axiosInstance.get(`/Categories`); /* we wrote the full things we need in an api calle function 
+    so whenever we wnat to get things we just rote ther and it will automaticlly come here*/ 
     return response.data;
   }
 const query = useQuery(
@@ -17,4 +18,4 @@ const query = useQuery(
   )
   return query;
 }
-/* any change in logic you will do it in here no need to search in aa plenty of lins on one page :)*/
+/* any change in logic you will do it in here no need to search in a plenty of lins on one page :)*/
