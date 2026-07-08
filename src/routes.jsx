@@ -5,6 +5,7 @@ import Products from "./pages/products/Products";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import Cart from "./pages/cart/Cart";
+import UserContextProvider from "./context/UserContext";
 
 const router = createBrowserRouter([
   {
@@ -30,8 +31,11 @@ const router = createBrowserRouter([
       },
       {
         path:"cart",
-        element:<Cart />
-      }
+        element:
+        <UserContextProvider> 
+          <Cart />              
+        </UserContextProvider>
+      } /*  this is how i take the permission and using context is the worst thing you ever do  */
     ]
 
   },
