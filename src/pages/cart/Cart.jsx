@@ -1,11 +1,11 @@
 import axios from 'axios'
-import React, { useContext, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import authAxiosInstance from '../../api/authAxiosInstance';
-import { UserContext } from '../../context/UserContext';
+
 
 export default function Cart() {
 
-  const x = useContext(UserContext);
+
 
   const getItems = async ()=>{
     const response = await authAxiosInstance.get(`/Carts`);
@@ -17,6 +17,6 @@ export default function Cart() {
   } , [] )
 
   return (
-    <div>Cart -{x.userName}</div>
+    <div>Cart</div>
   )
 }
