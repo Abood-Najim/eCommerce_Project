@@ -7,8 +7,8 @@ import useAddToCart from '../../hooks/useAddToCart';
 export default function ProductDetails() {
 
   const { id } = useParams();
-  
-  const { mutate:addToCart } = useAddToCart();
+
+  const { mutate: addToCart } = useAddToCart();
   const { data, isLoading, isError, error } = useProduct(id);
 
   if (isLoading) return <CircularProgress />
@@ -19,7 +19,8 @@ export default function ProductDetails() {
     <Box>
       <Typography>{data.response.name}</Typography>
       <Typography>{data.response.description}</Typography>
-      <Button onClick={() => { addToCart(data.response.id, 1) }}>Add To Cart</Button>
+      <Button onClick={() => { addToCart({ productId: data.response.id, count: 1 }) }}>Add To Cart</Button>
     </Box>
   )
 }
+/*whe we send data to Mutation we send it like how we do the object ({parameter:1,Parameter:2,......}) */
