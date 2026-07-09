@@ -1,13 +1,14 @@
 import axios from "axios";
+import useAuthStore from "../store/useAuthStore";
 
-const token = localStorage.getItem("accessToken"); 
+const token = useAuthStore.getState().token;
 
 const authAxiosInstance = axios.create(
   {
-    baseURL:`${import.meta.env.VITE_BURL}`, /*any place i use axoisInstance in it wil see the things that are here so when i want to modify it i just came here (clean and nice) */
-    headers:{
-      "Accept-Language" : "en",
-      "Authorization":`Baerer ${token}`
+    baseURL: `${import.meta.env.VITE_BURL}`, /*any place i use axoisInstance in it wil see the things that are here so when i want to modify it i just came here (clean and nice) */
+    headers: {
+      "Accept-Language": "en",
+      "Authorization": `Baerer ${token}` /* sends the authantication that i'm the user Abood for example */
     }
   }
 );
