@@ -20,28 +20,30 @@ export default function Cart() {
     <Box component="section">
       <Typography variant='h1'>Cart</Typography>
       <TableContainer>
-        <Table>
-          <TableHead>
-            <TableCell>Product Name</TableCell>
-            <TableCell>Price</TableCell>
-            <TableCell>Quantity</TableCell>
-            <TableCell>Total</TableCell>
-            <TableCell>Actions</TableCell>
-          </TableHead>
+  <Table>
+    <TableHead>
+      <TableRow>
+        <TableCell>Product Name</TableCell>
+        <TableCell>Price</TableCell>
+        <TableCell>Quantity</TableCell>
+        <TableCell>Total</TableCell>
+        <TableCell>Actions</TableCell>
+      </TableRow>
+    </TableHead>
 
-          <TableBody>
-            {data.items.map((item) => {
-              <TableRow key={item.id}>
-                <TableCell>{item.productName}</TableCell>
-                <TableCell>{item.price}$</TableCell>
-                <TableCell>{item.count}</TableCell>
-                <TableCell>{item.totalPrice}$</TableCell>
-              </TableRow>
-
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
+    <TableBody>
+      {data.items.map((item) => (
+        <TableRow key={item.id}>
+          <TableCell>{item.productName}</TableCell>
+          <TableCell>{item.price}$</TableCell>
+          <TableCell>{item.count}</TableCell>
+          <TableCell>{item.totalPrice}$</TableCell>
+          <TableCell></TableCell>
+        </TableRow>
+      ))}
+    </TableBody>
+  </Table>
+</TableContainer>
     </Box>
   )
 }/* we use state manegmaent when ever we want something to be changed on all the pages that we added the state to it */
