@@ -11,12 +11,14 @@ import useRemoveFromCart from '../../hooks/useRemoveFromCart';
 import useUpdateQuantity from '../../hooks/useUpdateQuantity';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
+import useClearCart from '../../hooks/useClearCart';
 
 export default function Cart() {
 
   const { data, isLoading, isError, error } = useCart();
   const { mutate: removeItem, isPending } = useRemoveFromCart();
   const { mutate: updateQuantity, isPending: updateQuantityPend } = useUpdateQuantity();
+  const { mutate: clearCart, isPending: clearCartPend } = useClearCart();
 
   const handleUpdate = (productId,action)=>{
     const item = data.items.find(i=>i.productId == productId);
@@ -26,11 +28,27 @@ export default function Cart() {
       updateQuantity({productId,count:item.count-1});
     }
   }
+  useEffect(() => {
+
+  if (!data || !data.items) return;
+
+  const itemCounter = data.items
+    .filter((item) => item.count === 0)
+    .map((item) => item.productId);
+
+  if (itemCounter.length > 0) {
+    removeItem(itemCounter);
+  }
+}, [data, removeItem]);
+
   if (isLoading) return <CircularProgress />
   if (isError) return <Typography color='red'>{error.message}</Typography>
   return (
     <Box component="section">
       <Typography variant='h1'>Cart</Typography>
+      <Button disabled={clearCartPend} onClick={clearCart}>
+        <Typography variant='h5'>Clear Cart</Typography>
+        </Button>
       <TableContainer>
         <Table>
           <TableHead>
