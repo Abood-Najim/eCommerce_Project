@@ -5,46 +5,67 @@ import useAuthStore from '../../store/useAuthStore';
 import useCart from '../../hooks/useCart';
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
-import { Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Box, Button, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import useRemoveFromCart from '../../hooks/useRemoveFromCart';
-
+import useUpdateQuantity from '../../hooks/useUpdateQuantity';
+import RemoveIcon from '@mui/icons-material/Remove';
+import AddIcon from '@mui/icons-material/Add';
 
 export default function Cart() {
 
   const { data, isLoading, isError, error } = useCart();
-  const {mutate:removeItem,isPending}= useRemoveFromCart();
+  const { mutate: removeItem, isPending } = useRemoveFromCart();
+  const { mutate: updateQuantity, isPending: updateQuantityPend } = useUpdateQuantity();
 
+  const handleUpdate = (productId,action)=>{
+    const item = data.items.find(i=>i.productId == productId);
+    if(action == '+'){
+      updateQuantity({productId,count:item.count+1});
+    }else{
+      updateQuantity({productId,count:item.count-1});
+    }
+  }
   if (isLoading) return <CircularProgress />
   if (isError) return <Typography color='red'>{error.message}</Typography>
   return (
     <Box component="section">
       <Typography variant='h1'>Cart</Typography>
       <TableContainer>
-  <Table>
-    <TableHead>
-      <TableRow>
-        <TableCell>Product Name</TableCell>
-        <TableCell>Price</TableCell>
-        <TableCell>Quantity</TableCell>
-        <TableCell>Total</TableCell>
-        <TableCell>Actions</TableCell>
-      </TableRow>
-    </TableHead>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Product Name</TableCell>
+              <TableCell>Price</TableCell>
+              <TableCell>Quantity</TableCell>
+              <TableCell>Total</TableCell>
+              <TableCell>Actions</TableCell>
+            </TableRow>
+          </TableHead>
 
-    <TableBody>
-      {data.items.map((item) => (
-        <TableRow key={item.id}>
-          <TableCell>{item.productName}</TableCell>
-          <TableCell>{item.price}$</TableCell>
-          <TableCell>{item.count}</TableCell>
-          <TableCell>{item.totalPrice}$</TableCell>
-          <TableCell><Button color='error' disabled={isPending} onClick={()=>removeItem(item.productId)}><DeleteIcon /></Button></TableCell>
-        </TableRow>
-      ))}
-    </TableBody>
-  </Table>
-</TableContainer>
+          <TableBody>
+            {data.items.map((item) => (
+              <TableRow key={item.id}>
+                <TableCell>{item.productName}</TableCell>
+                <TableCell>{item.price}$</TableCell>
+                <TableCell>
+                  <Box sx={{display:'flex',alignItems:'center'}}>
+                    <IconButton>
+                      <RemoveIcon disabled={updateQuantityPend} onClick={()=>handleUpdate(item.productId,'-')}/>
+                    </IconButton>
+                    <Typography>{item.count}</Typography>
+                    <IconButton>
+                      <AddIcon disabled={updateQuantityPend} onClick={()=>handleUpdate(item.productId,'+')} />
+                    </IconButton>
+                  </Box>
+                </TableCell>
+                <TableCell>{item.totalPrice}$</TableCell>
+                <TableCell><Button color='error' disabled={isPending} onClick={() => removeItem(item.productId)}><DeleteIcon /></Button></TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </Box>
   )
 }/* we use state manegmaent when ever we want something to be changed on all the pages that we added the state to it */
