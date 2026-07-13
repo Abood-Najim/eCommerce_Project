@@ -5,17 +5,18 @@ import useAuthStore from '../../store/useAuthStore';
 import useCart from '../../hooks/useCart';
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
-import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
-
+import { Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import useRemoveFromCart from '../../hooks/useRemoveFromCart';
 
 
 export default function Cart() {
 
   const { data, isLoading, isError, error } = useCart();
+  const {mutate:removeItem,isPending}= useRemoveFromCart();
 
   if (isLoading) return <CircularProgress />
   if (isError) return <Typography color='red'>{error.message}</Typography>
-  console.log(data);
   return (
     <Box component="section">
       <Typography variant='h1'>Cart</Typography>
@@ -38,7 +39,7 @@ export default function Cart() {
           <TableCell>{item.price}$</TableCell>
           <TableCell>{item.count}</TableCell>
           <TableCell>{item.totalPrice}$</TableCell>
-          <TableCell></TableCell>
+          <TableCell><Button color='error' disabled={isPending} onClick={()=>removeItem(item.productId)}><DeleteIcon /></Button></TableCell>
         </TableRow>
       ))}
     </TableBody>

@@ -10,7 +10,7 @@ export default function useCart() {
   };
 
   return useQuery({
-    queryKey: ['product', 'en'],
+    queryKey: ['cart', 'en'],
     queryFn: getItems,
     staleTime: 1000 * 60 * 5
   });
