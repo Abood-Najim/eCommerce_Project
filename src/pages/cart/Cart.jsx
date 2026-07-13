@@ -12,6 +12,7 @@ import useUpdateQuantity from '../../hooks/useUpdateQuantity';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import useClearCart from '../../hooks/useClearCart';
+import { useTranslation } from 'react-i18next';
 
 export default function Cart() {
 
@@ -19,6 +20,7 @@ export default function Cart() {
   const { mutate: removeItem, isPending } = useRemoveFromCart();
   const { mutate: updateQuantity, isPending: updateQuantityPend } = useUpdateQuantity();
   const { mutate: clearCart, isPending: clearCartPend } = useClearCart();
+  const {t} = useTranslation();
 
   const handleUpdate = (productId,action)=>{
     const item = data.items.find(i=>i.productId == productId);
@@ -45,19 +47,19 @@ export default function Cart() {
   if (isError) return <Typography color='red'>{error.message}</Typography>
   return (
     <Box component="section">
-      <Typography variant='h1'>Cart</Typography>
+      <Typography variant='h1'>{t('Cart')}</Typography>
       <Button disabled={clearCartPend} onClick={clearCart}>
-        <Typography variant='h5'>Clear Cart</Typography>
+        <Typography variant='h5'>{t('Clear Cart')}</Typography>
         </Button>
       <TableContainer>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Product Name</TableCell>
-              <TableCell>Price</TableCell>
-              <TableCell>Quantity</TableCell>
-              <TableCell>Total</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell>{t('Product Name')}</TableCell>
+              <TableCell>{t('Price')}</TableCell>
+              <TableCell>{t('Quantity')}</TableCell>
+              <TableCell>{t('Total')}</TableCell>
+              <TableCell>{t('Actions')}</TableCell>
             </TableRow>
           </TableHead>
 

@@ -2,17 +2,18 @@ import React from 'react'
 import useProducts from '../../hooks/useProducts';
 import { Box, Card, CardContent, CardMedia, CircularProgress, Grid, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const Products = () => {
 
   const { data, isLoading, isError, error } = useProducts();
-
+  const {t} = useTranslation();
   if (isLoading) return <CircularProgress />
   if (isError) return <Typography color='red'>{error.message}</Typography>
 
   return (
     <Box className="products" components="section">
-      <Typography component="h1" variant="h2">Product</Typography>
+      <Typography component="h1" variant="h2">{t('Products')}</Typography>
       <Grid container spacing={{ xs: 2, md: 3 }} sx={{ textAlign: 'center' }}>
 
 
