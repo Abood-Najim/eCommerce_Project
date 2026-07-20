@@ -29,6 +29,7 @@ export default function Navbar() {
 
       {token? <>
         <Link to="/cart">{t('Cart')} {cartCount}</Link>
+        <Link to="/profile">{t('Profile')}</Link>
         <Link to="/login" component="button" onClick={logout}>{t('Logout')}</Link>
       </>:
       <>

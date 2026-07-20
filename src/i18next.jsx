@@ -32,6 +32,10 @@ i18n
           "Cash" : "Cash",
           "Pay Now" : "Pay Now",
           "Payment Method" : "Payment Method",
+          "My Profile" : "My Profile",
+          "Profile" : "Profile",
+          "Info" : "Info",
+          "Orders" : "Orders",
         }
       },
       ar: {
@@ -55,6 +59,10 @@ i18n
           "Cash" : "الدفع المباشر عند الوصول",
           "Pay Now" : "ادفع الان",
           "Payment Method" : "طريقة الدفع",
+          "My Profile" : "ملفي الشخصي",
+          "Profile" : "الملف الشخصي",
+          "Info" : "البيانات الشخصية",
+          "Orders" : "الطلبات",
         }
       }
     },
