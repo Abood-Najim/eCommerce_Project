@@ -25,7 +25,13 @@ i18n
           "Price":"Price",
           "Quantity":"Quantity",
           "Total":"Total",
-          "Actions":"Actions"
+          "Actions":"Actions",
+          "Proceed To Checkout" : "Proceed To Checkout",
+          "Continue Shopping" : "Continue Shopping",
+          "Visa" : "Visa",
+          "Cash" : "Cash",
+          "Pay Now" : "Pay Now",
+          "Payment Method" : "Payment Method",
         }
       },
       ar: {
@@ -42,7 +48,13 @@ i18n
           "Price":"السعر",
           "Quantity":"الكمية",
           "Total":"السعر الكلي",
-          "Actions":"تعديلات"
+          "Actions":"تعديلات",
+          "Proceed To Checkout" : "الانتقال الى صفحة الدفع",
+          "Continue Shopping" : "اكمل تصفح",
+          "Visa" : "بطاقة بنك(فيزا)",
+          "Cash" : "الدفع المباشر عند الوصول",
+          "Pay Now" : "ادفع الان",
+          "Payment Method" : "طريقة الدفع",
         }
       }
     },

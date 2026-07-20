@@ -13,9 +13,11 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import useClearCart from '../../hooks/useClearCart';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 export default function Cart() {
 
+const navigate = useNavigate();
   const { data, isLoading, isError, error } = useCart();
   const { mutate: removeItem, isPending } = useRemoveFromCart();
   const { mutate: updateQuantity, isPending: updateQuantityPend } = useUpdateQuantity();
@@ -86,6 +88,15 @@ export default function Cart() {
           </TableBody>
         </Table>
       </TableContainer>
+
+      <Box>
+        <Button onClick={()=>navigate('/checkout')}>{t('Proceed To Checkout')}</Button>
+        <Button onClick={()=>navigate('/')}>{t('Continue Shopping')}</Button>
+      </Box>
     </Box>
   )
-}/* we use state manegmaent when ever we want something to be changed on all the pages that we added the state to it */
+}
+
+
+
+/* we use state manegmaent when ever we want something to be changed on all the pages that we added the state to it */
