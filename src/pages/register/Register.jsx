@@ -9,8 +9,10 @@ import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined'
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import { useTranslation } from 'react-i18next'
 
 export default function Register() {
+  const { t } = useTranslation()
   const theme = useTheme()
   const navigate = useNavigate()
   const [serverErrors, setServerErrors] = useState([])
@@ -37,7 +39,7 @@ export default function Register() {
         Lumina Luxe
       </Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>
-        Elevate your lifestyle with curated elegance.
+        {t('Elevate your lifestyle with curated elegance.')}
       </Typography>
 
       <Box
@@ -56,10 +58,10 @@ export default function Register() {
         }}
       >
         <Typography variant="h5" sx={{ fontWeight: 600, mb: 1, color: 'text.primary' }}>
-          Create your account
+          {t('Create your account')}
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-          Join the community of luxury seekers.
+          {t('Join the community of luxury seekers.')}
         </Typography>
 
         {serverErrors?.length > 0 && serverErrors.map((error, index) => (
@@ -69,7 +71,7 @@ export default function Register() {
         <TextField
           fullWidth
           {...register("UserName")}
-          label="UserName"
+          label={t('UserName')}
           variant="outlined"
           error={!!errors.UserName}
           helperText={errors.UserName?.message}
@@ -85,7 +87,7 @@ export default function Register() {
         <TextField
           fullWidth
           {...register("FullName")}
-          label="FullName"
+          label={t('FullName')}
           variant="outlined"
           error={!!errors.FullName}
           helperText={errors.FullName?.message}
@@ -101,7 +103,7 @@ export default function Register() {
         <TextField
           fullWidth
           {...register("PhoneNumber")}
-          label="PhoneNumber"
+          label={t('PhoneNumber')}
           variant="outlined"
           error={!!errors.PhoneNumber}
           helperText={errors.PhoneNumber?.message}
@@ -110,7 +112,7 @@ export default function Register() {
         <TextField
           fullWidth
           {...register("Email")}
-          label="Email"
+          label={t('Email')}
           variant="outlined"
           error={!!errors.Email}
           helperText={errors.Email?.message}
@@ -126,7 +128,7 @@ export default function Register() {
         <TextField
           fullWidth
           {...register("Password")}
-          label="Password"
+          label={t('Password')}
           type="password"
           variant="outlined"
           error={!!errors.Password}
@@ -144,7 +146,7 @@ export default function Register() {
           control={<Checkbox checked={agree} onChange={(e) => setAgree(e.target.checked)} />}
           label={
             <Typography variant="body2" color="text.secondary">
-              I agree to the <span style={{ color: theme.palette.primary.main, cursor: 'pointer' }}>Terms of Service</span> and <span style={{ color: theme.palette.primary.main, cursor: 'pointer' }}>Privacy Policy</span>.
+              {t('I agree to the')} <span style={{ color: theme.palette.primary.main, cursor: 'pointer' }}>{t('Terms of Service')}</span> {t('and')} <span style={{ color: theme.palette.primary.main, cursor: 'pointer' }}>{t('Privacy Policy')}</span>.
             </Typography>
           }
           sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', mt: 1 }}
@@ -163,20 +165,20 @@ export default function Register() {
             justifyContent: 'center'
           }}
         >
-          {isSubmitting ? <CircularProgress size={24} color="inherit" /> : 'Register'}
+          {isSubmitting ? <CircularProgress size={24} color="inherit" /> : t('Register')}
           {!isSubmitting && <ArrowForwardIcon fontSize="small" />}
         </Button>
 
         <Box sx={{ textAlign: 'center' }}>
           <Typography variant="body2" color="text.secondary">
-            Already have an account? <Link to="/login" style={{ color: theme.palette.primary.main, fontWeight: 500, textDecoration: 'none' }}>Login here</Link>
+            {t('Already have an account?')} <Link to="/login" style={{ color: theme.palette.primary.main, fontWeight: 500, textDecoration: 'none' }}>{t('Login here')}</Link>
           </Typography>
         </Box>
 
       </Box>
 
       <Typography variant="caption" color="text.secondary" sx={{ mt: 4 }}>
-        &copy; 2024 Lumina Luxe. All rights reserved.
+        &copy; 2024 Lumina Luxe. {t('All rights reserved.')}
       </Typography>
     </Box>
   )
