@@ -80,7 +80,12 @@ export default function SetNewPassword() {
         justifyContent: 'center',
         backgroundColor: 'background.default',
         py: 42,
-        px: 2
+        px: 2,
+        '& .MuiInputAdornment-root button, & .MuiInputAdornment-root svg': {
+          opacity: '0 !important',
+          pointerEvents: 'none !important',
+          display: 'none !important'
+        }
       }}
     >
       <Typography variant="h4" sx={{ fontWeight: 700, color: 'primary.main', mb: 4, letterSpacing: '-0.5px' }}>
@@ -103,14 +108,14 @@ export default function SetNewPassword() {
           gap: 2,
         }}
       >
-        <Box sx={{ 
-          width: 56, 
-          height: 56, 
-          borderRadius: '50%', 
+        <Box sx={{
+          width: 56,
+          height: 56,
+          borderRadius: '50%',
           border: 2,
           borderColor: 'primary.main',
-          display: 'flex', 
-          alignItems: 'center', 
+          display: 'flex',
+          alignItems: 'center',
           justifyContent: 'center',
           mb: 1
         }}>
@@ -120,7 +125,7 @@ export default function SetNewPassword() {
         <Typography variant="h5" sx={{ fontWeight: 600, color: 'text.primary' }}>
           {t("Set New Password")}
         </Typography>
-        
+
         <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', mb: 1, maxWidth: '90%' }}>
           {t("Enter your new password.")}
         </Typography>
@@ -142,7 +147,7 @@ export default function SetNewPassword() {
               </InputAdornment>
             ),
           }}
-          sx={{ 
+          sx={{
             '& .MuiInputBase-root.Mui-disabled': {
               backgroundColor: 'action.disabledBackground',
               color: 'text.disabled'
@@ -164,8 +169,7 @@ export default function SetNewPassword() {
                 <InputAdornment position="start">
                   <LockOutlinedIcon color="action" />
                 </InputAdornment>
-              ),
-              endAdornment: null,
+              )
             }}
           />
           <IconButton
@@ -176,6 +180,7 @@ export default function SetNewPassword() {
               top: 12,
               color: 'text.secondary',
             }}
+
           >
             {showNewPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
           </IconButton>
@@ -196,9 +201,9 @@ export default function SetNewPassword() {
                 <InputAdornment position="start">
                   <LockOutlinedIcon color="action" />
                 </InputAdornment>
-              ),
-              endAdornment: null,
+              )
             }}
+            
           />
           <IconButton
             onClick={() => setShowConfirmPassword((prev) => !prev)}
@@ -237,13 +242,13 @@ export default function SetNewPassword() {
           )}
         </Button>
 
-        <Link 
-          to="/login" 
-          style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
+        <Link
+          to="/login"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
             gap: '6px',
-            color: theme.palette.text.secondary, 
+            color: theme.palette.text.secondary,
             textDecoration: 'none',
             fontWeight: 500,
             marginTop: '8px'
@@ -262,7 +267,7 @@ export default function SetNewPassword() {
           {t("Terms of Service")}
         </Typography>
       </Box>
-      
+
       <Typography variant="caption" color="text.secondary" sx={{ mt: 3 }}>
         &copy; 2024 Lumina Luxe. {t("All rights reserved.")}
       </Typography>
