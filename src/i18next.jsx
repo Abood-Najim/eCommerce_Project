@@ -66,6 +66,18 @@ i18n
           "and": "and",
           "Already have an account?": "Already have an account?",
           "Login here": "Login here",
+          "Forgot Password": "Forgot Password",
+          "Enter your email address and we'll send you a verification code.": "Enter your email address and we'll send you a verification code.",
+          "Send Verification Code": "Send Verification Code",
+          "Back to Login": "Back to Login",
+          "Verify Reset Code": "Verify Reset Code",
+          "Enter the 4-digit security code we sent to your registered email.": "Enter the 4-digit security code we sent to your registered email.",
+          "Verify Code": "Verify Code",
+          "Resend Code": "Resend Code",
+          "Protected by Lumina Security • High-grade encryption": "Protected by Lumina Security • High-grade encryption",
+          "Set New Password": "Set New Password",
+          "Enter the verification code and your new password.": "Enter the verification code and your new password.",
+          "Confirm Password": "Confirm Password",
 
         }
       },
@@ -124,6 +136,18 @@ i18n
           "and": "و",
           "Already have an account?": "هل لديك حساب بالفعل؟",
           "Login here": "سجل الدخول هنا",
+          "Forgot Password": "نسيت كلمة المرور",
+          "Enter your email address and we'll send you a verification code.": "أدخل بريدك الإلكتروني وسنرسل لك رمز التحقق.",
+          "Send Verification Code": "إرسال رمز التحقق",
+          "Back to Login": "العودة إلى تسجيل الدخول",
+          "Verify Reset Code": "تحقق من رمز إعادة التعيين",
+          "Enter the 4-digit security code we sent to your registered email.": "أدخل رمز الأمان المكون من 4 أرقام الذي أرسلناه إلى بريدك الإلكتروني المسجل.",
+          "Verify Code": "تحقق من الرمز",
+          "Resend Code": "إعادة إرسال الرمز",
+          "Protected by Lumina Security • High-grade encryption": "محمي بواسطة Lumina Security • تشفير عالي الجودة",
+          "Set New Password": "تعيين كلمة مرور جديدة",
+          "Enter the verification code and your new password.": "أدخل رمز التحقق وكلمة المرور الجديدة.",
+          "Confirm Password": "تأكيد كلمة المرور",
 
         }
       }

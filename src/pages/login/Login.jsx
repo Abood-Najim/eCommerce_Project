@@ -29,7 +29,8 @@ export default function Login() {
       setToken(response.data.accessToken)
       navigate('/')
     } catch (err) {
-      setServerErrors(err.response?.data?.errors || [])
+      const errorMessage = err.response?.data?.message || "Invalid email or password.";
+      setServerErrors([errorMessage]);
     }
   }
 
@@ -106,12 +107,10 @@ export default function Login() {
           <Typography variant="body2" sx={{ fontWeight: 500, color: 'text.primary' }}>
             {t('Password')}
           </Typography>
-          <Typography 
-            variant="body2" 
-            sx={{ fontWeight: 500, color: 'primary.main', cursor: 'pointer', '&:hover': { textDecoration: 'underline' } }}
-          >
+          <Link to='/resetPassword' 
+            style={{ fontWeight: 500, color: theme.palette.primary.main, textDecoration: 'none' }} >
             {t('Forgot Password?')}
-          </Typography>
+          </Link>
         </Box>
 
         <TextField

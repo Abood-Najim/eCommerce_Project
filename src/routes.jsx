@@ -11,6 +11,9 @@ import Checkout from "./pages/checkout/Checkout";
 import ProfileLayout from "./pages/profile/ProfileLayout";
 import ProfileInfo from "./pages/profile/ProfileInfo";
 import ProfileOrders from "./pages/profile/ProfileOrders";
+import ResetPassword from "./pages/forgotPassword/ResetPassword";
+import VerifyCode from "./pages/verifyCode/VerifyCode";
+import SetNewPassword from "./pages/setNewPass/SetNewPassword";
 
 const router = createBrowserRouter([
   {
@@ -37,6 +40,21 @@ const router = createBrowserRouter([
         {
           path: "register",
           element: <Register />
+        },
+        {
+          path: "resetPassword",
+          element:
+            <ResetPassword />
+        },
+        {
+          path: "verifyCode",
+          element:
+            <VerifyCode />
+        },
+        {
+          path: "setNewPass",
+          element:
+            <SetNewPassword />
         },
         {
           path: "profile",

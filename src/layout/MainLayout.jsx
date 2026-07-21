@@ -7,9 +7,10 @@ export default function MainLayout() {
   const location = useLocation();
   return (
     <>
-    <Navbar />
+    {location.pathname !== '/resetPassword' && location.pathname !== '/verifyCode' && location.pathname !== '/setNewPass' && <Navbar />}
     <Outlet />
-    {location.pathname !== '/register' && location.pathname !== '/login' && <Footer />}
+    {location.pathname !== '/register' && location.pathname !== '/login' && location.pathname !== '/resetPassword' &&
+    location.pathname !== '/verifyCode' && location.pathname !== '/setNewPass' && <Footer />}
     </>
   )
 }
