@@ -105,7 +105,7 @@ export default function Navbar() {
           <Link to="/products" style={{ textDecoration: 'none', color: theme.palette.text.primary, fontWeight: 500 }}>
             {t('Products')}
           </Link>
-          <Link to="/" style={{ textDecoration: 'none', color: theme.palette.text.primary, fontWeight: 500 }}>
+          <Link to="/categories" style={{ textDecoration: 'none', color: theme.palette.text.primary, fontWeight: 500 }}>
             {t('Categories')}
           </Link>
         </Box>

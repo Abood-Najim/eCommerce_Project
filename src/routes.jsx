@@ -14,6 +14,7 @@ import ProfileOrders from "./pages/profile/ProfileOrders";
 import ResetPassword from "./pages/forgotPassword/ResetPassword";
 import VerifyCode from "./pages/verifyCode/VerifyCode";
 import SetNewPassword from "./pages/setNewPass/SetNewPassword";
+import Categories from "./pages/categories/Categories";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
         {
           path: "product/:id",
           element: <ProductDetails />
+        },
+        {
+          path: "categories",
+          element: <Categories />
         },
         {
           path: "login",
@@ -59,34 +64,34 @@ const router = createBrowserRouter([
         {
           path: "profile",
           element:
-          <Protectedrouter>
-            <ProfileLayout />
-          </Protectedrouter>,
-          children:[
+            <Protectedrouter>
+              <ProfileLayout />
+            </Protectedrouter>,
+          children: [
             {
-              index:true,
-              element:<ProfileInfo />
+              index: true,
+              element: <ProfileInfo />
             },
             {
               path: 'orders',
-              element:<ProfileOrders />
+              element: <ProfileOrders />
             }
           ]
-          
+
         },
         {
           path: "cart",
           element:
-          <Protectedrouter>
-            <Cart />
-          </Protectedrouter>
+            <Protectedrouter>
+              <Cart />
+            </Protectedrouter>
         },
         {
           path: "checkout",
           element:
-          <Protectedrouter>
-            <Checkout />
-          </Protectedrouter>
+            <Protectedrouter>
+              <Checkout />
+            </Protectedrouter>
         }
       ]
 

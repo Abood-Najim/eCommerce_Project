@@ -78,6 +78,7 @@ i18n
           "Set New Password": "Set New Password",
           "Enter the verification code and your new password.": "Enter the verification code and your new password.",
           "Confirm Password": "Confirm Password",
+          "Failed to load categories.": "Failed to load categories.",
 
         }
       },
@@ -148,7 +149,8 @@ i18n
           "Set New Password": "تعيين كلمة مرور جديدة",
           "Enter the verification code and your new password.": "أدخل رمز التحقق وكلمة المرور الجديدة.",
           "Confirm Password": "تأكيد كلمة المرور",
-
+          "Failed to load categories.": "فشل تحميل التصنيفات.",
+          
         }
       }
     },
