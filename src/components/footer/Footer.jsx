@@ -30,13 +30,12 @@ export default function Footer() {
     >
       <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: { xs: 6, md: 4 }, mb: 6 }}>
         
-        {/* Left Side - Centered on mobile, left aligned on desktop */}
         <Box sx={{ maxWidth: { xs: '100%', md: 300 }, display: 'flex', flexDirection: 'column', alignItems: { xs: 'center', md: 'flex-start' }, textAlign: { xs: 'center', md: 'left' } }}>
           <Typography variant="h4" sx={{ fontWeight: 700, color: 'primary.main', mb: 2, letterSpacing: '-0.5px' }}>
             Lumina Luxe
           </Typography>
           <Typography variant="body1" color="text.secondary" sx={{ mb: 3, lineHeight: 1.6 }}>
-            Redefining digital lifestyle through precision engineering and visionary design.
+            {t('Redefining digital lifestyle through precision engineering and visionary design.')}
           </Typography>
           <Box sx={{ display: 'flex', gap: 1.5 }}>
             <IconButton sx={{ backgroundColor: 'action.hover', color: 'primary.main', '&:hover': { backgroundColor: 'primary.main', color: 'white' } }}>
@@ -51,7 +50,6 @@ export default function Footer() {
           </Box>
         </Box>
 
-        {/* Right Side - Row on desktop, Centered Column on mobile */}
         <Box sx={{ 
           display: 'flex', 
           flexDirection: { xs: 'column', md: 'row' }, 

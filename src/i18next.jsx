@@ -79,6 +79,13 @@ i18n
           "Enter the verification code and your new password.": "Enter the verification code and your new password.",
           "Confirm Password": "Confirm Password",
           "Failed to load categories.": "Failed to load categories.",
+          "Price Range": "Price Range",
+          "Rating": "Rating",
+          "Sort by": "Sort by",
+          "Add to Cart": "Add to Cart",
+          "Redefining digital lifestyle through precision engineering and visionary design." : "Redefining digital lifestyle through precision engineering and visionary design." ,
+
+
 
         }
       },
@@ -150,7 +157,12 @@ i18n
           "Enter the verification code and your new password.": "أدخل رمز التحقق وكلمة المرور الجديدة.",
           "Confirm Password": "تأكيد كلمة المرور",
           "Failed to load categories.": "فشل تحميل التصنيفات.",
-          
+          "Price Range": "نطاق السعر",
+          "Rating": "التقييم",
+          "Sort by": "ترتيب حسب",
+          "Add to Cart": "أضف إلى السلة",
+          "Redefining digital lifestyle through precision engineering and visionary design." : "إعادة تعريف نمط الحياة الرقمي من خلال الهندسة الدقيقة والتصميم المبتكر.",
+
         }
       }
     },
