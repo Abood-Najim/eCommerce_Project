@@ -1,17 +1,21 @@
 import React from 'react'
+import useProductsByCategory from '../../hooks/useProductsByCategory';
 import useProducts from '../../hooks/useProducts';
-import { Box, Card, CardContent, CardMedia, CircularProgress, Grid, Typography, Rating, IconButton, Button } from '@mui/material';
+import { Box, Card, CardContent, CardMedia, CircularProgress, Grid, Typography, Rating, IconButton, Button, useTheme } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import useAddToCart from '../../hooks/useAddToCart';
 
-const Products = () => {
-
-  const { data, isLoading, isError, error } = useProducts();
+const Products = ({ categoryId, page = 1, limit = 8, sortBy = 'price', ascending = false }) => {
+  const theme = useTheme();
   const {t} = useTranslation();
   const { mutate: addToCart } = useAddToCart();
+
+  const { data, isLoading, isError, error } = categoryId 
+  ? useProductsByCategory(categoryId) 
+  : useProducts(page, limit, sortBy, ascending);
 
   const handleAddToCart = (productId, e) => {
     e.preventDefault();
@@ -21,12 +25,12 @@ const Products = () => {
   if (isLoading) return <CircularProgress />
   if (isError) return <Typography color='red'>{error.message}</Typography>
 
+  const products = data?.response?.data || data?.data || data || [];
+
   return (
     <Box className="products" component="section">
-      <Typography component="h1" variant="h2" sx={{ mb: 3, textAlign: 'left' }}>{t('Products')}</Typography>
       <Grid container spacing={{ xs: 2, md: 3 }}>
-
-        {data.response.data.map((product) => {
+        {products.map((product) => {
           return (
             <Grid item size={{ xs: 12, sm: 6, md: 4 }} key={product.id}>
               <Link to={`/product/${product.id}`} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
@@ -50,7 +54,7 @@ const Products = () => {
                       top: 10, 
                       right: 10, 
                       color: 'text.secondary',
-                      '&:hover': { color: '#F43F5E' } 
+                      '&:hover': { color: theme.palette.error.main }
                     }}
                   >
                     <FavoriteBorderIcon fontSize="small" />
@@ -79,13 +83,12 @@ const Products = () => {
                       <Typography component="h3" variant="h6" sx={{ fontWeight: 600, fontSize: { xs: '1rem', sm: '1.1rem' } }}>
                         {product.name}
                       </Typography>
-                      
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <Rating 
                           value={product.rate || 0} 
                           readOnly 
                           size="small" 
-                          sx={{ color: '#F43F5E', fontSize: '1rem' }} 
+                          sx={{ color: theme.palette.error.main }}
                         />
                       </Box>
                     </Box>
