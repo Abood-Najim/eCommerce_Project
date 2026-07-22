@@ -28,7 +28,8 @@ const Products = ({ categoryId, page = 1, limit = 8, sortBy = 'price', ascending
   const products = data?.response?.data || data?.data || data || [];
 
   if (!Array.isArray(products)) {
-    return <Typography color='text.secondary'>No products found.</Typography>
+    // FIXED: Translated message
+    return <Typography color='text.secondary'>{t('No products found')}</Typography>
   }
 
   return (

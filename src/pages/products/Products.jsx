@@ -110,7 +110,7 @@ export default function ProductsPage() {
             control={
               <Checkbox 
                 checked={selectedCategory === String(category.id)}
-                onChange={() => setSelectedCategory(String(category.id))} // Only updates state
+                onChange={() => setSelectedCategory(String(category.id))}
                 size="small"
                 color="primary"
                 sx={{ p: 0.5 }}
@@ -236,8 +236,9 @@ export default function ProductsPage() {
               <Typography variant="h5" sx={{ fontWeight: 600, color: 'text.primary', fontSize: '1.5rem' }}>
                 {t('Shop')}
               </Typography>
+              {/* FIXED: Formatted subtitle string */}
               <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.85rem', mt: 0.5 }}>
-                Showing {totalCount} products
+                {t('Showing')} {totalCount} {t('products')}
               </Typography>
             </Box>
 

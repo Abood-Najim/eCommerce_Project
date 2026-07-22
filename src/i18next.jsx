@@ -83,8 +83,7 @@ i18n
           "Rating": "Rating",
           "Sort by": "Sort by",
           "Add to Cart": "Add to Cart",
-          "Redefining digital lifestyle through precision engineering and visionary design." : "Redefining digital lifestyle through precision engineering and visionary design." ,
-
+          "Redefining digital lifestyle through precision engineering and visionary design.": "Redefining digital lifestyle through precision engineering and visionary design.",
 
 
         }
@@ -161,7 +160,7 @@ i18n
           "Rating": "التقييم",
           "Sort by": "ترتيب حسب",
           "Add to Cart": "أضف إلى السلة",
-          "Redefining digital lifestyle through precision engineering and visionary design." : "إعادة تعريف نمط الحياة الرقمي من خلال الهندسة الدقيقة والتصميم المبتكر.",
+          "Redefining digital lifestyle through precision engineering and visionary design.": "إعادة تعريف نمط الحياة الرقمي من خلال الهندسة الدقيقة والتصميم المبتكر.",
 
         }
       }
