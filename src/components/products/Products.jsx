@@ -1,6 +1,6 @@
 import React from 'react'
-import useProductsByCategory from '../../hooks/useProductsByCategory';
 import useProducts from '../../hooks/useProducts';
+import useProductsByCategory from '../../hooks/useProductsByCategory';
 import { Box, Card, CardContent, CardMedia, CircularProgress, Grid, Typography, Rating, IconButton, Button, useTheme } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -14,8 +14,8 @@ const Products = ({ categoryId, page = 1, limit = 8, sortBy = 'price', ascending
   const { mutate: addToCart } = useAddToCart();
 
   const { data, isLoading, isError, error } = categoryId 
-  ? useProductsByCategory(categoryId) 
-  : useProducts(page, limit, sortBy, ascending);
+    ? useProductsByCategory(categoryId) 
+    : useProducts(page, limit, sortBy, ascending);
 
   const handleAddToCart = (productId, e) => {
     e.preventDefault();
@@ -26,6 +26,10 @@ const Products = ({ categoryId, page = 1, limit = 8, sortBy = 'price', ascending
   if (isError) return <Typography color='red'>{error.message}</Typography>
 
   const products = data?.response?.data || data?.data || data || [];
+
+  if (!Array.isArray(products)) {
+    return <Typography color='text.secondary'>No products found.</Typography>
+  }
 
   return (
     <Box className="products" component="section">
