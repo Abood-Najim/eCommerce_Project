@@ -85,8 +85,17 @@ i18n
           "Add to Cart": "Add to Cart",
           "Redefining digital lifestyle through precision engineering and visionary design.": "Redefining digital lifestyle through precision engineering and visionary design.",
           "No products found": "No products found",
-
-
+          "Min": "Min",
+          "Max": "Max",
+          "to": "to",
+          "Apply Filters": "Apply Filters",
+          "Clear Filters": "Clear Filters",
+          "Price: High to Low": "Price: High to Low",
+          "Price: Low to High": "Price: Low to High",
+          "Name: A to Z": "Name: A to Z",
+          "Showing": "Showing",
+          "products": "products",
+          
         }
       },
       ar: {
@@ -163,7 +172,17 @@ i18n
           "Add to Cart": "أضف إلى السلة",
           "Redefining digital lifestyle through precision engineering and visionary design.": "إعادة تعريف نمط الحياة الرقمي من خلال الهندسة الدقيقة والتصميم المبتكر.",
           "No products found": "غير متوفر حاليا",
-          
+          "Min": "الأدنى",
+          "Max": "الأقصى",
+          "to": "إلى",
+          "Apply Filters": "تطبيق الفلاتر",
+          "Clear Filters": "مسح الفلاتر",
+          "Price: High to Low": "السعر: من الأعلى إلى الأدنى",
+          "Price: Low to High": "السعر: من الأدنى إلى الأعلى",
+          "Name: A to Z": "الاسم: من الألف إلى الياء",
+          "Showing": "يوجد",
+          "products": "منتجات",
+
         }
       }
     },
