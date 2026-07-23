@@ -1,11 +1,22 @@
-import axios from 'axios'
 import React, { useEffect } from 'react'
 import authAxiosInstance from '../../api/authAxiosInstance';
 import useAuthStore from '../../store/useAuthStore';
 import useCart from '../../hooks/useCart';
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
-import { Box, Button, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { 
+  Box, 
+  Button, 
+  IconButton, 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableContainer, 
+  TableHead, 
+  TableRow, 
+  Paper,
+  useTheme
+} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import useRemoveFromCart from '../../hooks/useRemoveFromCart';
 import useUpdateQuantity from '../../hooks/useUpdateQuantity';
@@ -14,89 +25,135 @@ import AddIcon from '@mui/icons-material/Add';
 import useClearCart from '../../hooks/useClearCart';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 
 export default function Cart() {
-
-const navigate = useNavigate();
+  const navigate = useNavigate();
+  const theme = useTheme();
   const { data, isLoading, isError, error } = useCart();
   const { mutate: removeItem, isPending } = useRemoveFromCart();
   const { mutate: updateQuantity, isPending: updateQuantityPend } = useUpdateQuantity();
   const { mutate: clearCart, isPending: clearCartPend } = useClearCart();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
-  const handleUpdate = (productId,action)=>{
-    const item = data.items.find(i=>i.productId == productId);
-    if(action == '+'){
-      updateQuantity({productId,count:item.count+1});
-    }else{
-      updateQuantity({productId,count:item.count-1});
+  const handleUpdate = (productId, action) => {
+    const item = data.items.find(i => i.productId == productId);
+    if (action == '+') {
+      updateQuantity({ productId, count: item.count + 1 });
+    } else {
+      updateQuantity({ productId, count: item.count - 1 });
     }
   }
+
   useEffect(() => {
-
-  if (!data || !data.items) return;
-
-  const itemCounter = data.items
-    .filter((item) => item.count === 0)
-    .map((item) => item.productId);
-
-  if (itemCounter.length > 0) {
-    removeItem(itemCounter);
-  }
-}, [data, removeItem]);
+    if (!data || !data.items) return;
+    const itemCounter = data.items
+      .filter((item) => item.count === 0)
+      .map((item) => item.productId);
+    if (itemCounter.length > 0) {
+      removeItem(itemCounter);
+    }
+  }, [data, removeItem]);
 
   if (isLoading) return <CircularProgress />
   if (isError) return <Typography color='red'>{error.message}</Typography>
+
   return (
-    <Box component="section">
-      <Typography variant='h1'>{t('Cart')}</Typography>
-      <Button disabled={clearCartPend} onClick={clearCart}>
-        <Typography variant='h5'>{t('Clear Cart')}</Typography>
+    <Box component="section" sx={{ py: 6, px: { xs: 2, md: 4 }, maxWidth: '1200px', mx: 'auto' }}>
+      
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4, flexWrap: 'wrap', gap: 2 }}>
+        <Typography variant="h4" sx={{ fontWeight: 700, color: 'text.primary', letterSpacing: '-0.5px' }}>
+          {t('Cart')}
+        </Typography>
+        <Button 
+          disabled={clearCartPend} 
+          onClick={clearCart}
+          variant="outlined"
+          color="error"
+          size="small"
+          sx={{ textTransform: 'none', borderRadius: 2 }}
+        >
+          {t('Clear Cart')}
         </Button>
-      <TableContainer>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>{t('Product Name')}</TableCell>
-              <TableCell>{t('Price')}</TableCell>
-              <TableCell>{t('Quantity')}</TableCell>
-              <TableCell>{t('Total')}</TableCell>
-              <TableCell>{t('Actions')}</TableCell>
-            </TableRow>
-          </TableHead>
-
-          <TableBody>
-            {data.items.map((item) => (
-              <TableRow key={item.id}>
-                <TableCell>{item.productName}</TableCell>
-                <TableCell>{item.price}$</TableCell>
-                <TableCell>
-                  <Box sx={{display:'flex',alignItems:'center'}}>
-                    <IconButton>
-                      <RemoveIcon disabled={updateQuantityPend} onClick={()=>handleUpdate(item.productId,'-')}/>
-                    </IconButton>
-                    <Typography>{item.count}</Typography>
-                    <IconButton>
-                      <AddIcon disabled={updateQuantityPend} onClick={()=>handleUpdate(item.productId,'+')} />
-                    </IconButton>
-                  </Box>
-                </TableCell>
-                <TableCell>{item.totalPrice}$</TableCell>
-                <TableCell><Button color='error' disabled={isPending} onClick={() => removeItem(item.productId)}><DeleteIcon /></Button></TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-      <Box>
-        <Button onClick={()=>navigate('/checkout')}>{t('Proceed To Checkout')}</Button>
-        <Button onClick={()=>navigate('/')}>{t('Continue Shopping')}</Button>
       </Box>
+
+      {data.items.length === 0 ? (
+        <Paper elevation={0} sx={{ p: 6, textAlign: 'center', border: `1px solid ${theme.palette.divider}`, borderRadius: 3 }}>
+          <ShoppingBagOutlinedIcon sx={{ fontSize: 64, color: 'text.secondary', mb: 2 }} />
+          <Typography variant="h6" color="text.secondary" sx={{ mb: 2 }}>
+            {t('Your cart is empty')}
+          </Typography>
+          <Button variant="contained" onClick={() => navigate('/')} sx={{ textTransform: 'none', borderRadius: 2 }}>
+            {t('Continue Shopping')}
+          </Button>
+        </Paper>
+      ) : (
+        <>
+          <TableContainer component={Paper} elevation={0} sx={{ border: `1px solid ${theme.palette.divider}`, borderRadius: 3 }}>
+            <Table sx={{ minWidth: { xs: 650, md: 'auto' } }}>
+              <TableHead>
+                <TableRow sx={{ backgroundColor: 'action.hover' }}>
+                  <TableCell sx={{ fontWeight: 600, textAlign: 'start' }}>{t('Product Name')}</TableCell>
+                  <TableCell sx={{ fontWeight: 600, textAlign: 'center' }}>{t('Price')}</TableCell>
+                  <TableCell sx={{ fontWeight: 600, textAlign: 'center' }}>{t('Quantity')}</TableCell>
+                  <TableCell sx={{ fontWeight: 600, textAlign: 'center' }}>{t('Total')}</TableCell>
+                  <TableCell sx={{ fontWeight: 600, textAlign: 'center' }}>{t('Actions')}</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {data.items.map((item) => (
+                  <TableRow key={item.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell>
+                      <Typography sx={{ fontWeight: 500 }}>{item.productName}</Typography>
+                    </TableCell>
+                    <TableCell sx={{ textAlign: 'center' }}>{item.price}$</TableCell>
+                    <TableCell sx={{ textAlign: 'center' }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
+                        <IconButton 
+                          size="small" 
+                          disabled={updateQuantityPend} 
+                          onClick={() => handleUpdate(item.productId, '-')} 
+                          sx={{ border: `1px solid ${theme.palette.divider}` }}
+                        >
+                          <RemoveIcon fontSize="small" />
+                        </IconButton>
+                        <Typography sx={{ minWidth: 30, textAlign: 'center', fontWeight: 600 }}>{item.count}</Typography>
+                        <IconButton 
+                          size="small" 
+                          disabled={updateQuantityPend} 
+                          onClick={() => handleUpdate(item.productId, '+')} 
+                          sx={{ border: `1px solid ${theme.palette.divider}` }}
+                        >
+                          <AddIcon fontSize="small" />
+                        </IconButton>
+                      </Box>
+                    </TableCell>
+                    <TableCell sx={{ textAlign: 'center', fontWeight: 600, color: 'primary.main' }}>{item.totalPrice}$</TableCell>
+                    <TableCell sx={{ textAlign: 'center' }}>
+                      <IconButton color="error" disabled={isPending} onClick={() => removeItem(item.productId)} size="small">
+                        <DeleteIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+
+          <Box sx={{ mt: 4, display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: 'center', gap: 2 }}>
+            <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+              <Button variant="contained" onClick={() => navigate('/checkout')} sx={{ textTransform: 'none', borderRadius: 2, px: 3, py: 1.2 }}>
+                {t('Proceed To Checkout')}
+              </Button>
+              <Button variant="outlined" onClick={() => navigate('/')} sx={{ textTransform: 'none', borderRadius: 2, px: 3, py: 1.2 }}>
+                {t('Continue Shopping')}
+              </Button>
+            </Box>
+          </Box>
+        </>
+      )}
     </Box>
   )
 }
-
-
 
 /* we use state manegmaent when ever we want something to be changed on all the pages that we added the state to it */

@@ -95,7 +95,8 @@ i18n
           "Name: A to Z": "Name: A to Z",
           "Showing": "Showing",
           "products": "products",
-          
+          "Your cart is empty": "Your cart is empty",
+
         }
       },
       ar: {
@@ -182,7 +183,8 @@ i18n
           "Name: A to Z": "الاسم: من الألف إلى الياء",
           "Showing": "يوجد",
           "products": "منتجات",
-
+          "Your cart is empty": "سلتك فارغة",
+          
         }
       }
     },
