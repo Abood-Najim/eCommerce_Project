@@ -83,7 +83,7 @@ export default function Cart() {
           <Typography variant="h6" color="text.secondary" sx={{ mb: 2 }}>
             {t('Your cart is empty')}
           </Typography>
-          <Button variant="contained" onClick={() => navigate('/')} sx={{ textTransform: 'none', borderRadius: 2 }}>
+          <Button variant="contained" onClick={() => navigate('/products')} sx={{ textTransform: 'none', borderRadius: 2 }}>
             {t('Continue Shopping')}
           </Button>
         </Paper>
@@ -145,7 +145,7 @@ export default function Cart() {
               <Button variant="contained" onClick={() => navigate('/checkout')} sx={{ textTransform: 'none', borderRadius: 2, px: 3, py: 1.2 }}>
                 {t('Proceed To Checkout')}
               </Button>
-              <Button variant="outlined" onClick={() => navigate('/')} sx={{ textTransform: 'none', borderRadius: 2, px: 3, py: 1.2 }}>
+              <Button variant="outlined" onClick={() => navigate('/products')} sx={{ textTransform: 'none', borderRadius: 2, px: 3, py: 1.2 }}>
                 {t('Continue Shopping')}
               </Button>
             </Box>

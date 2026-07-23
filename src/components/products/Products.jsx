@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import useAddToCart from '../../hooks/useAddToCart';
+import i18n from '../../i18next';
 
 const Products = ({ categoryId, page = 1, limit = 8, sortBy = 'price', ascending = false, minPrice = '', maxPrice = '', minRating = '', onTotalCountChange }) => {
   const theme = useTheme();
@@ -21,7 +22,9 @@ const Products = ({ categoryId, page = 1, limit = 8, sortBy = 'price', ascending
     e.preventDefault();
     addToCart({ productId, count: 1 });
   };
+  const isRtl = i18n.language === 'ar'; 
 
+  const iconElement = <ShoppingBagOutlinedIcon fontSize="small" />;
   if (isLoading) return <CircularProgress />
   if (isError) return <Typography color='red'>{error.message}</Typography>
 
@@ -126,11 +129,12 @@ const Products = ({ categoryId, page = 1, limit = 8, sortBy = 'price', ascending
                     ${product.price}
                   </Typography>
 
-                  <Box sx={{ mt: 'auto' }}>
+                  <Box sx={{ mt: 'auto',display:'flex',alignItems:'stretch',justifyContent:'center',gap:2 }}>
                     <Button 
                       variant="contained" 
                       size="small" 
-                      startIcon={<ShoppingBagOutlinedIcon fontSize="small" />}
+                      startIcon={!isRtl ? iconElement : undefined}
+                      endIcon={isRtl ? iconElement : undefined}
                       fullWidth
                       sx={{ 
                         textTransform: 'none', 

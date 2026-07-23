@@ -96,6 +96,10 @@ i18n
           "Showing": "Showing",
           "products": "products",
           "Your cart is empty": "Your cart is empty",
+          "Checkout": "Checkout",
+          "Order Summary": "Order Summary",
+          "Back": "Back",
+          "Order confirmed.": "Order confirmed.",
 
         }
       },
@@ -184,11 +188,14 @@ i18n
           "Showing": "يوجد",
           "products": "منتجات",
           "Your cart is empty": "سلتك فارغة",
+          "Checkout": "الدفع",
+          "Order Summary": "ملخص الطلب",
+          "Back": "رجوع",
+          "Order confirmed.": "تم تأكيد الطلب",
           
-        }
       }
     },
     fallbackLng: "en",
 
-  });
+  }});
 export default i18n;
