@@ -92,13 +92,7 @@ export default function Navbar() {
           variant="h4"
           component={Link}
           to="/"
-          sx={{
-            textDecoration: 'none',
-            color: theme.palette.primary.main,
-            fontWeight: 700,
-            letterSpacing: '-0.5px',
-          }}
-        >
+          sx={{textDecoration: 'none',color: theme.palette.primary.main,fontWeight: 700,letterSpacing: '-0.5px',}}>
           Lumina Luxe
         </Typography>
         <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 4 }}>

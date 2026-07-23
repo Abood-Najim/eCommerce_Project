@@ -23,7 +23,7 @@ export default function Categories() {
   )
 
   return (
-    <Box sx={{ py: 6, px: { xs: 2, md: 4 }, minHeight: '100vh' }}>
+    <Box sx={{ py: 6, px: { xs: 2, md: 4 }, minHeight:'100vh' }}>
       <Typography 
         variant="h3" 
         component="h1" 
@@ -31,7 +31,7 @@ export default function Categories() {
           fontWeight: 600, 
           mb: 4, 
           color: 'text.primary',
-          textAlign: { xs: 'center', md: 'left' }
+          textAlign: { xs: 'center', md: 'start' }
         }}
       >
         {t('Categories')}
