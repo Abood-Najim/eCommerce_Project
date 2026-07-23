@@ -84,6 +84,7 @@ i18n
           "Sort by": "Sort by",
           "Add to Cart": "Add to Cart",
           "Redefining digital lifestyle through precision engineering and visionary design.": "Redefining digital lifestyle through precision engineering and visionary design.",
+          "No products found": "No products found",
 
 
         }
@@ -161,7 +162,8 @@ i18n
           "Sort by": "ترتيب حسب",
           "Add to Cart": "أضف إلى السلة",
           "Redefining digital lifestyle through precision engineering and visionary design.": "إعادة تعريف نمط الحياة الرقمي من خلال الهندسة الدقيقة والتصميم المبتكر.",
-
+          "No products found": "غير متوفر حاليا",
+          
         }
       }
     },

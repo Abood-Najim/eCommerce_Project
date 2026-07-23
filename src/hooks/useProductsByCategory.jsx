@@ -5,7 +5,7 @@ import i18n from '../i18next';
 export default function useProductsByCategory(categoryId) {
   const getProductsByCategory = async () => {
     const response = await axiosInstance.get(`/Products/category/${categoryId}`);
-    return response.data;
+    return response.data; 
   }
 
   const query = useQuery({

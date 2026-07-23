@@ -8,7 +8,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import useAddToCart from '../../hooks/useAddToCart';
 
-const Products = ({ categoryId, page = 1, limit = 8, sortBy = 'price', ascending = false }) => {
+const Products = ({ categoryId, page = 1, limit = 8, sortBy = 'price', ascending = false, onTotalCountChange }) => {
   const theme = useTheme();
   const {t} = useTranslation();
   const { mutate: addToCart } = useAddToCart();
@@ -25,11 +25,37 @@ const Products = ({ categoryId, page = 1, limit = 8, sortBy = 'price', ascending
   if (isLoading) return <CircularProgress />
   if (isError) return <Typography color='red'>{error.message}</Typography>
 
-  const products = data?.response?.data || data?.data || data || [];
+  let products = [];
+  if (categoryId) {
+    products = data?.response || [];
+  } else {
+    products = data?.response?.data || data?.data || data || [];
+  }
+
+  if (categoryId && Array.isArray(products)) {
+    if (sortBy === 'price') {
+      products.sort((a, b) => ascending ? a.price - b.price : b.price - a.price);
+    } else if (sortBy === 'name') {
+      products.sort((a, b) => ascending ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name));
+    }
+  }
+
+  if (onTotalCountChange && Array.isArray(products)) {
+    onTotalCountChange(products.length);
+  }
 
   if (!Array.isArray(products)) {
-    // FIXED: Translated message
     return <Typography color='text.secondary'>{t('No products found')}</Typography>
+  }
+
+  if (products.length === 0) {
+    return (
+      <Box sx={{ textAlign: 'center', py: 6 }}>
+        <Typography variant="h6" color="text.secondary">
+          {t('No products found')}
+        </Typography>
+      </Box>
+    )
   }
 
   return (
