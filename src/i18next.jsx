@@ -100,6 +100,18 @@ i18n
           "Order Summary": "Order Summary",
           "Back": "Back",
           "Order confirmed.": "Order confirmed.",
+          "Limited Edition": "Limited Edition",
+          "Reviews": "Reviews",
+          "In Stock": "In Stock",
+          "Out of Stock": "Out of Stock",
+          "Ready to ship within 48 hours": "Ready to ship within 48 hours",
+          "Select Quantity": "Select Quantity",
+          "Free Delivery": "Free Delivery",
+          "On orders over $500": "On orders over $500",
+          "2 Year Warranty": "2 Year Warranty",
+          "Full coverage protection": "Full coverage protection",
+          "Description": "Description",
+          "Elevate your cooking experience with the ROYALSTAR Digital Air Fryer, the versatile kitchen companion perfect for modern homes.": "Elevate your cooking experience with the ROYALSTAR Digital Air Fryer, the versatile kitchen companion perfect for modern homes.",
 
         }
       },
@@ -192,10 +204,23 @@ i18n
           "Order Summary": "ملخص الطلب",
           "Back": "رجوع",
           "Order confirmed.": "تم تأكيد الطلب",
-          
-      }
-    },
-    fallbackLng: "en",
+          "Limited Edition": "إصدار محدود",
+          "Reviews": "تقييمات",
+          "In Stock": "متوفر",
+          "Out of Stock": "غير متوفر",
+          "Ready to ship within 48 hours": "جاهز للشحن خلال 48 ساعة",
+          "Select Quantity": "اختر الكمية",
+          "Free Delivery": "توصيل مجاني",
+          "On orders over $500": "للطلبات التي تزيد عن 500$",
+          "2 Year Warranty": "ضمان لمدة سنتين",
+          "Full coverage protection": "حماية شاملة",
+          "Description": "الوصف",
+          "Elevate your cooking experience with the ROYALSTAR Digital Air Fryer, the versatile kitchen companion perfect for modern homes.": "ارتقِ بتجربة الطهي الخاصة بك مع مقلاة الهواء الرقمية من رويال ستار، الرفيق المثالي متعدد الاستخدامات في المطبخ، والمناسب تمامًا للمنازل الحديثة.",
 
-  }});
+        }
+      },
+      fallbackLng: "en",
+
+    }
+  });
 export default i18n;

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Typography, IconButton, Divider, useTheme } from '@mui/material'
+import { Box, Typography, IconButton, Divider, useTheme, Container } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import {
   Language as LanguageIcon,
@@ -15,6 +15,7 @@ export default function Footer() {
   const theme = useTheme()
 
   return (
+
     <Box 
       component="footer" 
       sx={{ 
