@@ -14,9 +14,12 @@ import {
   IconButton,
   Chip,
   Tabs,
-  Tab
+  Tab,
+  TextField
 } from '@mui/material';
 import useAddToCart from '../../hooks/useAddToCart';
+import useAddReview from '../../hooks/useAddReview';
+import useAuthStore from '../../store/useAuthStore';
 import { useTranslation } from 'react-i18next';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -26,13 +29,36 @@ export default function ProductDetails() {
   const { t } = useTranslation();
   const theme = useTheme();
   const { id } = useParams();
+  const token = useAuthStore((state) => state.token);
   const { mutate: addToCart } = useAddToCart();
+  const { mutate: addReview, isPending: reviewPending } = useAddReview();
   const { data, isLoading, isError, error } = useProduct(id);
   const [quantity, setQuantity] = useState(1);
   const [tabValue, setTabValue] = useState(0);
+  const [reviewRating, setReviewRating] = useState(0);
+  const [reviewComment, setReviewComment] = useState('');
 
   const handleAddToCart = () => {
     addToCart({ productId: data.response.id, count: quantity });
+  };
+
+  const handleSubmitReview = (e) => {
+    e.preventDefault();
+    if (!reviewRating || !reviewComment.trim()) return;
+
+    addReview(
+      {
+        productId: id,
+        rating: reviewRating,
+        comment: reviewComment
+      },
+      {
+        onSuccess: () => {
+          setReviewRating(0);
+          setReviewComment('');
+        }
+      }
+    );
   };
 
   if (isLoading) return <CircularProgress />
@@ -327,6 +353,47 @@ export default function ProductDetails() {
         )}
         {tabValue === 1 && (
           <Box sx={{ py: 2 }}>
+            {token ? (
+              <Box component="form" onSubmit={handleSubmitReview} sx={{ mb: 4, p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2 }}>
+                <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
+                  {t('Write a Review')}
+                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+                  <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                    {t('Your Rating')}:
+                  </Typography>
+                  <Rating
+                    value={reviewRating}
+                    onChange={(event, newValue) => setReviewRating(newValue || 0)}
+                    precision={1}
+                  />
+                </Box>
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={3}
+                  placeholder={t('Share your experience...')}
+                  value={reviewComment}
+                  onChange={(e) => setReviewComment(e.target.value)}
+                  sx={{ mb: 2 }}
+                />
+                <Button
+                  type="submit"
+                  variant="contained"
+                  disabled={reviewPending || !reviewRating || !reviewComment.trim()}
+                  sx={{ textTransform: 'none', borderRadius: 2, px: 3 }}
+                >
+                  {reviewPending ? <CircularProgress size={24} color="inherit" /> : t('Submit Review')}
+                </Button>
+              </Box>
+            ) : (
+              <Box sx={{ mb: 4, p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, textAlign: 'center' }}>
+                <Typography color="text.secondary">
+                  {t('Please')} <Link to="/login" style={{ color: theme.palette.primary.main, fontWeight: 600, textDecoration: 'none' }}>{t('Login')}</Link> {t('to write a review.')}
+                </Typography>
+              </Box>
+            )}
+
             {data.response.reviews && data.response.reviews.length > 0 ? (
               data.response.reviews.map((review, index) => (
                 <Box key={index} sx={{ mb: 3, pb: 2, borderBottom: `1px solid ${theme.palette.divider}` }}>
@@ -355,3 +422,4 @@ export default function ProductDetails() {
   )
 }
 /*whe we send data to Mutation we send it like how we do the object ({parameter:1,Parameter:2,......}) */
+/*By the way I tried using grid but i don't like how it looks so i changed it to this*/

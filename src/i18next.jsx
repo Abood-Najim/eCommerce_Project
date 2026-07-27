@@ -112,6 +112,12 @@ i18n
           "Full coverage protection": "Full coverage protection",
           "Description": "Description",
           "Elevate your cooking experience with the ROYALSTAR Digital Air Fryer, the versatile kitchen companion perfect for modern homes.": "Elevate your cooking experience with the ROYALSTAR Digital Air Fryer, the versatile kitchen companion perfect for modern homes.",
+          "Write a Review": "Write a Review",
+          "Your Rating": "Your Rating",
+          "Share your experience...": "Share your experience...",
+          "Submit Review": "Submit Review",
+          "Please": "Please",
+          "to write a review.": "to write a review.",
 
         }
       },
@@ -216,6 +222,12 @@ i18n
           "Full coverage protection": "حماية شاملة",
           "Description": "الوصف",
           "Elevate your cooking experience with the ROYALSTAR Digital Air Fryer, the versatile kitchen companion perfect for modern homes.": "ارتقِ بتجربة الطهي الخاصة بك مع مقلاة الهواء الرقمية من رويال ستار، الرفيق المثالي متعدد الاستخدامات في المطبخ، والمناسب تمامًا للمنازل الحديثة.",
+          "Write a Review": "اكتب مراجعة",
+          "Your Rating": "تقييمك",
+          "Share your experience...": "شارك تجربتك...",
+          "Submit Review": "إرسال المراجعة",
+          "Please": "الرجاء",
+          "to write a review.": "لكتابة مراجعة.",
 
         }
       },
