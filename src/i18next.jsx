@@ -123,7 +123,10 @@ i18n
           "Experience the pinnacle of performance and aesthetics with our curated collection of visionary tech.": "Experience the pinnacle of performance and aesthetics with our curated collection of visionary tech.",
           "Shop Collection": "Shop Collection",
           "View Vision": "View Vision",
-          
+          "Browse by category": "Browse by category",
+          "Find the perfect match for your workflow.": "Find the perfect match for your workflow.",
+          "View All": "View All",
+
         }
       },
       ar: {
@@ -238,6 +241,9 @@ i18n
           "Experience the pinnacle of performance and aesthetics with our curated collection of visionary tech.": "اختبر قمة الأداء والجماليات من خلال مجموعتنا المنسقة من التقنيات الرؤيوية.",
           "Shop Collection": "تسوق المجموعة",
           "View Vision": "عرض الرؤية",
+          "Browse by category": "تصفح حسب التصنيف",
+          "Find the perfect match for your workflow.": "اعثر على التطابق المثالي لسير عملك.",
+          "View All": "عرض الكل",
 
         }
       },
