@@ -30,7 +30,7 @@ export default function Home() {
 
   return (
       <Container maxWidth="xxl" sx={{ px: { xs: 0, md: 6 } }}>
-    <Box sx={{ p: {sm:0,md:5,lg:15} }}>
+    <Box sx={{ p: {sm:0,md:5,lg:15} , pb:{sm:5} }}>
         
         <Box sx={{ display: { xs: 'flex', md: 'none' }, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', py: 8, position: 'relative', minHeight: '500px', backgroundImage: `url(${heroImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
           <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: alpha(theme.palette.background.default,0.88), borderRadius:{ sm:0,md:3} }} />
@@ -103,7 +103,8 @@ export default function Home() {
           </Box>
         </Box>
     </Box>
-    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4, flexWrap: 'wrap', gap: 2 }}>
+
+    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4, flexWrap: 'wrap', gap: 2,px: { xs: 5 } }}>
           <Box>
             <Typography variant="h5" sx={{ fontWeight: 700, color: 'text.primary' }}>
               {t('Browse by category')}
@@ -119,13 +120,28 @@ export default function Home() {
           </Link>
         </Box>
 
-        <Grid container spacing={3}>
+        <Box 
+          sx={{ 
+            display: 'flex', 
+            flexDirection:'row',
+            gap: 3,
+            overflowX: { xs: 'auto', md: 'visible' },
+            flexWrap: { xs: 'nowrap', md: 'wrap' },
+            pb: { xs: 2, md: 0 },
+            '&::-webkit-scrollbar': { display: 'none' }
+          }}
+        >
           {categories.slice(0, 4).map((category) => (
-            <Grid item xs={6} sm={4} md={3} key={category.id} >
+            <Box 
+              key={category.id} 
+              sx={{ 
+                flex: { xs: '0 0 45%', sm: '0 0 30%', md: 'auto' },
+                minWidth: { xs: 140, md: 250 }
+              }}
+            >
               <Link 
                 to={`/products?categoryId=${category.id}`}
                 style={{ textDecoration: 'none' }}
-                
               >
                 <Paper
                   elevation={0}
@@ -139,7 +155,7 @@ export default function Home() {
                     backgroundColor: alpha(theme.palette.background.default,1),
                     borderRadius: 3,
                     minHeight: 250,
-                    minWidth:250,
+                    width: '100%',
                     cursor: 'pointer',
                     transition: 'all 0.3s ease',
                     '&:hover': {
@@ -164,9 +180,9 @@ export default function Home() {
                   </Typography>
                 </Paper>
               </Link>
-            </Grid>
+            </Box>
           ))}
-        </Grid>
+        </Box>
       </Container>
   )
 }
