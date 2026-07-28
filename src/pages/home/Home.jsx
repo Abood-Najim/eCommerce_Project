@@ -128,7 +128,7 @@ export default function Home() {
             overflowX: { xs: 'auto', md: 'visible' },
             flexWrap: { xs: 'nowrap', md: 'wrap' },
             pb: { xs: 2, md: 0 },
-            '&::-webkit-scrollbar': { display: 'none' }
+            '&::-webkit-scrollbar': { display: 'none' },
           }}
         >
           {categories.slice(0, 4).map((category) => (
@@ -143,7 +143,7 @@ export default function Home() {
                 to={`/products?categoryId=${category.id}`}
                 style={{ textDecoration: 'none' }}
               >
-                <Paper
+              <Paper
                   elevation={0}
                   sx={{
                     p: 4,
@@ -152,14 +152,15 @@ export default function Home() {
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: 2,
-                    backgroundColor: alpha(theme.palette.background.default,1),
+                    backgroundColor: alpha(theme.palette.background.paper, 0.6),
                     borderRadius: 3,
+                    outline: `2px solid transparent`,
                     minHeight: 250,
                     width: '100%',
                     cursor: 'pointer',
                     transition: 'all 0.3s ease',
                     '&:hover': {
-                      outline: `2px solid ${theme.palette.primary.main}`, 
+                      outlineColor: theme.palette.primary.main,
                       transform: 'translateY(-4px)',
                       boxShadow: `0px 8px 24px ${alpha(theme.palette.text.primary, 0.15)}`,
                     }
