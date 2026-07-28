@@ -118,7 +118,12 @@ i18n
           "Submit Review": "Submit Review",
           "Please": "Please",
           "to write a review.": "to write a review.",
-
+          "PREMIUM DIGITAL BOUTIQUE": "PREMIUM DIGITAL BOUTIQUE",
+          "Elevate Your Digital Horizon": "Elevate Your Digital Horizon",
+          "Experience the pinnacle of performance and aesthetics with our curated collection of visionary tech.": "Experience the pinnacle of performance and aesthetics with our curated collection of visionary tech.",
+          "Shop Collection": "Shop Collection",
+          "View Vision": "View Vision",
+          
         }
       },
       ar: {
@@ -228,6 +233,11 @@ i18n
           "Submit Review": "إرسال المراجعة",
           "Please": "الرجاء",
           "to write a review.": "لكتابة مراجعة.",
+          "PREMIUM DIGITAL BOUTIQUE": "بوتيك رقمي متميز",
+          "Elevate Your Digital Horizon": "ارتقِ بأفقك الرقمي",
+          "Experience the pinnacle of performance and aesthetics with our curated collection of visionary tech.": "اختبر قمة الأداء والجماليات من خلال مجموعتنا المنسقة من التقنيات الرؤيوية.",
+          "Shop Collection": "تسوق المجموعة",
+          "View Vision": "عرض الرؤية",
 
         }
       },
