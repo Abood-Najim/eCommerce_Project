@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Typography, Button, Container, useTheme, Chip } from '@mui/material'
+import { Box, Typography, Button, Container, useTheme, Chip, alpha } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
@@ -15,7 +15,7 @@ export default function Home() {
       <Container maxWidth="xxl" sx={{ px: { xs: 0, md: 6 } }}>
         
         <Box sx={{ display: { xs: 'flex', md: 'none' }, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', py: 8, position: 'relative', minHeight: '500px', backgroundImage: `url(${heroImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-          <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255, 255, 255, 0.88)', borderRadius:{ sm:0,md:3} }} />
+          <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: alpha(theme.palette.background.default,0.88), borderRadius:{ sm:0,md:3} }} />
 
           <Box sx={{ position: 'relative', zIndex: 1, maxWidth: 400 }}>
             <Chip 
