@@ -5,12 +5,15 @@ import { Link } from 'react-router-dom'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import useCategories from '../../hooks/useCategories'
 import useProducts from '../../hooks/useProducts'
+import useProduct from '../../hooks/useProduct'
 import ComputerIcon from '@mui/icons-material/Computer'
 import HeadphonesIcon from '@mui/icons-material/Headphones'
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid'
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports'
 import CategoryIcon from '@mui/icons-material/Category';
 import CheckroomIcon from '@mui/icons-material/Checkroom';
+import StarIcon from '@mui/icons-material/Star';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
 import heroImage from './assets/hero.jpg'
 import keyboardImage from './assets/keyboard.jpg'
 import deskImage from './assets/deskSetup.jpg'
@@ -22,6 +25,8 @@ export default function Home() {
   const categories = categoriesData?.response?.data || []
   const { data: productsData } = useProducts(1, 4)
   const products = productsData?.response?.data || []
+    const { data: productData } = useProduct(5)
+  const reviews = productData?.response?.reviews || []
 
   const getCategoryIcon = (name) => {
     const lower = name.toLowerCase()
@@ -289,9 +294,46 @@ export default function Home() {
             <Button component={Link} to="/products" variant="contained" sx={{ textTransform: 'none', borderRadius: 2, px: 3 }}>{t('Explore Bundle')}</Button>
           </Box>
         </Paper>
-
       </Box>
 
+      <Box sx={{ mt: 12, mb: 8, px: { xs: 0, md: 0 } }}>
+        <Typography variant="h4" sx={{ fontWeight: 700, color: 'text.primary', mb: 1, textAlign: 'center' }}>
+          {t('Voices of the Collective')}
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', mb: 6 }}>
+          {t('Trusted by creators worldwide.')}
+        </Typography>
+
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3 }}>
+          {reviews.slice(0, 3).map((review, index) => (
+            <Paper key={index} elevation={0} sx={{ flex: 1, p: 4, borderRadius: 3, border: `1px solid ${theme.palette.divider}` }}>
+              <Box sx={{ display: 'flex', gap: 0.5, mb: 2, color: theme.palette.primary.main }}>
+                {[...Array(5)].map((_, i) => (
+                  <span key={i}>
+                    {i < review.rating ? <StarIcon fontSize="small" /> : <StarBorderIcon fontSize="small" />}
+                  </span>
+                ))}
+              </Box>
+              <Typography variant="body1" sx={{ mb: 3, lineHeight: 1.6, color: 'text.primary', fontStyle: 'italic' }}>
+                “{review.comment}”
+              </Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Box>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>{review.userName}</Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    {new Date(review.createdAt).toLocaleDateString()}
+                  </Typography>
+                </Box>
+              </Box>
+              <Box sx={{ mt: 2 }}>
+                <Link to={`/product/${products[index]?.id}`} style={{ color: theme.palette.primary.main, fontWeight: 500, textDecoration: 'underline', fontSize: '0.85rem' }}>
+                  {t('View Product')}
+                </Link>
+              </Box>
+            </Paper>
+          ))}
+        </Box>
+      </Box>
     </Container>
   )
 }
