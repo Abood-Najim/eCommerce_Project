@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Typography, Button, Container, useTheme, Chip, alpha, Paper } from '@mui/material'
+import { Box, Typography, Button, Container, useTheme, Chip, alpha, Paper, TextField } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
@@ -25,7 +25,7 @@ export default function Home() {
   const categories = categoriesData?.response?.data || []
   const { data: productsData } = useProducts(1, 4)
   const products = productsData?.response?.data || []
-    const { data: productData } = useProduct(5)
+  const { data: productData } = useProduct(5)
   const reviews = productData?.response?.reviews || []
 
   const getCategoryIcon = (name) => {
@@ -39,6 +39,7 @@ export default function Home() {
   }/*i can add any icon i want here i just add the name of the category and put the elegable Icon for it*/
 
   return (
+    <Box>
     <Container maxWidth="xxl" sx={{ px: { xs: 0, md: 6 } }}>
       <Box sx={{ p: { sm: 0, md: 5, lg: 15 }, pb: { sm: 5 } }}>
 
@@ -205,7 +206,7 @@ export default function Home() {
       </Box>
 
       <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3, mb: 3 }}>
-        
+
         <Paper
           elevation={0}
           sx={{
@@ -253,7 +254,7 @@ export default function Home() {
       </Box>
 
       <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3 }}>
-        
+
         <Box sx={{ flex: { xs: 'auto', md: 3 } }}>
           {products.length > 1 && (
             <Link to={`/product/${products[1]?.id}`} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
@@ -334,6 +335,67 @@ export default function Home() {
           ))}
         </Box>
       </Box>
+
+      
     </Container>
+    <Box 
+        sx={{ 
+          mt: 12, 
+          py: { xs: 4, md: 20 }, 
+          px: { xs: 1, md: 3 }, 
+          backgroundColor: theme.palette.mode === 'light' ? '#1a1a2e' : theme.palette.primary.dark,
+          color: '#fff',
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: 4
+        }}
+      >
+        <Box sx={{ flex: 1, maxWidth: { md: '500px' } }}>
+          <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
+            {t('Stay Ahead of the Curve')}
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.7)', lineHeight: 1.6 }}>
+            {t('Join our exclusive newsletter for early access to limited edition drops, designer collaborations, and technological insights.')}
+          </Typography>
+        </Box>
+
+        <Box sx={{ flex: 1, display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2, width: '100%', maxWidth: { md: '400px' } }}>
+          <TextField
+            placeholder={t('Enter your email')}
+            variant="outlined"
+            fullWidth
+            size="small"
+            sx={{
+              bgcolor: 'rgba(255,255,255,0.1)',
+              borderRadius: 2,
+              '& .MuiOutlinedInput-root': {
+                color: '#fff',
+                fieldset: { borderColor: 'transparent' },
+                '&:hover fieldset': { borderColor: 'rgba(255,255,255,0.3)' },
+                '&.Mui-focused fieldset': { borderColor: theme.palette.primary.main },
+              },
+              '& .MuiInputBase-input::placeholder': {
+                color: 'rgba(255,255,255,0.6)',
+              },
+            }}
+          />
+          <Button 
+            variant="contained" 
+            sx={{ 
+              px: 4, 
+              py: 1.2, 
+              textTransform: 'none', 
+              fontWeight: 600, 
+              borderRadius: 2,
+              whiteSpace: 'nowrap'
+            }}
+          >
+            {t('Subscribe')}
+          </Button>
+        </Box>
+      </Box>
+      </Box>
   )
 }
