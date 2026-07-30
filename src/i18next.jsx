@@ -162,6 +162,10 @@ i18n
           "Update Email": "Update Email",
           "New Email Address": "New Email Address",
           "Save Changes": "Save Changes",
+          "Change Password": "Change Password",
+          "Current Password": "Current Password",
+          "New Password": "New Password",
+          "Confirm New Password": "Confirm New Password",
 
         }
       },
@@ -316,6 +320,10 @@ i18n
           "Update Email": "تحديث البريد الإلكتروني",
           "New Email Address": "البريد الإلكتروني الجديد",
           "Save Changes": "حفظ التغييرات",
+          "Change Password": "تغيير كلمة المرور",
+          "Current Password": "كلمة المرور الحالية",
+          "New Password": "كلمة المرور الجديدة",
+          "Confirm New Password": "تأكيد كلمة المرور الجديدة",
 
         }
       },
