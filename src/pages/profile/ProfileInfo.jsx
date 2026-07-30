@@ -3,19 +3,26 @@ import { Box, Paper, Typography, CircularProgress, Button, useTheme, Modal, Text
 import { useTranslation } from 'react-i18next'
 import useProfile from '../../hooks/useProfile'
 import useUpdateProfile from '../../hooks/useUpdateProfile'
+import useUpdateEmail from '../../hooks/useUpdateEmail'
 import CloseIcon from '@mui/icons-material/Close'
 
 export default function ProfileInfo() {
   const { t } = useTranslation()
   const theme = useTheme()
   const [open, setOpen] = useState(false)
+  const [emailOpen, setEmailOpen] = useState(false)
   
   const { data, isLoading, isError, error } = useProfile()
   const { mutate: updateProfile, isPending } = useUpdateProfile()
+  const { mutate: updateEmail, isPending: emailPending } = useUpdateEmail()
   
   const [formData, setFormData] = useState({
     fullName: '',
     phoneNumber: ''
+  })
+
+  const [emailData, setEmailData] = useState({
+    newEmail: ''
   })
   
   if (isLoading) return <CircularProgress />
@@ -32,12 +39,30 @@ export default function ProfileInfo() {
   }
   
   const handleClose = () => setOpen(false)
+
+  const handleEmailOpen = () => {
+    setEmailData({
+      newEmail: profile.email || ''
+    })
+    setEmailOpen(true)
+  }
+
+  const handleEmailClose = () => setEmailOpen(false)
   
   const handleSubmit = (e) => {
     e.preventDefault()
     updateProfile(formData, {
       onSuccess: () => {
         handleClose()
+      }
+    })
+  }
+
+  const handleEmailSubmit = (e) => {
+    e.preventDefault()
+    updateEmail(emailData, {
+      onSuccess: () => {
+        handleEmailClose()
       }
     })
   }
@@ -48,14 +73,24 @@ export default function ProfileInfo() {
         <Typography variant="h5" sx={{ fontWeight: 700, color: 'text.primary' }}>
           {t('Personal Information')}
         </Typography>
-        <Button 
-          variant="outlined" 
-          size="small" 
-          onClick={handleOpen}
-          sx={{ textTransform: 'none', borderRadius: 2 }}
+        <Box sx={{ display: 'flex', gap: 1 }}>
+          <Button 
+            variant="outlined" 
+            size="small" 
+            onClick={handleEmailOpen}
+            sx={{ textTransform: 'none', borderRadius: 2 }}
           >
-          {t('Update Profile')}
-        </Button>
+            {t('Update Email')}
+          </Button>
+          <Button 
+            variant="outlined" 
+            size="small" 
+            onClick={handleOpen}
+            sx={{ textTransform: 'none', borderRadius: 2 }}
+          >
+            {t('Update Profile')}
+          </Button>
+        </Box>
       </Box>
 
       <Divider sx={{ mb: 4 }} />
@@ -131,6 +166,46 @@ export default function ProfileInfo() {
               sx={{ mt: 1, textTransform: 'none', borderRadius: 2 }}
             >
               {isPending ? <CircularProgress size={24} color="inherit" /> : t('Save Changes')}
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
+
+      <Modal open={emailOpen} onClose={handleEmailClose} disableScrollLock={true}>
+        <Box sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: { xs: '90%', sm: 400 },
+          bgcolor: 'background.paper',
+          borderRadius: 3,
+          boxShadow: 24,
+          p: 4
+        }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+            <Typography variant="h6" sx={{ fontWeight: 600 }}>
+              {t('Update Email')}
+            </Typography>
+            <IconButton onClick={handleEmailClose} size="small">
+              <CloseIcon />
+            </IconButton>
+          </Box>
+
+          <Box component="form" onSubmit={handleEmailSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <TextField
+              fullWidth
+              label={t('New Email Address')}
+              value={emailData.newEmail}
+              onChange={(e) => setEmailData({ ...emailData, newEmail: e.target.value })}
+            />
+            <Button 
+              type="submit" 
+              variant="contained" 
+              disabled={emailPending}
+              sx={{ mt: 1, textTransform: 'none', borderRadius: 2 }}
+            >
+              {emailPending ? <CircularProgress size={24} color="inherit" /> : t('Save Changes')}
             </Button>
           </Box>
         </Box>
