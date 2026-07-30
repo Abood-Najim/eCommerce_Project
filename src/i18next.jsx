@@ -159,7 +159,10 @@ i18n
           "User": "User",
           "Points": "Points",
           "Member since": "Member since",
-          
+          "Update Email": "Update Email",
+          "New Email Address": "New Email Address",
+          "Save Changes": "Save Changes",
+
         }
       },
       ar: {
@@ -310,11 +313,14 @@ i18n
           "User": "مستخدم",
           "Points": "النقاط",
           "Member since": "عضو منذ",
-          
+          "Update Email": "تحديث البريد الإلكتروني",
+          "New Email Address": "البريد الإلكتروني الجديد",
+          "Save Changes": "حفظ التغييرات",
+
         }
       },
       fallbackLng: "en",
-      
+
     }
   });
-  export default i18n;
+export default i18n;
