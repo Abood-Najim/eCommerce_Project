@@ -16,8 +16,9 @@ const query = useQuery(
     {
       queryKey: ['categories',i18n.language],
       queryFn:getCategories,
-      staleTime:1000 * 60 * 5
+      staleTime:1000 * 60 * 5,
     }
+    
   )
   return query;
 }

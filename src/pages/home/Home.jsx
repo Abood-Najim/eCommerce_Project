@@ -23,7 +23,7 @@ export default function Home() {
   const { t } = useTranslation()
   const theme = useTheme()
   const { data: categoriesData } = useCategories()
-  const categories = categoriesData?.response?.data || []
+  const categories = (categoriesData?.response?.data || []).filter(category => category && category.name)
   const { data: productsData } = useProducts(1, 4)
   const products = productsData?.response?.data || []
   const { data: productData } = useProduct(5)
