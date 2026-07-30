@@ -144,7 +144,22 @@ i18n
           "Join our exclusive newsletter for early access to limited edition drops, designer collaborations, and technological insights.": "Join our exclusive newsletter for early access to limited edition drops, designer collaborations, and technological insights.",
           "Enter your email": "Enter your email",
           "Subscribe": "Subscribe",
-
+          "Personal Information": "Personal Information",
+          "Personal Info": "Personal Info",
+          "Update Profile": "Update Profile",
+          "Full Name": "Full Name",
+          "Phone Number": "Phone Number",
+          "Order History": "Order History",
+          "Order ID": "Order ID",
+          "Date": "Date",
+          "Amount": "Amount",
+          "Status": "Status",
+          "Payment": "Payment",
+          "No orders yet.": "No orders yet.",
+          "User": "User",
+          "Points": "Points",
+          "Member since": "Member since",
+          
         }
       },
       ar: {
@@ -280,11 +295,26 @@ i18n
           "Join our exclusive newsletter for early access to limited edition drops, designer collaborations, and technological insights.": "انضم إلى نشرتنا الحصرية للوصول المبكر إلى الإصدارات المحدودة وتعاونات المصممين والرؤى التكنولوجية.",
           "Enter your email": "أدخل بريدك الإلكتروني",
           "Subscribe": "اشتراك",
-
+          "Personal Information": "المعلومات الشخصية",
+          "Personal Info": "المعلومات الشخصية",
+          "Update Profile": "تحديث الملف الشخصي",
+          "Full Name": "الاسم الكامل",
+          "Phone Number": "رقم الهاتف",
+          "Order History": "سجل الطلبات",
+          "Order ID": "رقم الطلب",
+          "Date": "التاريخ",
+          "Amount": "المبلغ",
+          "Status": "الحالة",
+          "Payment": "الدفع",
+          "No orders yet.": "لا توجد طلبات بعد.",
+          "User": "مستخدم",
+          "Points": "النقاط",
+          "Member since": "عضو منذ",
+          
         }
       },
       fallbackLng: "en",
-
+      
     }
   });
-export default i18n;
+  export default i18n;
