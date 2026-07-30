@@ -1,20 +1,25 @@
 import React, { useState } from 'react'
-import { Box, Paper, Typography, CircularProgress, Button, useTheme, Modal, TextField, IconButton, Divider } from '@mui/material'
+import { Box, Paper, Typography, CircularProgress, Button, useTheme, Modal, TextField, IconButton, Divider, InputAdornment } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import useProfile from '../../hooks/useProfile'
 import useUpdateProfile from '../../hooks/useUpdateProfile'
 import useUpdateEmail from '../../hooks/useUpdateEmail'
+import useChangePassword from '../../hooks/useChangePassword'
 import CloseIcon from '@mui/icons-material/Close'
+import VisibilityIcon from '@mui/icons-material/Visibility'
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 
 export default function ProfileInfo() {
   const { t } = useTranslation()
   const theme = useTheme()
   const [open, setOpen] = useState(false)
   const [emailOpen, setEmailOpen] = useState(false)
+  const [passwordOpen, setPasswordOpen] = useState(false)
   
   const { data, isLoading, isError, error } = useProfile()
   const { mutate: updateProfile, isPending } = useUpdateProfile()
   const { mutate: updateEmail, isPending: emailPending } = useUpdateEmail()
+  const { mutate: changePassword, isPending: passwordPending } = useChangePassword()
   
   const [formData, setFormData] = useState({
     fullName: '',
@@ -24,6 +29,16 @@ export default function ProfileInfo() {
   const [emailData, setEmailData] = useState({
     newEmail: ''
   })
+
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmNewPassword: ''
+  })
+
+  const [showCurrent, setShowCurrent] = useState(false)
+  const [showNew, setShowNew] = useState(false)
+  const [showConfirm, setShowConfirm] = useState(false)
   
   if (isLoading) return <CircularProgress />
   if (isError) return <Typography color='error'>{error.message}</Typography>
@@ -48,6 +63,17 @@ export default function ProfileInfo() {
   }
 
   const handleEmailClose = () => setEmailOpen(false)
+
+  const handlePasswordOpen = () => {
+    setPasswordData({
+      currentPassword: '',
+      newPassword: '',
+      confirmNewPassword: ''
+    })
+    setPasswordOpen(true)
+  }
+
+  const handlePasswordClose = () => setPasswordOpen(false)
   
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -66,6 +92,15 @@ export default function ProfileInfo() {
       }
     })
   }
+
+  const handlePasswordSubmit = (e) => {
+    e.preventDefault()
+    changePassword(passwordData, {
+      onSuccess: () => {
+        handlePasswordClose()
+      }
+    })
+  }
   
   return (
     <Paper elevation={0} sx={{ p: 4, borderRadius: 3, border: `1px solid ${theme.palette.divider}` }}>
@@ -73,7 +108,7 @@ export default function ProfileInfo() {
         <Typography variant="h5" sx={{ fontWeight: 700, color: 'text.primary' }}>
           {t('Personal Information')}
         </Typography>
-        <Box sx={{ display: 'flex', gap: 1 }}>
+        <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
           <Button 
             variant="outlined" 
             size="small" 
@@ -81,6 +116,14 @@ export default function ProfileInfo() {
             sx={{ textTransform: 'none', borderRadius: 2 }}
           >
             {t('Update Email')}
+          </Button>
+          <Button 
+            variant="outlined" 
+            size="small" 
+            onClick={handlePasswordOpen}
+            sx={{ textTransform: 'none', borderRadius: 2 }}
+          >
+            {t('Change Password')}
           </Button>
           <Button 
             variant="outlined" 
@@ -210,6 +253,89 @@ export default function ProfileInfo() {
           </Box>
         </Box>
       </Modal>
+
+      <Modal open={passwordOpen} onClose={handlePasswordClose} disableScrollLock={true}>
+        <Box sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: { xs: '90%', sm: 400 },
+          bgcolor: 'background.paper',
+          borderRadius: 3,
+          boxShadow: 24,
+          p: 4
+        }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+            <Typography variant="h6" sx={{ fontWeight: 600 }}>
+              {t('Change Password')}
+            </Typography>
+            <IconButton onClick={handlePasswordClose} size="small">
+              <CloseIcon />
+            </IconButton>
+          </Box>
+
+          <Box component="form" onSubmit={handlePasswordSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <TextField
+              fullWidth
+              label={t('Current Password')}
+              type={showCurrent ? 'text' : 'password'}
+              value={passwordData.currentPassword}
+              onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={() => setShowCurrent(!showCurrent)} edge="end">
+                      {showCurrent ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
+            />
+            <TextField
+              fullWidth
+              label={t('New Password')}
+              type={showNew ? 'text' : 'password'}
+              value={passwordData.newPassword}
+              onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={() => setShowNew(!showNew)} edge="end">
+                      {showNew ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
+            />
+            <TextField
+              fullWidth
+              label={t('Confirm New Password')}
+              type={showConfirm ? 'text' : 'password'}
+              value={passwordData.confirmNewPassword}
+              onChange={(e) => setPasswordData({ ...passwordData, confirmNewPassword: e.target.value })}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={() => setShowConfirm(!showConfirm)} edge="end">
+                      {showConfirm ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
+            />
+            <Button 
+              type="submit" 
+              variant="contained" 
+              disabled={passwordPending}
+              sx={{ mt: 1, textTransform: 'none', borderRadius: 2 }}
+            >
+              {passwordPending ? <CircularProgress size={24} color="inherit" /> : t('Change Password')}
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
     </Paper>
   )
 }
+/* بما انه اشتغلت وحدة على المودل معناها كلهم عليها و احلى هيك*/ 
