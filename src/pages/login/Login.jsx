@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, TextField, Typography, InputAdornment, Checkbox, FormControlLabel, useTheme } from '@mui/material'
+import { Box, Button, CircularProgress, TextField, Typography, InputAdornment, Checkbox, FormControlLabel, useTheme, Paper } from '@mui/material'
 import axios from 'axios'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -35,7 +35,7 @@ export default function Login() {
   }
 
   return (
-    <Box sx={{ 
+    <Paper sx={{ 
       textAlign:'center',
       display: 'flex', 
       flexDirection: 'column', 
@@ -43,7 +43,8 @@ export default function Login() {
       justifyContent: 'center', 
       backgroundColor: 'background.default', 
       py: 28, 
-      px: 2
+      px: 2,
+      borderRadius:0
     }}>
       
       <Box 
@@ -162,6 +163,6 @@ export default function Login() {
           </Typography>
         </Box>
       </Box>
-    </Box>
+    </Paper>
   )
 }

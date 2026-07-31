@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, TextField, Typography, InputAdornment, Checkbox, FormControlLabel, Divider, useTheme } from '@mui/material'
+import { Box, Button, CircularProgress, TextField, Typography, InputAdornment, Checkbox, FormControlLabel, Divider, useTheme, Paper } from '@mui/material'
 import axios from 'axios'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -33,7 +33,7 @@ export default function Register() {
   }
 
   return (
-    <Box sx={{textAlign : 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', backgroundColor: 'background.default', py: 13,px: 2 }}>
+    <Paper sx={{textAlign : 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', backgroundColor: 'background.default', py: 13,px: 2,borderRadius:0 }}>
 
       <Typography variant="h4" sx={{ fontWeight: 700, color: 'primary.main', mb: 0.5, letterSpacing: '-0.5px' }}>
         Lumina Luxe
@@ -180,6 +180,6 @@ export default function Register() {
       <Typography variant="caption" color="text.secondary" sx={{ mt: 4 }}>
         &copy; 2024 Lumina Luxe. {t('All rights reserved.')}
       </Typography>
-    </Box>
+    </Paper>
   )
 }

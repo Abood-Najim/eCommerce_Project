@@ -34,7 +34,7 @@ export default function AboutUs() {
   ]
 
   return (
-    <Box sx={{ py: 6, px: { xs: 2, md: 4 }, backgroundColor: 'background.default', minHeight: '100vh' }}>
+    <Paper sx={{ py: 6, px: { xs: 2, md: 4 }, backgroundColor: 'background.default', minHeight: '100vh',borderRadius:0 }}>
       <Container maxWidth="lg">
         <Box sx={{ textAlign: 'center', mb: 6 }}>
           <Typography variant="h2" sx={{ fontWeight: 700, color: 'text.primary', mb: 2 }}>
@@ -112,6 +112,6 @@ export default function AboutUs() {
         </Box>
 
       </Container>
-    </Box>
+    </Paper>
   )
 }

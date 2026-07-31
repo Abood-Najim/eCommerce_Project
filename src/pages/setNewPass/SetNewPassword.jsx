@@ -8,6 +8,7 @@ import {
   InputAdornment,
   useTheme,
   IconButton,
+  Paper,
 } from "@mui/material"
 import React, { useState } from "react"
 import { useForm } from "react-hook-form"
@@ -72,7 +73,7 @@ export default function SetNewPassword() {
   }
 
   return (
-    <Box
+    <Paper
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -85,7 +86,8 @@ export default function SetNewPassword() {
           opacity: '0 !important',
           pointerEvents: 'none !important',
           display: 'none !important'
-        }
+        },
+        borderRadius:0
       }}
     >
       <Typography variant="h4" sx={{ fontWeight: 700, color: 'primary.main', mb: 4, letterSpacing: '-0.5px' }}>
@@ -271,6 +273,6 @@ export default function SetNewPassword() {
       <Typography variant="caption" color="text.secondary" sx={{ mt: 3 }}>
         &copy; 2024 Lumina Luxe. {t("All rights reserved.")}
       </Typography>
-    </Box>
+    </Paper>
   )
 }

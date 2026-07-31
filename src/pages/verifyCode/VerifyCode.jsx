@@ -1,4 +1,4 @@
-import { Box, Button, Typography, useTheme, CircularProgress } from '@mui/material'
+import { Box, Button, Typography, useTheme, CircularProgress, Paper } from '@mui/material'
 import React, { useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, Link } from 'react-router-dom'
@@ -72,7 +72,7 @@ export default function VerifyCode() {
   }
 
   return (
-    <Box
+    <Paper
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -80,7 +80,8 @@ export default function VerifyCode() {
         justifyContent: 'center',
         backgroundColor: 'background.default',
         py: 50,
-        px: 2
+        px: 2,
+        borderRadius:0
       }}
     >
       <Typography variant="h4" sx={{ fontWeight: 700, color: 'primary.main', mb: 4, letterSpacing: '-0.5px' }}>
@@ -219,6 +220,6 @@ export default function VerifyCode() {
           <VerifiedUserIcon fontSize="small" sx={{ color: 'text.secondary' }} />
         </Box>
       </Box>
-    </Box>
+    </Paper>
   )
 }

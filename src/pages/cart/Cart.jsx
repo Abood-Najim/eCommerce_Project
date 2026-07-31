@@ -61,7 +61,7 @@ export default function Cart() {
   if (isError) return <Typography color='red'>{error.message}</Typography>
 
   return (
-    <Box component="section" sx={{ py: 6, px: { xs: 2, md: 4 }, maxWidth: '1200px', mx: 'auto' }}>
+    <Box component="section" sx={{ py: 6, px: { xs: 2, md: 4 }, maxWidth: '1200px', mx: 'auto',minHeight:'80vh' }}>
       
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4, flexWrap: 'wrap', gap: 2 }}>
         <Typography variant="h4" sx={{ fontWeight: 700, color: 'text.primary', letterSpacing: '-0.5px' }}>

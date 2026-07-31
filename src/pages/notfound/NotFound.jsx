@@ -12,7 +12,7 @@ export default function NotFound() {
   const theme = useTheme()
 
   return (
-    <Box sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'background.default', py: 6 }}>
+    <Paper sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'background.default', py: 6,borderRadius:0 }}>
       <Container maxWidth="md" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
         <Box sx={{ position: 'relative', mb: 4, mx: 'auto', maxWidth: 400, display: 'flex', justifyContent: 'center' }}>
           <Typography 
@@ -136,6 +136,6 @@ export default function NotFound() {
         </Box>
 
       </Container>
-    </Box>
+    </Paper>
   )
 }

@@ -10,7 +10,7 @@ export default function ContactUs() {
   const theme = useTheme()
 
   return (
-    <Box sx={{ py: 6, px: { xs: 2, md: 4 }, backgroundColor: 'background.default', minHeight: '100vh' }}>
+    <Paper sx={{ py: 6, px: { xs: 2, md: 4 }, backgroundColor: 'background.default', minHeight: '100vh',borderRadius:0 }}>
       <Container maxWidth="lg">
         <Typography variant="h3" sx={{ fontWeight: 700, color: 'text.primary', mb: 1, textAlign: 'center' }}>
           {t('Contact Us')}
@@ -76,6 +76,6 @@ export default function ContactUs() {
 
         </Box>
       </Container>
-    </Box>
+    </Paper>
   )
 }
