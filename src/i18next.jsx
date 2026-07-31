@@ -166,7 +166,13 @@ i18n
           "Current Password": "Current Password",
           "New Password": "New Password",
           "Confirm New Password": "Confirm New Password",
-
+          "Have a question or need assistance? We are here to help. Reach out to us anytime.": "Have a question or need assistance? We are here to help. Reach out to us anytime.",
+          "Get in Touch": "Get in Touch",
+          "We would love to hear from you. Whether you have a question about products, need assistance with your order, or just want to share feedback, our team is ready to help.": "We would love to hear from you. Whether you have a question about products, need assistance with your order, or just want to share feedback, our team is ready to help.",
+          "Send us a Message": "Send us a Message",
+          "Subject": "Subject",
+          "Message": "Message",
+          "Send Message": "Send Message",
         }
       },
       ar: {
@@ -324,6 +330,13 @@ i18n
           "Current Password": "كلمة المرور الحالية",
           "New Password": "كلمة المرور الجديدة",
           "Confirm New Password": "تأكيد كلمة المرور الجديدة",
+          "Have a question or need assistance? We are here to help. Reach out to us anytime.": "هل لديك سؤال أو تحتاج إلى مساعدة؟ نحن هنا لمساعدتك. تواصل معنا في أي وقت.",
+          "Get in Touch": "تواصل معنا",
+          "We would love to hear from you. Whether you have a question about products, need assistance with your order, or just want to share feedback, our team is ready to help.": "نحن نحب أن نسمع منك. سواء كان لديك سؤال حول المنتجات، أو تحتاج إلى مساعدة في طلبك، أو ترغب فقط في مشاركة ملاحظاتك، فإن فريقنا مستعد للمساعدة.",
+          "Send us a Message": "أرسل لنا رسالة",
+          "Subject": "الموضوع",
+          "Message": "الرسالة",
+          "Send Message": "إرسال الرسالة",
 
         }
       },
