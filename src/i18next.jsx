@@ -182,6 +182,15 @@ i18n
           "Our Story": "Our Story",
           "About Us": "About Us",
           "About": "About",
+          "Lost in Luxury?": "Lost in Luxury?",
+          "The page you are looking for might have been moved, removed, or is temporarily unavailable.": "The page you are looking for might have been moved, removed, or is temporarily unavailable.",
+          "Back to Home": "Back to Home",
+          "Browse Categories": "Browse Categories",
+          "Discover our latest collection pieces.": "Discover our latest collection pieces.",
+          "Exclusives": "Exclusives",
+          "Member-only limited edition items.": "Member-only limited edition items.",
+          "Need help finding something specific?": "Need help finding something specific?",
+
         }
       },
       ar: {
@@ -355,6 +364,14 @@ i18n
           "Our Story": "قصتنا",
           "Our Mission": "مهمتنا",
           "About": "حول",
+          "Lost in Luxury?": "ضائع في الفخامة؟",
+          "The page you are looking for might have been moved, removed, or is temporarily unavailable.": "ربما تم نقل الصفحة التي تبحث عنها أو إزالتها أو أنها غير متوفرة مؤقتًا.",
+          "Back to Home": "العودة إلى الصفحة الرئيسية",
+          "Browse Categories": "تصفح التصنيفات",
+          "Discover our latest collection pieces.": "اكتشف أحدث قطع مجموعتنا.",
+          "Member-only limited edition items.": "إصدارات محدودة حصرية للأعضاء.",
+          "Need help finding something specific?": "هل تحتاج مساعدة في العثور على شيء محدد؟",
+          "Exclusives": "حصريات",
 
         }
       },
