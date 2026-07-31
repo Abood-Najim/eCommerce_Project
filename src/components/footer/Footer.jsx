@@ -25,7 +25,8 @@ export default function Footer() {
         backgroundColor: 'background.default', 
         borderTop: 1, 
         borderColor: 'divider', 
-        width: '100%' 
+        width: '100%',
+        borderRadius:0,
       }}
     >
       <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: { xs: 6, md: 4 }, mb: 6 }}>
