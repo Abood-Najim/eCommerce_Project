@@ -15,7 +15,8 @@ import {
   TableHead, 
   TableRow, 
   Paper,
-  useTheme
+  useTheme,
+  Stack
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import useRemoveFromCart from '../../hooks/useRemoveFromCart';
@@ -26,6 +27,7 @@ import useClearCart from '../../hooks/useClearCart';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 
 export default function Cart() {
   const navigate = useNavigate();
@@ -130,9 +132,23 @@ export default function Cart() {
                     </TableCell>
                     <TableCell sx={{ textAlign: 'center', fontWeight: 600, color: 'primary.main' }}>{item.totalPrice}$</TableCell>
                     <TableCell sx={{ textAlign: 'center' }}>
-                      <IconButton color="error" disabled={isPending} onClick={() => removeItem(item.productId)} size="small">
-                        <DeleteIcon />
-                      </IconButton>
+                      <Stack direction="row" spacing={1} justifyContent="center" alignItems="center">
+                        <IconButton 
+                          size="small"
+                          onClick={() => navigate(`/product/${item.productId}`)}
+                          sx={{ color: 'primary.main' }}
+                        >
+                          <VisibilityOutlinedIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton 
+                          color="error" 
+                          disabled={isPending} 
+                          onClick={() => removeItem(item.productId)} 
+                          size="small"
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Stack>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -155,5 +171,3 @@ export default function Cart() {
     </Box>
   )
 }
-
-/* we use state manegmaent when ever we want something to be changed on all the pages that we added the state to it */
