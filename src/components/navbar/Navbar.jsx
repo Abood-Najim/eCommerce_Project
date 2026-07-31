@@ -102,6 +102,9 @@ export default function Navbar() {
           <Link to="/categories" style={{ textDecoration: 'none', color: theme.palette.text.primary, fontWeight: 500 }}>
             {t('Categories')}
           </Link>
+          <Link to="/contact" style={{ textDecoration: 'none', color: theme.palette.text.primary, fontWeight: 500 }}>
+            {t('Contact Us')}
+          </Link>
         </Box>
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
@@ -200,6 +203,9 @@ export default function Navbar() {
           </Link>
           <Link to="/" style={{ textDecoration: 'none', color: theme.palette.text.primary, fontWeight: 500 }}>
             {t('Categories')}
+          </Link>
+          <Link to="/contact" style={{ textDecoration: 'none', color: theme.palette.text.primary, fontWeight: 500 }}>
+            {t('Contact Us')}
           </Link>
           
           <Divider />

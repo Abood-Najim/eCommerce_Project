@@ -15,6 +15,7 @@ import ResetPassword from "./pages/forgotPassword/ResetPassword";
 import VerifyCode from "./pages/verifyCode/VerifyCode";
 import SetNewPassword from "./pages/setNewPass/SetNewPassword";
 import Categories from "./pages/categories/Categories";
+import ContactUs from "./pages/contact/ContactUs";
 
 const router = createBrowserRouter([
   {
@@ -92,7 +93,11 @@ const router = createBrowserRouter([
             <Protectedrouter>
               <Checkout />
             </Protectedrouter>
-        }
+        },
+        {
+          path: "contact",
+          element: <ContactUs />
+        },
       ]
 
   },
