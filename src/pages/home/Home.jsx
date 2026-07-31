@@ -374,10 +374,10 @@ export default function Home() {
             ))}
           </Box>
         </Box>
-
-
       </Container>
-      <Box
+
+      <Paper
+        elevation={0}
         sx={{
           mt: 12,
           py: { xs: 4, md: 20 },
@@ -388,7 +388,8 @@ export default function Home() {
           flexDirection: { xs: 'column', md: 'row' },
           alignItems: 'center',
           justifyContent: 'space-between',
-          gap: 4
+          gap: 4,
+          borderRadius: 0
         }}
       >
         <Box sx={{ flex: 1, maxWidth: { md: '500px' } }}>
@@ -434,7 +435,7 @@ export default function Home() {
             {t('Subscribe')}
           </Button>
         </Box>
-      </Box>
+      </Paper>
     </Box>
   )
 }

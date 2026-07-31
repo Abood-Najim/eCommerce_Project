@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Typography, IconButton, Divider, useTheme } from '@mui/material'
+import { Box, Typography, IconButton, Divider, useTheme, Paper } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import {
@@ -16,7 +16,7 @@ export default function Footer() {
   const theme = useTheme()
 
   return (
-    <Box 
+    <Paper 
       component="footer" 
       sx={{  
         pt: 8, 
@@ -110,6 +110,6 @@ export default function Footer() {
           <IconButton size="small" color="inherit"><PaymentsIcon fontSize="small" /></IconButton>
         </Box>
       </Box>
-    </Box>
+    </Paper>
   )
 }
