@@ -1,13 +1,14 @@
 import { create } from "zustand";
 
+const useThemeStore = create((set) => ({
+  mode: localStorage.getItem('themeMode') || 'light',
 
-const useThemeStore = create((set)=>({
-
-  mode:'light',
-  toggleMode : ()=> {
-    set((state)=>({
-      mode: state.mode === "light"? 'dark' : 'light'
-    }))
+  toggleMode: () => {
+    set((state) => {
+      const newMode = state.mode === "light" ? 'dark' : 'light';
+      localStorage.setItem('themeMode', newMode);
+      return { mode: newMode };
+    });
   }
 }))
 
