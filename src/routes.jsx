@@ -17,6 +17,7 @@ import SetNewPassword from "./pages/setNewPass/SetNewPassword";
 import Categories from "./pages/categories/Categories";
 import ContactUs from "./pages/contact/ContactUs";
 import AboutUs from "./pages/aboutus/AboutUs";
+import NotFound from "./pages/notfound/NotFound";
 
 const router = createBrowserRouter([
   {
@@ -103,6 +104,10 @@ const router = createBrowserRouter([
           path: "aboutus",
           element: <AboutUs />
         },
+        {
+          path: "*",
+          element: <NotFound />
+        }
       ]
 
   },
