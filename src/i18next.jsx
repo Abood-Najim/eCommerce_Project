@@ -173,6 +173,15 @@ i18n
           "Subject": "Subject",
           "Message": "Message",
           "Send Message": "Send Message",
+          "Our Core Values": "Our Core Values",
+          "Quality First": "Quality First",
+          "Community Driven": "Community Driven",
+          "Innovation First": "Innovation First",
+          "Fast & Reliable": "Fast & Reliable",
+          "Our Mission": "Our Mission",
+          "Our Story": "Our Story",
+          "About Us": "About Us",
+          "About": "About",
         }
       },
       ar: {
@@ -337,6 +346,15 @@ i18n
           "Subject": "الموضوع",
           "Message": "الرسالة",
           "Send Message": "إرسال الرسالة",
+          "Our Core Values": "قيمنا الأساسية",
+          "Quality First": "الجودة أولاً",
+          "Community Driven": "موجه نحو المجتمع",
+          "Innovation First": "الابتكار أولاً",
+          "Fast & Reliable": "سريع وموثوق",
+          "About Us": "من نحن",
+          "Our Story": "قصتنا",
+          "Our Mission": "مهمتنا",
+          "About": "حول",
 
         }
       },
