@@ -36,6 +36,12 @@ export default function Home() {
     if (lower.includes('phone') || lower.includes('mobile')) return <PhoneAndroidIcon sx={{ fontSize: 48 }} />
     if (lower.includes('wears') || lower.includes('clothes')) return <CheckroomIcon sx={{ fontSize: 48 }} />
     if (lower.includes('game') || lower.includes('console')) return <SportsEsportsIcon sx={{ fontSize: 48 }} />
+    //no need for the lower here casus it's arabic :)
+    if (name.includes('إلكترونيات') || name.includes('كمبيوتر') || name.includes('لابتوب')) return <ComputerIcon sx={{ fontSize: 48 }} />
+    if (name.includes('سماعات') || name.includes('صوت')) return <HeadphonesIcon sx={{ fontSize: 48 }} />
+    if (name.includes('هاتف') || name.includes('موبايل') || name.includes('هواتف'))return <PhoneAndroidIcon sx={{ fontSize: 48 }} />
+    if (name.includes('ملابس') || name.includes('أزياء')) return <CheckroomIcon sx={{ fontSize: 48 }} />
+    if (name.includes('ألعاب') || name.includes('كونسول')) return <SportsEsportsIcon sx={{ fontSize: 48 }} />
     return <CategoryIcon sx={{ fontSize: 48 }} />
   }/*i can add any icon i want here i just add the name of the category and put the elegable Icon for it*/
 
