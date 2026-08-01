@@ -34,6 +34,7 @@ const Products = ({ categoryId, page = 1, limit = 8, sortBy = 'price', ascending
   } else {
     products = data?.response?.data || data?.data || data || [];
   }
+  products = products.filter(p => p && p.name);
 
   if (Array.isArray(products)) {
     if (minPrice) products = products.filter(p => p.price >= Number(minPrice));
@@ -43,7 +44,11 @@ const Products = ({ categoryId, page = 1, limit = 8, sortBy = 'price', ascending
     if (sortBy === 'price') {
       products.sort((a, b) => ascending ? a.price - b.price : b.price - a.price);
     } else if (sortBy === 'name') {
-      products.sort((a, b) => ascending ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name));
+      products.sort((a, b) => {
+        const nameA = a.name || '';
+        const nameB = b.name || '';
+        return ascending ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
+      });
     }
   }
 
