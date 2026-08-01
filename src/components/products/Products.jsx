@@ -34,7 +34,6 @@ const Products = ({ categoryId, page = 1, limit = 8, sortBy = 'price', ascending
   } else {
     products = data?.response?.data || data?.data || data || [];
   }
-  products = products.filter(p => p && p.name);
 
   if (Array.isArray(products)) {
     if (minPrice) products = products.filter(p => p.price >= Number(minPrice));
