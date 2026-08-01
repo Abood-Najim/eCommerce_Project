@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { 
-  Box, 
-  Container, 
-  Typography, 
+import {
+  Box,
+  Container,
+  Typography,
   CircularProgress,
   useTheme,
   Pagination,
@@ -18,7 +18,8 @@ import {
   Rating,
   Drawer,
   IconButton,
-  Button
+  Button,
+  alpha
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import i18n from '../../i18next'
@@ -46,6 +47,7 @@ export default function ProductsPage() {
   const [sortBy, setSortBy] = useState('price')
   const [ascending, setAscending] = useState(false)
   const [drawerOpen, setDrawerOpen] = useState(false)
+  const [priceError, setPriceError] = useState('')
 
   const [selectedCategory, setSelectedCategory] = useState(urlCategoryId || '')
   const [minPrice, setMinPrice] = useState(urlMinPrice || '')
@@ -56,7 +58,7 @@ export default function ProductsPage() {
   const [appliedMinPrice, setAppliedMinPrice] = useState(urlMinPrice || '')
   const [appliedMaxPrice, setAppliedMaxPrice] = useState(urlMaxPrice || '')
   const [appliedRating, setAppliedRating] = useState(urlRating || '')
-  
+
   const [totalCount, setTotalCount] = useState(0)
 
   const { data: categoriesData, isLoading: categoriesLoading } = useCategories()
@@ -82,7 +84,7 @@ export default function ProductsPage() {
     if (minPrice) params.set('minPrice', minPrice)
     if (maxPrice) params.set('maxPrice', maxPrice)
     if (selectedRating) params.set('rating', selectedRating)
-    
+
     const newCategory = selectedCategory
     const newMin = minPrice
     const newMax = maxPrice
@@ -128,9 +130,9 @@ export default function ProductsPage() {
 
   const categories = categoriesData?.response?.data || []
 
-    const sidebarContent = (
+  const sidebarContent = (
     <Box sx={{ p: 2, width: 250 }}>
-      
+
       <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1.5, fontSize: '0.8rem', letterSpacing: '0.5px' }}>
         {t('Categories')}
       </Typography>
@@ -139,7 +141,7 @@ export default function ProductsPage() {
           <FormControlLabel
             key={category.id}
             control={
-              <Checkbox 
+              <Checkbox
                 checked={selectedCategory === String(category.id)}
                 onChange={() => setSelectedCategory(String(category.id))}
                 size="small"
@@ -152,11 +154,11 @@ export default function ProductsPage() {
                 {category.name}
               </Typography>
             }
-            sx={{ 
-              m: 0, 
-              '& .MuiTypography-root': { 
-                fontWeight: selectedCategory === String(category.id) ? 600 : 400 
-              } 
+            sx={{
+              m: 0,
+              '& .MuiTypography-root': {
+                fontWeight: selectedCategory === String(category.id) ? 600 : 400
+              }
             }}
           />
         ))}
@@ -168,9 +170,9 @@ export default function ProductsPage() {
         {t('Price Range')}
       </Typography>
       <Box sx={{ display: 'flex', gap: 0.5, alignItems: 'center', mb: 3 }}>
-        <TextField 
-          placeholder={t('Min')} 
-          size="small" 
+        <TextField
+          placeholder={t('Min')}
+          size="small"
           value={minPrice}
           onChange={(e) => setMinPrice(e.target.value)}
           sx={{ flex: 1, '& .MuiInputBase-root': { fontSize: '0.75rem', height: 32 } }}
@@ -179,9 +181,9 @@ export default function ProductsPage() {
           }}
         />
         <Typography color="text.secondary" sx={{ fontSize: '0.75rem' }}>{t('to')}</Typography>
-        <TextField 
-          placeholder={t('Max')} 
-          size="small" 
+        <TextField
+          placeholder={t('Max')}
+          size="small"
           value={maxPrice}
           onChange={(e) => setMaxPrice(e.target.value)}
           sx={{ flex: 1, '& .MuiInputBase-root': { fontSize: '0.75rem', height: 32 } }}
@@ -189,64 +191,71 @@ export default function ProductsPage() {
             startAdornment: <InputAdornment position="start" sx={{ '& .MuiTypography-root': { fontSize: '0.75rem' } }}>$</InputAdornment>
           }}
         />
-      </Box>
 
+      </Box>
+      {priceError && (
+        <Box sx={{ mb: 3, p: 2, borderRadius: 2, backgroundColor: alpha(theme.palette.error.main, 0.1), border: `1px solid ${theme.palette.error.main}` }}>
+          <Typography color="error" variant="body2" sx={{ fontWeight: 500 }}>
+            {priceError}
+          </Typography>
+        </Box>
+      )}
       <Divider sx={{ mb: 2.5 }} />
 
       <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1.5, fontSize: '0.8rem', letterSpacing: '0.5px' }}>
         {t('Rating')}
       </Typography>
       <Stack spacing={0.3} sx={{ mb: 3 }}>
-        <FormControlLabel 
+        <FormControlLabel
           control={
-            <Checkbox 
-              size="small" 
-              sx={{ p: 0.5 }} 
+            <Checkbox
+              size="small"
+              sx={{ p: 0.5 }}
               checked={selectedRating === '4'}
               onChange={() => setSelectedRating(selectedRating === '4' ? '' : '4')}
             />
-          } 
-          label={<Rating value={4} readOnly size="small" sx={{ color: theme.palette.error.main, fontSize: '0.9rem' }} />} 
+          }
+          label={<Rating value={4} readOnly size="small" sx={{ color: theme.palette.error.main, fontSize: '0.9rem' }} />}
           sx={{ m: 0, '& .MuiTypography-root': { fontSize: '0.75rem' } }}
         />
-        <FormControlLabel 
+        <FormControlLabel
           control={
-            <Checkbox 
-              size="small" 
-              sx={{ p: 0.5 }} 
+            <Checkbox
+              size="small"
+              sx={{ p: 0.5 }}
               checked={selectedRating === '3'}
               onChange={() => setSelectedRating(selectedRating === '3' ? '' : '3')}
             />
-          } 
-          label={<Rating value={3} readOnly size="small" sx={{ color: theme.palette.error.main, fontSize: '0.9rem' }} />} 
+          }
+          label={<Rating value={3} readOnly size="small" sx={{ color: theme.palette.error.main, fontSize: '0.9rem' }} />}
           sx={{ m: 0, '& .MuiTypography-root': { fontSize: '0.75rem' } }}
         />
-        <FormControlLabel 
+        <FormControlLabel
           control={
-            <Checkbox 
-              size="small" 
-              sx={{ p: 0.5 }} 
+            <Checkbox
+              size="small"
+              sx={{ p: 0.5 }}
               checked={selectedRating === '2'}
               onChange={() => setSelectedRating(selectedRating === '2' ? '' : '2')}
             />
-          } 
-          label={<Rating value={2} readOnly size="small" sx={{ color: theme.palette.error.main, fontSize: '0.9rem' }} />} 
+          }
+          label={<Rating value={2} readOnly size="small" sx={{ color: theme.palette.error.main, fontSize: '0.9rem' }} />}
           sx={{ m: 0, '& .MuiTypography-root': { fontSize: '0.75rem' } }}
         />
       </Stack>
 
       <Stack spacing={1} sx={{ mt: 1 }}>
-        <Button 
-          variant="contained" 
-          fullWidth 
+        <Button
+          variant="contained"
+          fullWidth
           onClick={handleApplyFilters}
           sx={{ textTransform: 'none', borderRadius: 1.5 }}
         >
           {t('Apply Filters')}
         </Button>
-        <Button 
-          variant="outlined" 
-          fullWidth 
+        <Button
+          variant="outlined"
+          fullWidth
           onClick={handleClearFilters}
           sx={{ textTransform: 'none', borderRadius: 1.5 }}
         >
@@ -258,19 +267,19 @@ export default function ProductsPage() {
 
   return (
     <Container maxWidth="xxl" sx={{ py: 6 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', mb: 1, gap: 0.5, color: 'text.secondary', fontSize: '0.8rem' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', mb: 1, gap: 0.5, color: 'text.secondary', fontSize: '0.8rem' }}>
         <Link to="/" style={{ textDecoration: 'none', color: theme.palette.text.secondary }}>
           {t('Home')}
         </Link>
-        
-        <ChevronRightIcon 
-  fontSize="small" 
-  sx={{ 
-    color: 'text.secondary', 
-    mx: 0.5,
-    transform: i18n.language === 'ar' ? 'rotate(180deg)' : 'none'
-  }} 
-/>
+
+        <ChevronRightIcon
+          fontSize="small"
+          sx={{
+            color: 'text.secondary',
+            mx: 0.5,
+            transform: i18n.language === 'ar' ? 'rotate(180deg)' : 'none'
+          }}
+        />
 
         {pathnames.map((name, index) => {
           const isLast = index === pathnames.length - 1
@@ -301,9 +310,9 @@ export default function ProductsPage() {
             </Box>
 
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
-              <Button 
-                variant="outlined" 
-                size="small" 
+              <Button
+                variant="outlined"
+                size="small"
                 startIcon={<FilterListIcon />}
                 onClick={() => setDrawerOpen(true)}
                 sx={{ display: { xs: 'flex', md: 'none' }, borderRadius: 1.5, textTransform: 'none' }}
@@ -314,7 +323,7 @@ export default function ProductsPage() {
               <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500, fontSize: '0.85rem' }}>
                 {t('Sort by')}:
               </Typography>
-                            <FormControl size="small" sx={{ minWidth: 140 }}>
+              <FormControl size="small" sx={{ minWidth: 140 }}>
                 <Select
                   value={`${sortBy}-${ascending ? 'asc' : 'desc'}`}
                   onChange={handleSortChange}
@@ -322,8 +331,8 @@ export default function ProductsPage() {
                   MenuProps={{
                     disableScrollLock: true,
                   }}
-                  sx={{ 
-                    borderRadius: 1.5, 
+                  sx={{
+                    borderRadius: 1.5,
                     bgcolor: 'background.paper',
                     '& .MuiOutlinedInput-notchedOutline': { borderColor: 'divider' },
                     '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'primary.main' },
@@ -341,16 +350,17 @@ export default function ProductsPage() {
             </Box>
           </Box>
 
-          <ProductsComponent 
-            page={page} 
-            limit={limit} 
-            sortBy={sortBy} 
+          <ProductsComponent
+            page={page}
+            limit={limit}
+            sortBy={sortBy}
             ascending={ascending}
             categoryId={appliedCategory}
             minPrice={appliedMinPrice}
             maxPrice={appliedMaxPrice}
             minRating={appliedRating}
             onTotalCountChange={setTotalCount}
+            onPriceError={setPriceError}
           />
         </Box>
       </Box>

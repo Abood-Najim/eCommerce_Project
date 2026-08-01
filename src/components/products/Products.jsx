@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import useProducts from '../../hooks/useProducts';
 import useProductsByCategory from '../../hooks/useProductsByCategory';
-import { Box, Card, CardContent, CardMedia, CircularProgress, Grid, Typography, Rating, IconButton, Button, useTheme } from '@mui/material';
+import { Box, Card, CardContent, CardMedia, CircularProgress, Grid, Typography, Rating, IconButton, Button, useTheme, alpha } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -9,20 +9,21 @@ import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import useAddToCart from '../../hooks/useAddToCart';
 import i18n from '../../i18next';
 
-const Products = ({ categoryId, page = 1, limit = 8, sortBy = 'price', ascending = false, minPrice = '', maxPrice = '', minRating = '', onTotalCountChange }) => {
+const Products = ({ categoryId, page = 1, limit = 8, sortBy = 'price', ascending = false, minPrice = '', maxPrice = '', minRating = '', onTotalCountChange, onPriceError }) => {
   const theme = useTheme();
   const { t } = useTranslation();
   const { mutate: addToCart } = useAddToCart();
+  const [priceError, setPriceError] = useState('');
 
-  const { data, isLoading, isError, error } = categoryId 
-    ? useProductsByCategory(categoryId) 
+  const { data, isLoading, isError, error } = categoryId
+    ? useProductsByCategory(categoryId)
     : useProducts(page, limit, sortBy, ascending);
 
   const handleAddToCart = (productId, e) => {
     e.preventDefault();
     addToCart({ productId, count: 1 });
   };
-  const isRtl = i18n.language === 'ar'; 
+  const isRtl = i18n.language === 'ar';
 
   const iconElement = <ShoppingBagOutlinedIcon fontSize="small" />;
   if (isLoading) return <CircularProgress />
@@ -35,9 +36,19 @@ const Products = ({ categoryId, page = 1, limit = 8, sortBy = 'price', ascending
     products = data?.response?.data || data?.data || data || [];
   }
 
+
+  let currentError = '';
   if (Array.isArray(products)) {
-    if (minPrice) products = products.filter(p => p.price >= Number(minPrice));
-    if (maxPrice) products = products.filter(p => p.price <= Number(maxPrice));
+    if (minPrice && maxPrice && Number(minPrice) > Number(maxPrice)) {
+      currentError = "Min price can't be higher than Max price.";
+    } else {
+      if (minPrice) products = products.filter(p => p.price >= Number(minPrice));
+      if (maxPrice) products = products.filter(p => p.price <= Number(maxPrice));
+    }
+    if (currentError !== priceError) {
+      setPriceError(currentError);
+      if (onPriceError) onPriceError(currentError);
+    }
     if (minRating) products = products.filter(p => (p.rate || 0) >= Number(minRating));
 
     if (sortBy === 'price') {
@@ -71,33 +82,33 @@ const Products = ({ categoryId, page = 1, limit = 8, sortBy = 'price', ascending
         {products.map((product) => (
           <Grid item size={{ xs: 12, sm: 6, md: 4 }} key={product.id}>
             <Link to={`/product/${product.id}`} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
-              <Card sx={{ 
-                position: 'relative', 
-                borderRadius: 2, 
-                border: '1px solid', 
-                borderColor: 'divider', 
-                boxShadow: 'none', 
+              <Card sx={{
+                position: 'relative',
+                borderRadius: 2,
+                border: '1px solid',
+                borderColor: 'divider',
+                boxShadow: 'none',
                 height: '100%',
                 display: 'flex',
                 flexDirection: 'column',
-                transition: 'all 0.3s ease', 
-                '&:hover': { transform: 'translateY(-4px)', boxShadow: '0px 8px 20px rgba(0,0,0,0.08)' } 
+                transition: 'all 0.3s ease',
+                '&:hover': { transform: 'translateY(-4px)', boxShadow: '0px 8px 20px rgba(0,0,0,0.08)' }
               }}>
-                <IconButton 
+                <IconButton
                   size="small"
-                  sx={{ 
-                    position: 'absolute', 
-                    top: 10, 
-                    right: 10, 
+                  sx={{
+                    position: 'absolute',
+                    top: 10,
+                    right: 10,
                     color: 'text.secondary',
                     '&:hover': { color: theme.palette.error.main }
                   }}
                 >
                   <FavoriteBorderIcon fontSize="small" />
                 </IconButton>
-                <Box sx={{ 
-                  display: 'flex', 
-                  alignItems: 'center', 
+                <Box sx={{
+                  display: 'flex',
+                  alignItems: 'center',
                   justifyContent: 'center',
                   backgroundColor: 'background.default',
                   maxWidth: '100%'
@@ -106,7 +117,7 @@ const Products = ({ categoryId, page = 1, limit = 8, sortBy = 'price', ascending
                     component="img"
                     image={product.image}
                     alt={product.name}
-                    sx={{ 
+                    sx={{
                       width: '100%',
                       height: '100%',
                       objectFit: 'contain'
@@ -120,10 +131,10 @@ const Products = ({ categoryId, page = 1, limit = 8, sortBy = 'price', ascending
                       {product.name}
                     </Typography>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Rating 
-                        value={product.rate || 0} 
-                        readOnly 
-                        size="small" 
+                      <Rating
+                        value={product.rate || 0}
+                        readOnly
+                        size="small"
                         sx={{ color: theme.palette.error.main }}
                       />
                     </Box>
@@ -133,16 +144,16 @@ const Products = ({ categoryId, page = 1, limit = 8, sortBy = 'price', ascending
                     ${product.price}
                   </Typography>
 
-                  <Box sx={{ mt: 'auto',display:'flex',alignItems:'stretch',justifyContent:'center',gap:2 }}>
-                    <Button 
-                      variant="contained" 
-                      size="small" 
+                  <Box sx={{ mt: 'auto', display: 'flex', alignItems: 'stretch', justifyContent: 'center', gap: 2 }}>
+                    <Button
+                      variant="contained"
+                      size="small"
                       startIcon={!isRtl ? iconElement : undefined}
                       endIcon={isRtl ? iconElement : undefined}
                       fullWidth
-                      sx={{ 
-                        textTransform: 'none', 
-                        borderRadius: 2, 
+                      sx={{
+                        textTransform: 'none',
+                        borderRadius: 2,
                         py: 0.8,
                         fontWeight: 600,
                         fontSize: '0.85rem'
