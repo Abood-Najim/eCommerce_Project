@@ -7,6 +7,8 @@ import { useTranslation } from 'react-i18next';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import useAddToCart from '../../hooks/useAddToCart';
+import useLoginPromptStore from '../../store/useLoginPromptStore';
+import useAuthStore from '../../store/useAuthStore';
 import i18n from '../../i18next';
 
 const Products = ({ categoryId, page = 1, limit = 8, sortBy = 'price', ascending = false, minPrice = '', maxPrice = '', minRating = '', onTotalCountChange, onPriceError }) => {
@@ -14,6 +16,8 @@ const Products = ({ categoryId, page = 1, limit = 8, sortBy = 'price', ascending
   const { t } = useTranslation();
   const { mutate: addToCart } = useAddToCart();
   const [priceError, setPriceError] = useState('');
+  const token = useAuthStore((state) => state.token)
+  const openLoginPrompt = useLoginPromptStore((state) => state.openLoginPrompt)
 
   const { data, isLoading, isError, error } = categoryId
     ? useProductsByCategory(categoryId)
@@ -21,6 +25,10 @@ const Products = ({ categoryId, page = 1, limit = 8, sortBy = 'price', ascending
 
   const handleAddToCart = (productId, e) => {
     e.preventDefault();
+    if (!token) {
+      openLoginPrompt();
+      return;
+    }
     addToCart({ productId, count: 1 });
   };
   const isRtl = i18n.language === 'ar';

@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import useProduct from '../../hooks/useProduct'
 import { useParams, Link } from 'react-router-dom';
-import { 
-  Box, 
-  Button, 
-  CircularProgress, 
-  Typography, 
-  Container, 
-  Rating, 
-  Divider, 
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Typography,
+  Container,
+  Rating,
+  Divider,
   Paper,
   useTheme,
   IconButton,
@@ -20,6 +20,7 @@ import {
 import useAddToCart from '../../hooks/useAddToCart';
 import useAddReview from '../../hooks/useAddReview';
 import useAuthStore from '../../store/useAuthStore';
+import useLoginPromptStore from '../../store/useLoginPromptStore'
 import { useTranslation } from 'react-i18next';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -30,6 +31,7 @@ export default function ProductDetails() {
   const theme = useTheme();
   const { id } = useParams();
   const token = useAuthStore((state) => state.token);
+  const openLoginPrompt = useLoginPromptStore((state) => state.openLoginPrompt)
   const { mutate: addToCart } = useAddToCart();
   const { mutate: addReview, isPending: reviewPending } = useAddReview();
   const { data, isLoading, isError, error } = useProduct(id);
@@ -39,11 +41,19 @@ export default function ProductDetails() {
   const [reviewComment, setReviewComment] = useState('');
 
   const handleAddToCart = () => {
+    if (!token) {
+      openLoginPrompt();
+      return;
+    }
     addToCart({ productId: data.response.id, count: quantity });
   };
 
   const handleSubmitReview = (e) => {
     e.preventDefault();
+    if (!token) {
+      openLoginPrompt();
+      return;
+    }
     if (!reviewRating || !reviewComment.trim()) return;
 
     addReview(
@@ -72,7 +82,7 @@ export default function ProductDetails() {
 
   return (
     <Container maxWidth="xxl" sx={{ py: 6 }}>
-      
+
       <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 0.5, mb: 4, color: 'text.secondary', fontSize: '0.8rem' }}>
         <Link to="/" style={{ textDecoration: 'none', color: theme.palette.text.secondary }}>
           {t('Home')}
@@ -88,18 +98,18 @@ export default function ProductDetails() {
       </Box>
 
       <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 4, alignItems: 'flex-start' }}>
-        
-        <Box sx={{ 
+
+        <Box sx={{
           display: 'flex',
           flexDirection: { xs: 'column-reverse', md: 'row' },
-          gap: 2, 
+          gap: 2,
           flex: { xs: '0 0 100%', md: '0 0 60%' },
-          maxWidth: { xs: '100%', md: '700px' }, 
+          maxWidth: { xs: '100%', md: '700px' },
           mx: { xs: 'auto', md: 0 }
         }}>
-          
-          <Box sx={{ 
-            display: 'flex', 
+
+          <Box sx={{
+            display: 'flex',
             flexDirection: { xs: 'row', md: 'column' },
             gap: 1.5,
             flex: { xs: '0 0 auto', md: '0 0 80px' }
@@ -132,10 +142,10 @@ export default function ProductDetails() {
           </Box>
 
           <Box sx={{ flex: 1 }}>
-            <Paper 
-              elevation={0} 
-              sx={{  
-                border: `1px solid ${theme.palette.divider}`, 
+            <Paper
+              elevation={0}
+              sx={{
+                border: `1px solid ${theme.palette.divider}`,
                 borderRadius: 3,
                 backgroundColor: 'background.default',
                 display: 'flex',
@@ -160,18 +170,18 @@ export default function ProductDetails() {
 
         <Box sx={{ flex: { xs: '0 0 100%', md: '1' }, maxWidth: { xs: '100%' } }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
-            
+
             <Box>
-              <Chip 
-                label={t('Limited Edition')} 
-                size="small" 
-                sx={{ 
-                  bgcolor: '#E0F2FE', 
-                  color: '#0284C7', 
-                  fontWeight: 600, 
+              <Chip
+                label={t('Limited Edition')}
+                size="small"
+                sx={{
+                  bgcolor: '#E0F2FE',
+                  color: '#0284C7',
+                  fontWeight: 600,
                   fontSize: '0.7rem',
                   borderRadius: 1
-                }} 
+                }}
               />
             </Box>
 
@@ -180,11 +190,11 @@ export default function ProductDetails() {
             </Typography>
 
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-              <Rating 
-                value={data.response.rate || 0} 
-                readOnly 
-                precision={0.5} 
-                sx={{ color: theme.palette.error.main }} 
+              <Rating
+                value={data.response.rate || 0}
+                readOnly
+                precision={0.5}
+                sx={{ color: theme.palette.error.main }}
               />
               <Typography variant="body2" color="text.secondary">
                 ({reviewCount} {t('Reviews')})
@@ -219,15 +229,15 @@ export default function ProductDetails() {
               <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
                 {t('Select Quantity')}
               </Typography>
-              <Box sx={{ 
-                display: 'flex', 
-                alignItems: 'center', 
+              <Box sx={{
+                display: 'flex',
+                alignItems: 'center',
                 border: `1px solid ${theme.palette.divider}`,
                 borderRadius: 2,
                 overflow: 'hidden'
               }}>
-                <IconButton 
-                  size="small" 
+                <IconButton
+                  size="small"
                   disabled={quantity <= 1}
                   onClick={() => setQuantity(prev => prev - 1)}
                   sx={{ px: 1.5, py: 1, borderRadius: 0, '&:hover': { bgcolor: 'action.hover' } }}
@@ -237,8 +247,8 @@ export default function ProductDetails() {
                 <Typography sx={{ px: 2, py: 1, fontWeight: 600, minWidth: 30, textAlign: 'center' }}>
                   {quantity}
                 </Typography>
-                <IconButton 
-                  size="small" 
+                <IconButton
+                  size="small"
                   onClick={() => setQuantity(prev => prev + 1)}
                   sx={{ px: 1.5, py: 1, borderRadius: 0, '&:hover': { bgcolor: 'action.hover' } }}
                 >
@@ -247,16 +257,16 @@ export default function ProductDetails() {
               </Box>
             </Box>
 
-            <Button 
-              variant="contained" 
-              size="large" 
-              fullWidth 
+            <Button
+              variant="contained"
+              size="large"
+              fullWidth
               startIcon={<ShoppingBagOutlinedIcon />}
               onClick={handleAddToCart}
               disabled={data.response.quantity === 0}
-              sx={{ 
-                py: 1.8, 
-                textTransform: 'none', 
+              sx={{
+                py: 1.8,
+                textTransform: 'none',
                 borderRadius: 2,
                 fontWeight: 600,
                 fontSize: '1rem'
@@ -266,12 +276,12 @@ export default function ProductDetails() {
             </Button>
 
             <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mt: 2 }}>
-              <Paper 
-                elevation={0} 
-                sx={{ 
-                  flex: 1, 
-                  p: 2, 
-                  border: `1px solid ${theme.palette.divider}`, 
+              <Paper
+                elevation={0}
+                sx={{
+                  flex: 1,
+                  p: 2,
+                  border: `1px solid ${theme.palette.divider}`,
                   borderRadius: 2,
                   display: 'flex',
                   alignItems: 'center',
@@ -291,12 +301,12 @@ export default function ProductDetails() {
                   </Typography>
                 </Box>
               </Paper>
-              <Paper 
-                elevation={0} 
-                sx={{ 
-                  flex: 1, 
-                  p: 2, 
-                  border: `1px solid ${theme.palette.divider}`, 
+              <Paper
+                elevation={0}
+                sx={{
+                  flex: 1,
+                  p: 2,
+                  border: `1px solid ${theme.palette.divider}`,
                   borderRadius: 2,
                   display: 'flex',
                   alignItems: 'center',
@@ -323,11 +333,11 @@ export default function ProductDetails() {
 
       </Box>
 
-      <Box sx={{ mt: 8, maxWidth: '100%' ,pl:{ xs:0 , md:8}}}>
+      <Box sx={{ mt: 8, maxWidth: '100%', pl: { xs: 0, md: 8 } }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
-          <Tabs 
-            value={tabValue} 
-            onChange={handleTabChange} 
+          <Tabs
+            value={tabValue}
+            onChange={handleTabChange}
             textColor="primary"
             indicatorColor="primary"
             sx={{
@@ -417,7 +427,7 @@ export default function ProductDetails() {
           </Box>
         )}
       </Box>
-      
+
     </Container>
   )
 }
