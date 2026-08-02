@@ -1,19 +1,20 @@
 import React, { useEffect } from 'react'
 import authAxiosInstance from '../../api/authAxiosInstance';
 import useAuthStore from '../../store/useAuthStore';
+import useLoginPromptStore from '../../store/useLoginPromptStore';
 import useCart from '../../hooks/useCart';
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
-import { 
-  Box, 
-  Button, 
-  IconButton, 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableContainer, 
-  TableHead, 
-  TableRow, 
+import {
+  Box,
+  Button,
+  IconButton,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   Paper,
   useTheme,
   Stack
@@ -37,7 +38,8 @@ export default function Cart() {
   const { mutate: updateQuantity, isPending: updateQuantityPend } = useUpdateQuantity();
   const { mutate: clearCart, isPending: clearCartPend } = useClearCart();
   const { t } = useTranslation();
-
+  const token = useAuthStore((state) => state.token);
+  const openLoginPrompt = useLoginPromptStore((state) => state.openLoginPrompt);
   const handleUpdate = (productId, action) => {
     const item = data.items.find(i => i.productId == productId);
     if (action == '+') {
@@ -57,18 +59,26 @@ export default function Cart() {
     }
   }, [data, removeItem]);
 
+  const handleCheckout = () => {
+    if (!token) {
+      openLoginPrompt();
+      return;
+    }
+    navigate('/checkout');
+  };
+
   if (isLoading) return <CircularProgress />
   if (isError) return <Typography color='red'>{error.message}</Typography>
 
   return (
-    <Box component="section" sx={{ py: 6, px: { xs: 2, md: 4 }, maxWidth: '1200px', mx: 'auto',minHeight:'80vh' }}>
-      
+    <Box component="section" sx={{ py: 6, px: { xs: 2, md: 4 }, maxWidth: '1200px', mx: 'auto', minHeight: '80vh' }}>
+
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4, flexWrap: 'wrap', gap: 2 }}>
         <Typography variant="h4" sx={{ fontWeight: 700, color: 'text.primary', letterSpacing: '-0.5px' }}>
           {t('Cart')}
         </Typography>
-        <Button 
-          disabled={clearCartPend} 
+        <Button
+          disabled={clearCartPend}
           onClick={clearCart}
           variant="outlined"
           color="error"
@@ -111,19 +121,19 @@ export default function Cart() {
                     <TableCell sx={{ textAlign: 'center' }}>{item.price}$</TableCell>
                     <TableCell sx={{ textAlign: 'center' }}>
                       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
-                        <IconButton 
-                          size="small" 
-                          disabled={updateQuantityPend} 
-                          onClick={() => handleUpdate(item.productId, '-')} 
+                        <IconButton
+                          size="small"
+                          disabled={updateQuantityPend}
+                          onClick={() => handleUpdate(item.productId, '-')}
                           sx={{ border: `1px solid ${theme.palette.divider}` }}
                         >
                           <RemoveIcon fontSize="small" />
                         </IconButton>
                         <Typography sx={{ minWidth: 30, textAlign: 'center', fontWeight: 600 }}>{item.count}</Typography>
-                        <IconButton 
-                          size="small" 
-                          disabled={updateQuantityPend} 
-                          onClick={() => handleUpdate(item.productId, '+')} 
+                        <IconButton
+                          size="small"
+                          disabled={updateQuantityPend}
+                          onClick={() => handleUpdate(item.productId, '+')}
                           sx={{ border: `1px solid ${theme.palette.divider}` }}
                         >
                           <AddIcon fontSize="small" />
@@ -133,17 +143,17 @@ export default function Cart() {
                     <TableCell sx={{ textAlign: 'center', fontWeight: 600, color: 'primary.main' }}>{item.totalPrice}$</TableCell>
                     <TableCell sx={{ textAlign: 'center' }}>
                       <Stack direction="row" spacing={1} justifyContent="center" alignItems="center">
-                        <IconButton 
+                        <IconButton
                           size="small"
                           onClick={() => navigate(`/product/${item.productId}`)}
                           sx={{ color: 'primary.main' }}
                         >
                           <VisibilityOutlinedIcon fontSize="small" />
                         </IconButton>
-                        <IconButton 
-                          color="error" 
-                          disabled={isPending} 
-                          onClick={() => removeItem(item.productId)} 
+                        <IconButton
+                          color="error"
+                          disabled={isPending}
+                          onClick={() => removeItem(item.productId)}
                           size="small"
                         >
                           <DeleteIcon />
@@ -158,7 +168,7 @@ export default function Cart() {
 
           <Box sx={{ mt: 4, display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: 'center', gap: 2 }}>
             <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-              <Button variant="contained" onClick={() => navigate('/checkout')} sx={{ textTransform: 'none', borderRadius: 2, px: 3, py: 1.2 }}>
+              <Button variant="contained" onClick={handleCheckout} sx={{ textTransform: 'none', borderRadius: 2, px: 3, py: 1.2 }}>
                 {t('Proceed To Checkout')}
               </Button>
               <Button variant="outlined" onClick={() => navigate('/products')} sx={{ textTransform: 'none', borderRadius: 2, px: 3, py: 1.2 }}>
