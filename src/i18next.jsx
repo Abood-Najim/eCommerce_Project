@@ -375,7 +375,6 @@ i18n
           "Need help finding something specific?": "هل تحتاج مساعدة في العثور على شيء محدد؟",
           "Exclusives": "حصريات",
           "Login Required": "تسجيل الدخول مطلوب",
-
           "You need to be signed in to perform this action.": "يجب تسجيل الدخول لإجراء هذا الإجراء.",
 
         }

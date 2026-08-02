@@ -5,6 +5,8 @@ import useProfile from '../../hooks/useProfile'
 import useUpdateProfile from '../../hooks/useUpdateProfile'
 import useUpdateEmail from '../../hooks/useUpdateEmail'
 import useChangePassword from '../../hooks/useChangePassword'
+import useAuthStore from '../../store/useAuthStore';
+import useLoginPromptStore from '../../store/useLoginPromptStore';
 import CloseIcon from '@mui/icons-material/Close'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
@@ -12,15 +14,17 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 export default function ProfileInfo() {
   const { t } = useTranslation()
   const theme = useTheme()
+  const token = useAuthStore((state) => state.token);
+  const openLoginPrompt = useLoginPromptStore((state) => state.openLoginPrompt);
   const [open, setOpen] = useState(false)
   const [emailOpen, setEmailOpen] = useState(false)
   const [passwordOpen, setPasswordOpen] = useState(false)
-  
+
   const { data, isLoading, isError, error } = useProfile()
   const { mutate: updateProfile, isPending } = useUpdateProfile()
   const { mutate: updateEmail, isPending: emailPending } = useUpdateEmail()
   const { mutate: changePassword, isPending: passwordPending } = useChangePassword()
-  
+
   const [formData, setFormData] = useState({
     fullName: '',
     phoneNumber: ''
@@ -39,42 +43,54 @@ export default function ProfileInfo() {
   const [showCurrent, setShowCurrent] = useState(false)
   const [showNew, setShowNew] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
-  
+
   if (isLoading) return <CircularProgress />
   if (isError) return <Typography color='error'>{error.message}</Typography>
-  
+
   const profile = data?.response || data || {}
-  
+
   const handleOpen = () => {
+    if (!token) {
+      openLoginPrompt();
+      return;
+    }
     setFormData({
       fullName: profile.fullName || '',
       phoneNumber: profile.phoneNumber || ''
-    })
-    setOpen(true)
-  }
-  
+    });
+    setOpen(true);
+  };
+
   const handleClose = () => setOpen(false)
 
   const handleEmailOpen = () => {
+    if (!token) {
+      openLoginPrompt();
+      return;
+    }
     setEmailData({
       newEmail: profile.email || ''
-    })
-    setEmailOpen(true)
-  }
+    });
+    setEmailOpen(true);
+  };
 
   const handleEmailClose = () => setEmailOpen(false)
 
   const handlePasswordOpen = () => {
+    if (!token) {
+      openLoginPrompt();
+      return;
+    }
     setPasswordData({
       currentPassword: '',
       newPassword: '',
       confirmNewPassword: ''
-    })
-    setPasswordOpen(true)
-  }
+    });
+    setPasswordOpen(true);
+  };
 
   const handlePasswordClose = () => setPasswordOpen(false)
-  
+
   const handleSubmit = (e) => {
     e.preventDefault()
     updateProfile(formData, {
@@ -101,7 +117,7 @@ export default function ProfileInfo() {
       }
     })
   }
-  
+
   return (
     <Paper elevation={0} sx={{ p: 4, borderRadius: 3, border: `1px solid ${theme.palette.divider}` }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3, flexWrap: 'wrap', gap: 2 }}>
@@ -109,25 +125,25 @@ export default function ProfileInfo() {
           {t('Personal Information')}
         </Typography>
         <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-          <Button 
-            variant="outlined" 
-            size="small" 
+          <Button
+            variant="outlined"
+            size="small"
             onClick={handleEmailOpen}
             sx={{ textTransform: 'none', borderRadius: 2 }}
           >
             {t('Update Email')}
           </Button>
-          <Button 
-            variant="outlined" 
-            size="small" 
+          <Button
+            variant="outlined"
+            size="small"
             onClick={handlePasswordOpen}
             sx={{ textTransform: 'none', borderRadius: 2 }}
           >
             {t('Change Password')}
           </Button>
-          <Button 
-            variant="outlined" 
-            size="small" 
+          <Button
+            variant="outlined"
+            size="small"
             onClick={handleOpen}
             sx={{ textTransform: 'none', borderRadius: 2 }}
           >
@@ -167,7 +183,7 @@ export default function ProfileInfo() {
         </Box>
       </Box>
 
-    {/*i made the update info as a model actually i was in a hurry so i didn't make as a new page*/} 
+      {/*i made the update info as a model actually i was in a hurry so i didn't make as a new page*/}
       <Modal open={open} onClose={handleClose} disableScrollLock={true}>
         <Box sx={{
           position: 'absolute',
@@ -202,9 +218,9 @@ export default function ProfileInfo() {
               value={formData.phoneNumber}
               onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
             />
-            <Button 
-              type="submit" 
-              variant="contained" 
+            <Button
+              type="submit"
+              variant="contained"
               disabled={isPending}
               sx={{ mt: 1, textTransform: 'none', borderRadius: 2 }}
             >
@@ -242,9 +258,9 @@ export default function ProfileInfo() {
               value={emailData.newEmail}
               onChange={(e) => setEmailData({ ...emailData, newEmail: e.target.value })}
             />
-            <Button 
-              type="submit" 
-              variant="contained" 
+            <Button
+              type="submit"
+              variant="contained"
               disabled={emailPending}
               sx={{ mt: 1, textTransform: 'none', borderRadius: 2 }}
             >
@@ -324,9 +340,9 @@ export default function ProfileInfo() {
                 )
               }}
             />
-            <Button 
-              type="submit" 
-              variant="contained" 
+            <Button
+              type="submit"
+              variant="contained"
               disabled={passwordPending}
               sx={{ mt: 1, textTransform: 'none', borderRadius: 2 }}
             >

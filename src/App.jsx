@@ -8,6 +8,7 @@ import { ThemeProvider } from '@emotion/react'
 import getTheme  from './theme'
 import { CssBaseline } from '@mui/material'
 import useThemeStore from './store/useThemeStore'
+
 export default function App() {
   const {i18n} = useTranslation();
   const mode = useThemeStore((state)=>state.mode);
