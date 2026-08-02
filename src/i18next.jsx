@@ -190,6 +190,8 @@ i18n
           "Exclusives": "Exclusives",
           "Member-only limited edition items.": "Member-only limited edition items.",
           "Need help finding something specific?": "Need help finding something specific?",
+          "Login Required": "Login Required",
+          "You need to be signed in to perform this action.": "You need to be signed in to perform this action.",
 
         }
       },
@@ -372,6 +374,9 @@ i18n
           "Member-only limited edition items.": "إصدارات محدودة حصرية للأعضاء.",
           "Need help finding something specific?": "هل تحتاج مساعدة في العثور على شيء محدد؟",
           "Exclusives": "حصريات",
+          "Login Required": "تسجيل الدخول مطلوب",
+
+          "You need to be signed in to perform this action.": "يجب تسجيل الدخول لإجراء هذا الإجراء.",
 
         }
       },
