@@ -9,11 +9,15 @@ import {
   useTheme,
   IconButton,
   Paper,
+  Container,
+  Stack,
+  Avatar
 } from "@mui/material"
 import React, { useState } from "react"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useNavigate, Link } from "react-router-dom"
+import { toast } from "react-toastify"
 import { setNewPasswordSchema } from "../../validations/SetNewPasswordSchema"
 import useResetPassword from "../../hooks/useResetPassword"
 import LockResetIcon from '@mui/icons-material/LockReset'
@@ -28,7 +32,6 @@ export default function SetNewPassword() {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const theme = useTheme()
-  const [serverErrors, setServerErrors] = useState([])
 
   const [showNewPassword, setShowNewPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -49,7 +52,7 @@ export default function SetNewPassword() {
 
   const onSubmit = (data) => {
     if (!savedEmail || !savedCode) {
-      setServerErrors(["Missing email or code. Please go back and restart the reset process."])
+      toast.error(t("Missing email or code. Please go back and restart the reset process."))
       return
     }
 
@@ -63,216 +66,242 @@ export default function SetNewPassword() {
         onSuccess: () => {
           localStorage.removeItem('resetPasswordEmail')
           localStorage.removeItem('resetPasswordCode')
+          toast.success(t("Password changed successfully!"))
           navigate("/login")
         },
         onError: (err) => {
-          setServerErrors([err.response?.data?.message || err.message || "An error occurred."])
+          const rawMessage = err?.response?.data?.message || err?.message
+          toast.error(rawMessage ? t(rawMessage) : t("Failed to reset password. Please try again."))
         },
       }
     )
   }
 
   return (
-    <Paper
+    <Box
       sx={{
+        minHeight: '100vh',
+        width: '100%',
         display: 'flex',
-        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'background.default',
-        py: 42,
-        px: 2,
-        '& .MuiInputAdornment-root button, & .MuiInputAdornment-root svg': {
-          opacity: '0 !important',
-          pointerEvents: 'none !important',
-          display: 'none !important'
-        },
-        borderRadius:0
+        background: `radial-gradient(circle at 50% 30%, ${theme.palette.primary.main}12 0%, ${theme.palette.background.default} 70%)`,
+        py: 4,
+        px: 2
       }}
     >
-      <Typography variant="h4" sx={{ fontWeight: 700, color: 'primary.main', mb: 4, letterSpacing: '-0.5px' }}>
-        Lumina Luxe
-      </Typography>
-
-      <Box
-        component="form"
-        onSubmit={handleSubmit(onSubmit)}
-        sx={{
-          width: "100%",
-          maxWidth: 450,
-          backgroundColor: "background.paper",
-          borderRadius: 3,
-          p: 4,
-          boxShadow: '0px 10px 40px rgba(0,0,0,0.08)',
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: 2,
-        }}
-      >
-        <Box sx={{
-          width: 56,
-          height: 56,
-          borderRadius: '50%',
-          border: 2,
-          borderColor: 'primary.main',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          mb: 1
-        }}>
-          <LockResetIcon sx={{ color: 'primary.main', fontSize: 28 }} />
-        </Box>
-
-        <Typography variant="h5" sx={{ fontWeight: 600, color: 'text.primary' }}>
-          {t("Set New Password")}
-        </Typography>
-
-        <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', mb: 1, maxWidth: '90%' }}>
-          {t("Enter your new password.")}
-        </Typography>
-
-        {serverErrors?.length > 0 && serverErrors.map((error, index) => (
-          <Typography key={index} color='error' variant="body2" sx={{ width: '100%', textAlign: 'center' }}>{error}</Typography>
-        ))}
-
-        <TextField
-          fullWidth
-          disabled
-          label={t("Email Address")}
-          variant="outlined"
-          value={savedEmail}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <EmailOutlinedIcon color="action" />
-              </InputAdornment>
-            ),
-          }}
-          sx={{
-            '& .MuiInputBase-root.Mui-disabled': {
-              backgroundColor: 'action.disabledBackground',
-              color: 'text.disabled'
-            }
-          }}
-        />
-        <Box sx={{ position: 'relative', width: '100%' }}>
-          <TextField
-            fullWidth
-            {...register("newPassword")}
-            label={t("New Password")}
-            type={showNewPassword ? "text" : "password"}
-            variant="outlined"
-            placeholder="********"
-            error={!!errors.newPassword}
-            helperText={errors.newPassword?.message}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <LockOutlinedIcon color="action" />
-                </InputAdornment>
-              )
-            }}
-          />
-          <IconButton
-            onClick={() => setShowNewPassword((prev) => !prev)}
+      <Container maxWidth="xs">
+        <Stack spacing={3} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Typography
+            variant="h4"
+            component={Link}
+            to="/"
             sx={{
-              position: 'absolute',
-              right: 10,
-              top: 12,
-              color: 'text.secondary',
-            }}
-
-          >
-            {showNewPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-          </IconButton>
-        </Box>
-
-        <Box sx={{ position: 'relative', width: '100%' }}>
-          <TextField
-            fullWidth
-            {...register("confirmPassword")}
-            label={t("Confirm Password")}
-            type={showConfirmPassword ? "text" : "password"}
-            variant="outlined"
-            placeholder="********"
-            error={!!errors.confirmPassword}
-            helperText={errors.confirmPassword?.message}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <LockOutlinedIcon color="action" />
-                </InputAdornment>
-              )
-            }}
-            
-          />
-          <IconButton
-            onClick={() => setShowConfirmPassword((prev) => !prev)}
-            sx={{
-              position: 'absolute',
-              right: 10,
-              top: 12,
-              color: 'text.secondary',
+              fontWeight: 800,
+              color: 'primary.main',
+              textDecoration: 'none',
+              letterSpacing: '-0.5px'
             }}
           >
-            {showConfirmPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-          </IconButton>
-        </Box>
+            Lumina Luxe
+          </Typography>
 
-        <Button
-          variant="contained"
-          fullWidth
-          type="submit"
-          disabled={isPending || isSubmitting}
-          sx={{
-            py: 1.5,
-            mt: 1,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            textTransform: 'none',
-          }}
-        >
-          {isPending || isSubmitting ? (
-            <CircularProgress size={24} color="inherit" />
-          ) : (
-            <>
-              {t("Reset Password")}
-              <CheckCircleOutlineOutlinedIcon fontSize="small" sx={{ ml: 1 }} />
-            </>
-          )}
-        </Button>
+          <Paper
+            elevation={0}
+            sx={{
+              width: '100%',
+              p: { xs: 3.5, sm: 4.5 },
+              borderRadius: 4,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              backgroundColor: 'background.paper',
+              border: `1px solid ${theme.palette.divider}`,
+              boxShadow: '0px 20px 50px rgba(0, 0, 0, 0.05)'
+            }}
+          >
+            <Avatar
+              sx={{
+                mb: 2.5,
+                bgcolor: 'primary.main',
+                color: 'primary.contrastText',
+                width: 54,
+                height: 54,
+                boxShadow: `0 8px 16px ${theme.palette.primary.main}33`
+              }}
+            >
+              <LockResetIcon fontSize="medium" />
+            </Avatar>
 
-        <Link
-          to="/login"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-            color: theme.palette.text.secondary,
-            textDecoration: 'none',
-            fontWeight: 500,
-            marginTop: '8px'
-          }}
-        >
-          <ArrowBackIcon fontSize="small" />
-          {t("Back to Login")}
-        </Link>
-      </Box>
+            <Typography variant="h5" sx={{ fontWeight: 700, color: 'text.primary', mb: 1, textAlign: 'center' }}>
+              {t("Set New Password")}
+            </Typography>
 
-      <Box sx={{ display: 'flex', gap: 3, mt: 6 }}>
-        <Typography variant="caption" color="text.secondary" sx={{ cursor: 'pointer', '&:hover': { color: 'primary.main' } }}>
-          {t("Privacy Policy")}
-        </Typography>
-        <Typography variant="caption" color="text.secondary" sx={{ cursor: 'pointer', '&:hover': { color: 'primary.main' } }}>
-          {t("Terms of Service")}
-        </Typography>
-      </Box>
+            <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', mb: 3, lineHeight: 1.5 }}>
+              {t("Please enter your new password below.")}
+            </Typography>
 
-      <Typography variant="caption" color="text.secondary" sx={{ mt: 3 }}>
-        &copy; 2024 Lumina Luxe. {t("All rights reserved.")}
-      </Typography>
-    </Paper>
+            <Box
+              component="form"
+              onSubmit={handleSubmit(onSubmit)}
+              sx={{
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 2.5,
+              }}
+            >
+              <TextField
+                fullWidth
+                disabled
+                label={t("Email Address")}
+                variant="outlined"
+                value={savedEmail}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <EmailOutlinedIcon color="action" />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{
+                  '& .MuiInputBase-root.Mui-disabled': {
+                    backgroundColor: 'action.hover',
+                    color: 'text.secondary'
+                  }
+                }}
+              />
+
+              <TextField
+                fullWidth
+                {...register("newPassword")}
+                label={t("New Password")}
+                type={showNewPassword ? "text" : "password"}
+                variant="outlined"
+                placeholder="••••••••"
+                error={!!errors.newPassword}
+                helperText={errors.newPassword ? t(errors.newPassword.message) : ""}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LockOutlinedIcon color="action" />
+                    </InputAdornment>
+                  ),
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => setShowNewPassword((prev) => !prev)}
+                        edge="end"
+                        tabIndex={-1}
+                      >
+                        {showNewPassword ? <VisibilityIcon fontSize="small" /> : <VisibilityOffIcon fontSize="small" />}
+                      </IconButton>
+                    </InputAdornment>
+                  )
+                }}
+              />
+
+              <TextField
+                fullWidth
+                {...register("confirmPassword")}
+                label={t("Confirm Password")}
+                type={showConfirmPassword ? "text" : "password"}
+                variant="outlined"
+                placeholder="••••••••"
+                error={!!errors.confirmPassword}
+                helperText={errors.confirmPassword ? t(errors.confirmPassword.message) : ""}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LockOutlinedIcon color="action" />
+                    </InputAdornment>
+                  ),
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => setShowConfirmPassword((prev) => !prev)}
+                        edge="end"
+                        tabIndex={-1}
+                      >
+                        {showConfirmPassword ? <VisibilityIcon fontSize="small" /> : <VisibilityOffIcon fontSize="small" />}
+                      </IconButton>
+                    </InputAdornment>
+                  )
+                }}
+              />
+
+              <Button
+                variant="contained"
+                fullWidth
+                type="submit"
+                size="large"
+                disabled={isPending || isSubmitting}
+                sx={{
+                  py: 1.6,
+                  mt: 0.5,
+                  borderRadius: 2.5,
+                  fontWeight: 600,
+                  fontSize: '1rem',
+                  textTransform: 'none',
+                  boxShadow: `0 8px 20px ${theme.palette.primary.main}40`,
+                  '&:hover': {
+                    boxShadow: `0 12px 24px ${theme.palette.primary.main}50`
+                  }
+                }}
+              >
+                {isPending || isSubmitting ? (
+                  <CircularProgress size={24} color="inherit" />
+                ) : (
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <span>{t("Reset Password")}</span>
+                    <CheckCircleOutlineOutlinedIcon fontSize="small" />
+                  </Box>
+                )}
+              </Button>
+
+              <Button
+                component={Link}
+                to="/login"
+                startIcon={<ArrowBackIcon fontSize="small" />}
+                sx={{
+                  mt: 1,
+                  color: 'text.secondary',
+                  textTransform: 'none',
+                  fontWeight: 500,
+                  borderRadius: 2,
+                  '&:hover': { color: 'text.primary', backgroundColor: 'action.hover' }
+                }}
+              >
+                {t("Back to Login")}
+              </Button>
+            </Box>
+          </Paper>
+
+          <Stack spacing={1.5} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Stack direction="row" spacing={3}>
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ cursor: 'pointer', '&:hover': { color: 'primary.main' } }}
+              >
+                {t("Privacy Policy")}
+              </Typography>
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ cursor: 'pointer', '&:hover': { color: 'primary.main' } }}
+              >
+                {t("Terms of Service")}
+              </Typography>
+            </Stack>
+
+            <Typography variant="caption" color="text.secondary" sx={{ opacity: 0.8 }}>
+              &copy; 2024 Lumina Luxe. {t("All rights reserved.")}
+            </Typography>
+          </Stack>
+        </Stack>
+      </Container>
+    </Box>
   )
 }

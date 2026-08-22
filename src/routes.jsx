@@ -7,6 +7,7 @@ import Register from "./pages/register/Register";
 import Cart from "./pages/cart/Cart";
 import ProductDetails from "./pages/products/ProductDetails";
 import Protectedrouter from "./Protectedrouter";
+import GuestRoute from "./GuestRoute";
 import Checkout from "./pages/checkout/Checkout";
 import ProfileLayout from "./pages/profile/ProfileLayout";
 import ProfileInfo from "./pages/profile/ProfileInfo";
@@ -18,98 +19,112 @@ import Categories from "./pages/categories/Categories";
 import ContactUs from "./pages/contact/ContactUs";
 import AboutUs from "./pages/aboutus/AboutUs";
 import NotFound from "./pages/notfound/NotFound";
+import OrderSuccess from "./pages/checkout/OrderSuccess";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
-    children:
-      [
-        {
-          index: true,
-          element: <Home />
-        },
-        {
-          path: "products",
-          element: <Products />
-        },
-        {
-          path: "product/:id",
-          element: <ProductDetails />
-        },
-        {
-          path: "categories",
-          element: <Categories />
-        },
-        {
-          path: "login",
-          element: <Login />
-        },
-        {
-          path: "register",
-          element: <Register />
-        },
-        {
-          path: "resetPassword",
-          element:
-            <ResetPassword />
-        },
-        {
-          path: "verifyCode",
-          element:
-            <VerifyCode />
-        },
-        {
-          path: "setNewPass",
-          element:
-            <SetNewPassword />
-        },
-        {
-          path: "profile",
-          element:
-            <Protectedrouter>
-              <ProfileLayout />
-            </Protectedrouter>,
-          children: [
-            {
-              index: true,
-              element: <ProfileInfo />
-            },
-            {
-              path: 'orders',
-              element: <ProfileOrders />
-            }
-          ]
-
-        },
-        {
-          path: "cart",
-          element:
-            <Protectedrouter>
-              <Cart />
-            </Protectedrouter>
-        },
-        {
-          path: "checkout",
-          element:
-            <Protectedrouter>
-              <Checkout />
-            </Protectedrouter>
-        },
-        {
-          path: "contact",
-          element: <ContactUs />
-        },
-        {
-          path: "aboutus",
-          element: <AboutUs />
-        },
-        {
-          path: "*",
-          element: <NotFound />
-        }
-      ]
-
+    children: [
+      {
+        index: true,
+        element: <Home />
+      },
+      {
+        path: "products",
+        element: <Products />
+      },
+      {
+        path: "product/:id",
+        element: <ProductDetails />
+      },
+      {
+        path: "categories",
+        element: <Categories />
+      },
+      {
+        path: "login",
+        element: (
+          <GuestRoute>
+            <Login />
+          </GuestRoute>
+        )
+      },
+      {
+        path: "register",
+        element: (
+          <GuestRoute>
+            <Register />
+          </GuestRoute>
+        )
+      },
+      {
+        path: "resetPassword",
+        element: <ResetPassword />
+      },
+      {
+        path: "verifyCode",
+        element: <VerifyCode />
+      },
+      {
+        path: "setNewPass",
+        element: <SetNewPassword />
+      },
+      {
+        path: "profile",
+        element: (
+          <Protectedrouter>
+            <ProfileLayout />
+          </Protectedrouter>
+        ),
+        children: [
+          {
+            index: true,
+            element: <ProfileInfo />
+          },
+          {
+            path: 'orders',
+            element: <ProfileOrders />
+          }
+        ]
+      },
+      {
+        path: "cart",
+        element: (
+          <Protectedrouter>
+            <Cart />
+          </Protectedrouter>
+        )
+      },
+      {
+        path: "checkout",
+        element: (
+          <Protectedrouter>
+            <Checkout />
+          </Protectedrouter>
+        )
+      },
+      {
+        path: "ordersuccess",
+        element: (
+          <Protectedrouter>
+            <OrderSuccess />
+          </Protectedrouter>
+        )
+      },
+      {
+        path: "contact",
+        element: <ContactUs />
+      },
+      {
+        path: "aboutus",
+        element: <AboutUs />
+      },
+      {
+        path: "*",
+        element: <NotFound />
+      }
+    ]
   },
 ]);
 

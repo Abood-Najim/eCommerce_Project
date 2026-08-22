@@ -1,6 +1,10 @@
 import React from 'react'
-import { Box, Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, CircularProgress, useTheme } from '@mui/material'
+import {
+  Box, Paper, Typography, Table, TableBody, TableCell, TableContainer,
+  TableHead, TableRow, Chip, CircularProgress, useTheme, Divider
+} from '@mui/material'
 import { useTranslation } from 'react-i18next'
+import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined'
 import useProfile from '../../hooks/useProfile'
 
 export default function ProfileOrders() {
@@ -9,27 +13,54 @@ export default function ProfileOrders() {
 
   const { data, isLoading, isError, error } = useProfile()
 
-  if (isLoading) return <CircularProgress />
-  if (isError) return <Typography color='error'>{error.message}</Typography>
+  if (isLoading) {
+    return (
+      <Paper elevation={0} sx={{ p: 4, borderRadius: 3, border: `1px solid ${theme.palette.divider}`, display: 'flex', justifyContent: 'center' }}>
+        <CircularProgress />
+      </Paper>
+    )
+  }
+
+  if (isError) {
+    return (
+      <Paper elevation={0} sx={{ p: 4, borderRadius: 3, border: `1px solid ${theme.palette.divider}` }}>
+        <Typography color="error" align="center">{error?.message ? t(error.message) : t('An error occurred')}</Typography>
+      </Paper>
+    )
+  }
 
   const profile = data?.response || data || {}
   const orders = profile.orders || []
 
   return (
-    <Paper elevation={0} sx={{ p: 4, borderRadius: 3, border: `1px solid ${theme.palette.divider}` }}>
+    <Paper
+      elevation={0}
+      sx={{
+        p: { xs: 3, sm: 4 },
+        borderRadius: 3,
+        border: `1px solid ${theme.palette.divider}`,
+        backgroundColor: 'background.paper',
+        boxShadow: theme.palette.mode === 'dark' ? '0px 10px 30px rgba(0,0,0,0.3)' : '0px 10px 30px rgba(0,0,0,0.03)'
+      }}
+    >
       <Typography variant="h5" sx={{ fontWeight: 700, color: 'text.primary', mb: 3 }}>
         {t('Order History')}
       </Typography>
 
+      <Divider sx={{ mb: 3 }} />
+
       {orders.length === 0 ? (
-        <Typography color="text.secondary" sx={{ textAlign: 'center', py: 4 }}>
-          {t('No orders yet.')}
-        </Typography>
+        <Box sx={{ textAlign: 'center', py: 8 }}>
+          <ShoppingBagOutlinedIcon sx={{ fontSize: 60, color: 'text.secondary', opacity: 0.4, mb: 1.5 }} />
+          <Typography color="text.secondary" sx={{ textAlign: 'center' }}>
+            {t('No orders yet.')}
+          </Typography>
+        </Box>
       ) : (
-        <TableContainer>
+        <TableContainer sx={{ borderRadius: 2, border: `1px solid ${theme.palette.divider}` }}>
           <Table sx={{ minWidth: { xs: 600, md: 'auto' } }}>
             <TableHead>
-              <TableRow sx={{ backgroundColor: 'action.hover' }}>
+              <TableRow sx={{ backgroundColor: theme.palette.mode === 'dark' ? 'action.hover' : 'grey.50' }}>
                 <TableCell sx={{ fontWeight: 600 }}>{t('Order ID')}</TableCell>
                 <TableCell sx={{ fontWeight: 600 }}>{t('Date')}</TableCell>
                 <TableCell sx={{ fontWeight: 600 }}>{t('Amount')}</TableCell>
@@ -39,7 +70,7 @@ export default function ProfileOrders() {
             </TableHead>
             <TableBody>
               {orders.map((order) => (
-                <TableRow key={order.id}>
+                <TableRow key={order.id} hover sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <TableCell>#{order.id}</TableCell>
                   <TableCell>
                     {new Date(order.orderDate).toLocaleDateString()}
@@ -48,17 +79,17 @@ export default function ProfileOrders() {
                     ${order.amountPaid}
                   </TableCell>
                   <TableCell>
-                    <Chip 
-                      label={order.status || '—'} 
-                      size="small" 
+                    <Chip
+                      label={order.status ? t(order.status) : '—'}
+                      size="small"
                       color={order.status === 'Active' ? 'success' : 'default'}
                       sx={{ fontWeight: 500, fontSize: '0.75rem' }}
                     />
                   </TableCell>
                   <TableCell>
-                    <Chip 
-                      label={order.paymentStatus || '—'} 
-                      size="small" 
+                    <Chip
+                      label={order.paymentStatus ? t(order.paymentStatus) : '—'}
+                      size="small"
                       color={order.paymentStatus === 'paid' ? 'success' : order.paymentStatus === 'unpaid' ? 'error' : 'default'}
                       sx={{ fontWeight: 500, fontSize: '0.75rem' }}
                     />

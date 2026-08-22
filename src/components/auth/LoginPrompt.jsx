@@ -3,6 +3,7 @@ import { Box, Modal, Typography, Button } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import CloseIcon from '@mui/icons-material/Close'
+import { toast } from 'react-toastify'
 import useLoginPromptStore from '../../store/useLoginPromptStore'
 
 export default function LoginPrompt() {
@@ -12,11 +13,13 @@ export default function LoginPrompt() {
 
   const handleLoginRedirect = () => {
     closeLoginPrompt()
+    toast.info(t('Redirecting to login...'))
     navigate('/login')
   }
 
   const handleRegisterRedirect = () => {
     closeLoginPrompt()
+    toast.info(t('Redirecting to registration...'))
     navigate('/register')
   }
 

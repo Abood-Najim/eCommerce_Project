@@ -1,3 +1,8 @@
 body,#root{
   transition: all 0.6s ease;
+  box-sizing: border-box;
+
+} 
+body {
+  padding: 0 !important;
 }

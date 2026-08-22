@@ -1,10 +1,8 @@
-import React, { useEffect } from 'react'
-import authAxiosInstance from '../../api/authAxiosInstance';
-import useAuthStore from '../../store/useAuthStore';
-import useLoginPromptStore from '../../store/useLoginPromptStore';
-import useCart from '../../hooks/useCart';
-import CircularProgress from '@mui/material/CircularProgress';
-import Typography from '@mui/material/Typography';
+import React, { useEffect, useState } from 'react'
+import useAuthStore from '../../store/useAuthStore'
+import useLoginPromptStore from '../../store/useLoginPromptStore'
+import useCart from '../../hooks/useCart'
+import Typography from '@mui/material/Typography'
 import {
   Box,
   Button,
@@ -17,79 +15,163 @@ import {
   TableRow,
   Paper,
   useTheme,
-  Stack
-} from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import useRemoveFromCart from '../../hooks/useRemoveFromCart';
-import useUpdateQuantity from '../../hooks/useUpdateQuantity';
-import RemoveIcon from '@mui/icons-material/Remove';
-import AddIcon from '@mui/icons-material/Add';
-import useClearCart from '../../hooks/useClearCart';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
-import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
-import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+  Stack,
+  Skeleton,
+  Avatar,
+  Divider,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  useMediaQuery
+} from '@mui/material'
+import DeleteIcon from '@mui/icons-material/Delete'
+import useRemoveFromCart from '../../hooks/useRemoveFromCart'
+import useUpdateQuantity from '../../hooks/useUpdateQuantity'
+import RemoveIcon from '@mui/icons-material/Remove'
+import AddIcon from '@mui/icons-material/Add'
+import useClearCart from '../../hooks/useClearCart'
+import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined'
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined'
+import ImageIcon from '@mui/icons-material/Image'
 
 export default function Cart() {
-  const navigate = useNavigate();
-  const theme = useTheme();
-  const { data, isLoading, isError, error } = useCart();
-  const { mutate: removeItem, isPending } = useRemoveFromCart();
-  const { mutate: updateQuantity, isPending: updateQuantityPend } = useUpdateQuantity();
-  const { mutate: clearCart, isPending: clearCartPend } = useClearCart();
-  const { t } = useTranslation();
-  const token = useAuthStore((state) => state.token);
-  const openLoginPrompt = useLoginPromptStore((state) => state.openLoginPrompt);
+  const navigate = useNavigate()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const { data, isLoading, isError, error } = useCart()
+  const { mutate: removeItem, isPending } = useRemoveFromCart()
+  const { mutate: updateQuantity, isPending: updateQuantityPend } = useUpdateQuantity()
+  const { mutate: clearCart, isPending: clearCartPend } = useClearCart()
+  const { t } = useTranslation()
+  const token = useAuthStore((state) => state.token)
+  const openLoginPrompt = useLoginPromptStore((state) => state.openLoginPrompt)
+
+  const [clearDialogOpen, setClearDialogOpen] = useState(false)
+
   const handleUpdate = (productId, action) => {
-    const item = data.items.find(i => i.productId == productId);
-    if (action == '+') {
-      updateQuantity({ productId, count: item.count + 1 });
+    const item = data?.items?.find((i) => i.productId == productId)
+    if (!item) return
+
+    if (action === '+') {
+      updateQuantity(
+        { productId, count: item.count + 1 },
+        {
+          onSuccess: () => toast.success(t('Quantity updated successfully')),
+          onError: (err) => toast.error(t(err?.message || 'Failed to update quantity'))
+        }
+      )
     } else {
-      updateQuantity({ productId, count: item.count - 1 });
+      if (item.count === 1) {
+        handleRemove(productId)
+      } else {
+        updateQuantity(
+          { productId, count: item.count - 1 },
+          {
+            onSuccess: () => toast.success(t('Quantity updated successfully')),
+            onError: (err) => toast.error(t(err?.message || 'Failed to update quantity'))
+          }
+        )
+      }
     }
   }
 
+  const handleRemove = (productId) => {
+    removeItem(productId, {
+      onSuccess: () => toast.success(t('Item removed from cart')),
+      onError: (err) => toast.error(t(err?.message || 'Failed to remove item'))
+    })
+  }
+
+  const handleConfirmClearCart = () => {
+    clearCart(undefined, {
+      onSuccess: () => {
+        toast.success(t('Cart cleared successfully'))
+        setClearDialogOpen(false)
+      },
+      onError: (err) => {
+        toast.error(t(err?.message || 'Failed to clear cart'))
+        setClearDialogOpen(false)
+      }
+    })
+  }
+
   useEffect(() => {
-    if (!data || !data.items) return;
+    if (isError) {
+      toast.error(t(error?.message || 'Failed to load cart.'))
+    }
+  }, [isError, error, t])
+
+  useEffect(() => {
+    if (!data || !data.items) return
     const itemCounter = data.items
       .filter((item) => item.count === 0)
-      .map((item) => item.productId);
+      .map((item) => item.productId)
     if (itemCounter.length > 0) {
-      removeItem(itemCounter);
+      removeItem(itemCounter)
     }
-  }, [data, removeItem]);
+  }, [data, removeItem])
 
   const handleCheckout = () => {
     if (!token) {
-      openLoginPrompt();
-      return;
+      openLoginPrompt()
+      return
     }
-    navigate('/checkout');
-  };
+    navigate('/checkout')
+  }
 
-  if (isLoading) return <CircularProgress />
-  if (isError) return <Typography color='red'>{error.message}</Typography>
+  if (isLoading) {
+    return (
+      <Box component="section" sx={{ py: 6, px: { xs: 2, md: 4 }, maxWidth: '1200px', mx: 'auto', minHeight: '80vh' }}>
+        <Skeleton variant="text" width={180} height={40} sx={{ mb: 4 }} />
+        <Skeleton variant="rectangular" height={320} sx={{ borderRadius: 3, mb: 4 }} />
+        <Skeleton variant="rectangular" height={100} sx={{ borderRadius: 3 }} />
+      </Box>
+    )
+  }
+
+  if (isError) {
+    return (
+      <Box sx={{ textAlign: 'center', py: 10 }}>
+        <Typography color="error" variant="h6">
+          {t(error?.message || 'Failed to load cart.')}
+        </Typography>
+      </Box>
+    )
+  }
+
+  const items = data?.items || []
+  const subtotal = items.reduce((acc, item) => acc + (item.totalPrice || 0), 0)
 
   return (
     <Box component="section" sx={{ py: 6, px: { xs: 2, md: 4 }, maxWidth: '1200px', mx: 'auto', minHeight: '80vh' }}>
-
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4, flexWrap: 'wrap', gap: 2 }}>
-        <Typography variant="h4" sx={{ fontWeight: 700, color: 'text.primary', letterSpacing: '-0.5px' }}>
-          {t('Cart')}
-        </Typography>
-        <Button
-          disabled={clearCartPend}
-          onClick={clearCart}
-          variant="outlined"
-          color="error"
-          size="small"
-          sx={{ textTransform: 'none', borderRadius: 2 }}
-        >
-          {t('Clear Cart')}
-        </Button>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <ShoppingBagOutlinedIcon sx={{ fontSize: 32, color: theme.palette.primary.main }} />
+          <Typography variant="h4" sx={{ fontWeight: 700, color: 'text.primary', letterSpacing: '-0.5px' }}>
+            {t('Cart')}
+          </Typography>
+        </Box>
+
+        {items.length > 0 && (
+          <Button
+            disabled={clearCartPend}
+            onClick={() => setClearDialogOpen(true)}
+            variant="outlined"
+            color="error"
+            size="small"
+            sx={{ textTransform: 'none', borderRadius: 2, px: 2 }}
+          >
+            {t('Clear Cart')}
+          </Button>
+        )}
       </Box>
 
-      {data.items.length === 0 ? (
+      {items.length === 0 ? (
         <Paper elevation={0} sx={{ p: 6, textAlign: 'center', border: `1px solid ${theme.palette.divider}`, borderRadius: 3 }}>
           <ShoppingBagOutlinedIcon sx={{ fontSize: 64, color: 'text.secondary', mb: 2 }} />
           <Typography variant="h6" color="text.secondary" sx={{ mb: 2 }}>
@@ -100,84 +182,253 @@ export default function Cart() {
           </Button>
         </Paper>
       ) : (
-        <>
-          <TableContainer component={Paper} elevation={0} sx={{ border: `1px solid ${theme.palette.divider}`, borderRadius: 3 }}>
-            <Table sx={{ minWidth: { xs: 650, md: 'auto' } }}>
-              <TableHead>
-                <TableRow sx={{ backgroundColor: 'action.hover' }}>
-                  <TableCell sx={{ fontWeight: 600, textAlign: 'start' }}>{t('Product Name')}</TableCell>
-                  <TableCell sx={{ fontWeight: 600, textAlign: 'center' }}>{t('Price')}</TableCell>
-                  <TableCell sx={{ fontWeight: 600, textAlign: 'center' }}>{t('Quantity')}</TableCell>
-                  <TableCell sx={{ fontWeight: 600, textAlign: 'center' }}>{t('Total')}</TableCell>
-                  <TableCell sx={{ fontWeight: 600, textAlign: 'center' }}>{t('Actions')}</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {data.items.map((item) => (
-                  <TableRow key={item.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                    <TableCell>
-                      <Typography sx={{ fontWeight: 500 }}>{item.productName}</Typography>
-                    </TableCell>
-                    <TableCell sx={{ textAlign: 'center' }}>{item.price}$</TableCell>
-                    <TableCell sx={{ textAlign: 'center' }}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', lg: 'row' }, gap: 4, alignItems: 'flex-start' }}>
+          <Box sx={{ flex: 1, width: '100%' }}>
+            {isMobile ? (
+              <Stack spacing={2}>
+                {items.map((item) => (
+                  <Paper
+                    key={item.id}
+                    elevation={0}
+                    sx={{
+                      p: 2,
+                      border: `1px solid ${theme.palette.divider}`,
+                      borderRadius: 3,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: 2
+                    }}
+                  >
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                      <Avatar
+                        src={item.image || ''}
+                        alt={item.productName}
+                        variant="rounded"
+                        sx={{ width: 56, height: 56, bgcolor: 'action.hover' }}
+                      >
+                        <ImageIcon color="action" />
+                      </Avatar>
+                      <Box sx={{ flex: 1 }}>
+                        <Typography sx={{ fontWeight: 600 }}>{item.productName}</Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          ${item.price} {t('each')}
+                        </Typography>
+                      </Box>
+                      <IconButton
+                        size="small"
+                        onClick={() => navigate(`/product/${item.productId}`)}
+                        sx={{ color: 'primary.main' }}
+                      >
+                        <VisibilityOutlinedIcon fontSize="small" />
+                      </IconButton>
+                    </Box>
+
+                    <Divider />
+
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                         <IconButton
                           size="small"
-                          disabled={updateQuantityPend}
+                          disabled={updateQuantityPend || isPending}
                           onClick={() => handleUpdate(item.productId, '-')}
-                          sx={{ border: `1px solid ${theme.palette.divider}` }}
+                          sx={{ border: `1px solid ${theme.palette.divider}`, borderRadius: 1.5 }}
                         >
                           <RemoveIcon fontSize="small" />
                         </IconButton>
-                        <Typography sx={{ minWidth: 30, textAlign: 'center', fontWeight: 600 }}>{item.count}</Typography>
+                        <Typography sx={{ minWidth: 28, textAlign: 'center', fontWeight: 600 }}>
+                          {item.count}
+                        </Typography>
                         <IconButton
                           size="small"
                           disabled={updateQuantityPend}
                           onClick={() => handleUpdate(item.productId, '+')}
-                          sx={{ border: `1px solid ${theme.palette.divider}` }}
+                          sx={{ border: `1px solid ${theme.palette.divider}`, borderRadius: 1.5 }}
                         >
                           <AddIcon fontSize="small" />
                         </IconButton>
                       </Box>
-                    </TableCell>
-                    <TableCell sx={{ textAlign: 'center', fontWeight: 600, color: 'primary.main' }}>{item.totalPrice}$</TableCell>
-                    <TableCell sx={{ textAlign: 'center' }}>
-                      <Stack direction="row" spacing={1} justifyContent="center" alignItems="center">
-                        <IconButton
-                          size="small"
-                          onClick={() => navigate(`/product/${item.productId}`)}
-                          sx={{ color: 'primary.main' }}
-                        >
-                          <VisibilityOutlinedIcon fontSize="small" />
-                        </IconButton>
-                        <IconButton
-                          color="error"
-                          disabled={isPending}
-                          onClick={() => removeItem(item.productId)}
-                          size="small"
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </Stack>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
 
-          <Box sx={{ mt: 4, display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: 'center', gap: 2 }}>
-            <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-              <Button variant="contained" onClick={handleCheckout} sx={{ textTransform: 'none', borderRadius: 2, px: 3, py: 1.2 }}>
+                      <Typography variant="h6" sx={{ fontWeight: 700, color: 'primary.main' }}>
+                        ${item.totalPrice}
+                      </Typography>
+
+                      <IconButton
+                        color="error"
+                        disabled={isPending}
+                        onClick={() => handleRemove(item.productId)}
+                        size="small"
+                      >
+                        <DeleteIcon fontSize="small" />
+                      </IconButton>
+                    </Box>
+                  </Paper>
+                ))}
+              </Stack>
+            ) : (
+              <TableContainer component={Paper} elevation={0} sx={{ border: `1px solid ${theme.palette.divider}`, borderRadius: 3 }}>
+                <Table>
+                  <TableHead>
+                    <TableRow sx={{ backgroundColor: 'action.hover' }}>
+                      <TableCell sx={{ fontWeight: 600 }}>{t('Product Name')}</TableCell>
+                      <TableCell sx={{ fontWeight: 600, textAlign: 'center' }}>{t('Price')}</TableCell>
+                      <TableCell sx={{ fontWeight: 600, textAlign: 'center' }}>{t('Quantity')}</TableCell>
+                      <TableCell sx={{ fontWeight: 600, textAlign: 'center' }}>{t('Total')}</TableCell>
+                      <TableCell sx={{ fontWeight: 600, textAlign: 'center' }}>{t('Actions')}</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {items.map((item) => (
+                      <TableRow key={item.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                        <TableCell>
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                            <Avatar
+                              src={item.image || ''}
+                              alt={item.productName}
+                              variant="rounded"
+                              sx={{ width: 48, height: 48, bgcolor: 'action.hover' }}
+                            >
+                              <ImageIcon color="action" />
+                            </Avatar>
+                            <Typography sx={{ fontWeight: 500 }}>{item.productName}</Typography>
+                          </Box>
+                        </TableCell>
+                        <TableCell sx={{ textAlign: 'center' }}>${item.price}</TableCell>
+                        <TableCell sx={{ textAlign: 'center' }}>
+                          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
+                            <IconButton
+                              size="small"
+                              disabled={updateQuantityPend || isPending}
+                              onClick={() => handleUpdate(item.productId, '-')}
+                              sx={{ border: `1px solid ${theme.palette.divider}`, borderRadius: 1.5 }}
+                            >
+                              <RemoveIcon fontSize="small" />
+                            </IconButton>
+                            <Typography sx={{ minWidth: 28, textAlign: 'center', fontWeight: 600 }}>
+                              {item.count}
+                            </Typography>
+                            <IconButton
+                              size="small"
+                              disabled={updateQuantityPend}
+                              onClick={() => handleUpdate(item.productId, '+')}
+                              sx={{ border: `1px solid ${theme.palette.divider}`, borderRadius: 1.5 }}
+                            >
+                              <AddIcon fontSize="small" />
+                            </IconButton>
+                          </Box>
+                        </TableCell>
+                        <TableCell sx={{ textAlign: 'center', fontWeight: 600, color: 'primary.main' }}>
+                          ${item.totalPrice}
+                        </TableCell>
+                        <TableCell sx={{ textAlign: 'center' }}>
+                          <Stack direction="row" spacing={1} justifyContent="center" alignItems="center">
+                            <IconButton
+                              size="small"
+                              onClick={() => navigate(`/product/${item.productId}`)}
+                              sx={{ color: 'primary.main' }}
+                            >
+                              <VisibilityOutlinedIcon fontSize="small" />
+                            </IconButton>
+                            <IconButton
+                              color="error"
+                              disabled={isPending}
+                              onClick={() => handleRemove(item.productId)}
+                              size="small"
+                            >
+                              <DeleteIcon fontSize="small" />
+                            </IconButton>
+                          </Stack>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )}
+          </Box>
+
+          <Paper
+            elevation={0}
+            sx={{
+              p: 3,
+              width: { xs: '100%', lg: '340px' },
+              position: { lg: 'sticky' },
+              top: { lg: '24px' },
+              height: 'fit-content',
+              border: `1px solid ${theme.palette.divider}`,
+              borderRadius: 3,
+              backgroundColor: 'background.paper'
+            }}
+          >
+            <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+              {t('Order Summary')}
+            </Typography>
+            <Divider sx={{ mb: 2 }} />
+
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1.5 }}>
+              <Typography color="text.secondary">{t('Subtotal')}</Typography>
+              <Typography sx={{ fontWeight: 600 }}>${subtotal}</Typography>
+            </Box>
+
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
+              <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                {t('Total')}
+              </Typography>
+              <Typography variant="h6" sx={{ fontWeight: 700, color: 'primary.main' }}>
+                ${subtotal}
+              </Typography>
+            </Box>
+
+            <Stack spacing={1.5}>
+              <Button
+                variant="contained"
+                fullWidth
+                onClick={handleCheckout}
+                sx={{ textTransform: 'none', borderRadius: 2, py: 1.2, fontWeight: 600 }}
+              >
                 {t('Proceed To Checkout')}
               </Button>
-              <Button variant="outlined" onClick={() => navigate('/products')} sx={{ textTransform: 'none', borderRadius: 2, px: 3, py: 1.2 }}>
+              <Button
+                variant="outlined"
+                fullWidth
+                onClick={() => navigate('/products')}
+                sx={{ textTransform: 'none', borderRadius: 2, py: 1.2 }}
+              >
                 {t('Continue Shopping')}
               </Button>
-            </Box>
-          </Box>
-        </>
+            </Stack>
+          </Paper>
+        </Box>
       )}
+
+      <Dialog
+        open={clearDialogOpen}
+        onClose={() => setClearDialogOpen(false)}
+        PaperProps={{ sx: { borderRadius: 3, p: 1 } }}
+      >
+        <DialogTitle sx={{ fontWeight: 600 }}>{t('Clear Cart?')}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {t('Are you sure you want to remove all items from your cart? This action cannot be undone.')}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 2 }}>
+          <Button
+            onClick={() => setClearDialogOpen(false)}
+            sx={{ textTransform: 'none', borderRadius: 2 }}
+          >
+            {t('Cancel')}
+          </Button>
+          <Button
+            onClick={handleConfirmClearCart}
+            color="error"
+            variant="contained"
+            disabled={clearCartPend}
+            sx={{ textTransform: 'none', borderRadius: 2 }}
+          >
+            {t('Clear Cart')}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   )
 }

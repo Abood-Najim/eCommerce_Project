@@ -1,25 +1,35 @@
-import { Box, Button, Typography, useTheme, CircularProgress, Paper } from '@mui/material'
 import React, { useState, useRef } from 'react'
+import {
+  Box,
+  Button,
+  Typography,
+  useTheme,
+  CircularProgress,
+  Paper,
+  Container,
+  Avatar,
+  Stack
+} from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
-import LockIcon from '@mui/icons-material/Lock'
-import ShieldIcon from '@mui/icons-material/Shield'
-import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
+import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined'
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
+import ShieldOutlinedIcon from '@mui/icons-material/ShieldOutlined'
+import LockPersonOutlinedIcon from '@mui/icons-material/LockPersonOutlined'
+import VerifiedUserOutlinedIcon from '@mui/icons-material/VerifiedUserOutlined'
 import useSendCode from '../../hooks/useSendCode'
 
 export default function VerifyCode() {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const theme = useTheme()
-  
+
   const [code, setCode] = useState(['', '', '', ''])
-  const [error, setError] = useState('')
-  
   const inputRefs = useRef([])
 
-  const savedEmail = localStorage.getItem('resetPasswordEmail') || ''
+  const savedEmail = localStorage.getItem('resetPasswordEmail') || 'user@example.com'
   const { mutate: sendCode, isPending: isSending } = useSendCode()
 
   const handleChange = (index, value) => {
@@ -41,185 +51,239 @@ export default function VerifyCode() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    setError('')
 
     const fullCode = code.join('')
     if (fullCode.length !== 4) {
-      setError('Please enter the complete 4-digit code.')
+      toast.error(t('Please enter the complete 4-digit code.'))
       return
     }
 
     localStorage.setItem('resetPasswordCode', fullCode)
+    toast.success(t('Code verified successfully!'))
     navigate('/setNewPass')
   }
 
   const handleResend = () => {
     if (!savedEmail) {
-      setError('No email found. Please go back to the reset page.')
+      toast.error(t('No email found. Please go back to the reset page.'))
       return
     }
-    
-    sendCode({ email: savedEmail }, {
-      onSuccess: () => {
-        setError('')
-        setCode(['', '', '', ''])
-        inputRefs.current[0]?.focus()
-      },
-      onError: (err) => {
-        setError(err.message || 'Failed to resend code. Please try again.')
+
+    sendCode(
+      { email: savedEmail },
+      {
+        onSuccess: () => {
+          toast.success(t('Security code resent to your email!'))
+          setCode(['', '', '', ''])
+          inputRefs.current[0]?.focus()
+        },
+        onError: (err) => {
+          const rawMessage = err?.response?.data?.message || err?.message
+          toast.error(rawMessage ? t(rawMessage) : t('Failed to resend code. Please try again.'))
+        }
       }
-    })
+    )
   }
 
   return (
-    <Paper
+    <Box
       sx={{
+        minHeight: '100vh',
+        width: '100%',
         display: 'flex',
-        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'background.default',
-        py: 50,
-        px: 2,
-        borderRadius:0
+        background: `radial-gradient(circle at 50% 30%, ${theme.palette.primary.main}12 0%, ${theme.palette.background.default} 70%)`,
+        py: 4,
+        px: 2
       }}
     >
-      <Typography variant="h4" sx={{ fontWeight: 700, color: 'primary.main', mb: 4, letterSpacing: '-0.5px' }}>
-        Lumina Luxe
-      </Typography>
-
-      <Box
-        component="form"
-        onSubmit={handleSubmit}
-        sx={{
-          width: '100%',
-          maxWidth: 450,
-          backgroundColor: 'background.paper',
-          borderRadius: 3,
-          p: 4,
-          boxShadow: '0px 10px 40px rgba(0,0,0,0.08)',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: 2,
-        }}
-      >
-        <Typography variant="h5" sx={{ fontWeight: 600, color: 'text.primary' }}>
-          {t('Verify Reset Code')}
-        </Typography>
-        
-        <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', mb: 1 }}>
-          {t('Enter the 4-digit security code we sent to your registered email.')}
-        </Typography>
-
-        {error && (
-          <Typography color='error' variant="body2" sx={{ width: '100%', textAlign: 'center' }}>
-            {error}
+      <Container maxWidth="xs">
+        <Stack spacing={3} alignItems="center" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+          <Typography
+            variant="h4"
+            component={Link}
+            to="/"
+            sx={{
+              fontWeight: 800,
+              color: 'primary.main',
+              textDecoration: 'none',
+              letterSpacing: '-0.5px'
+            }}
+          >
+            Lumina Luxe
           </Typography>
-        )}
 
-        <Box sx={{ display: 'flex', gap: 2, my: 2 }}>
-          {code.map((digit, index) => (
-            <input
-              key={index}
-              ref={(el) => (inputRefs.current[index] = el)}
-              type="text"
-              maxLength={1}
-              value={digit}
-              onChange={(e) => handleChange(index, e.target.value)}
-              onKeyDown={(e) => handleKeyDown(index, e)}
-              style={{
-                width: 60,
-                height: 70,
-                textAlign: 'center',
-                fontSize: '24px',
-                fontWeight: 600,
-                border: `1px solid ${theme.palette.divider}`,
-                borderRadius: '8px',
-                outline: 'none',
-                backgroundColor: theme.palette.background.default,
-                color: theme.palette.text.primary,
+          <Paper
+            elevation={0}
+            sx={{
+              width: '100%',
+              p: { xs: 3.5, sm: 4.5 },
+              borderRadius: 4,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: 'background.paper',
+              border: `1px solid ${theme.palette.divider}`,
+              boxShadow: '0px 20px 50px rgba(0, 0, 0, 0.05)'
+            }}
+          >
+            <Avatar
+              sx={{
+                mb: 2.5,
+                bgcolor: 'primary.main',
+                color: 'primary.contrastText',
+                width: 54,
+                height: 54,
+                boxShadow: `0 8px 16px ${theme.palette.primary.main}33`
               }}
-              onFocus={(e) => {
-                e.target.style.borderColor = theme.palette.primary.main
-                e.target.style.boxShadow = `0 0 0 2px ${theme.palette.primary.main}33`
-              }}
-              onBlur={(e) => {
-                e.target.style.borderColor = theme.palette.divider
-                e.target.style.boxShadow = 'none'
-              }}
-            />
-          ))}
-        </Box>
+            >
+              <LockOutlinedIcon fontSize="medium" />
+            </Avatar>
 
-        <Button
-          variant="contained"
-          fullWidth
-          type="submit"
-          disabled={isSending || code.join('').length !== 4}
-          sx={{
-            py: 1.5,
-            display: 'flex',
-            alignItems: 'center',
-            gap: 1,
-            justifyContent: 'center',
-            textTransform: 'none',
-          }}
-        >
-          {isSending ? (
-            <CircularProgress size={24} color="inherit" />
-          ) : (
-            <>
-              {t('Verify Code')}
-              <CheckCircleOutlineOutlinedIcon fontSize="small" />
-            </>
-          )}
-        </Button>
+            <Typography
+              variant="h5"
+              sx={{ fontWeight: 700, color: 'text.primary', mb: 1, textAlign: 'center' }}
+            >
+              {t('Verify Reset Code')}
+            </Typography>
 
-        <Button 
-          onClick={handleResend}
-          disabled={isSending}
-          variant="text"
-          sx={{ 
-            fontWeight: 500, 
-            color: 'primary.main', 
-            cursor: 'pointer', 
-            textTransform: 'none',
-            '&:hover': { textDecoration: 'underline', backgroundColor: 'transparent' }
-          }}
-        >
-          {isSending ? <CircularProgress size={20} color="primary" /> : t('Resend Code')}
-        </Button>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ textAlign: 'center', mb: 3.5, lineHeight: 1.5 }}
+            >
+              {t('Enter the 4-digit security code sent to')}
+              <Typography
+                component="span"
+                variant="body2"
+                sx={{ fontWeight: 600, color: 'text.primary', display: 'block', mt: 0.5 }}
+              >
+                {savedEmail}
+              </Typography>
+            </Typography>
 
-        <Button 
-          component={Link} 
-          to="/login"
-          sx={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '6px',
-            color: 'text.secondary', 
-            textDecoration: 'none',
-            fontWeight: 500,
-            marginTop: '4px',
-            textTransform: 'none'
-          }}
-        >
-          <ArrowBackIcon fontSize="small" />
-          {t('Back to Login')}
-        </Button>
-      </Box>
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
+              sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+            >
+              <Box sx={{ display: 'flex', gap: 1.5, mb: 4 }}>
+                {code.map((digit, index) => (
+                  <input
+                    key={index}
+                    ref={(el) => (inputRefs.current[index] = el)}
+                    type="text"
+                    maxLength={1}
+                    value={digit}
+                    onChange={(e) => handleChange(index, e.target.value)}
+                    onKeyDown={(e) => handleKeyDown(index, e)}
+                    style={{
+                      width: 56,
+                      height: 64,
+                      textAlign: 'center',
+                      fontSize: '24px',
+                      fontWeight: 700,
+                      border: `2px solid ${digit ? theme.palette.primary.main : theme.palette.divider}`,
+                      borderRadius: '12px',
+                      outline: 'none',
+                      backgroundColor: digit ? `${theme.palette.primary.main}08` : theme.palette.background.default,
+                      color: theme.palette.text.primary,
+                      transition: 'all 0.2s ease-in-out'
+                    }}
+                    onFocus={(e) => {
+                      e.target.style.borderColor = theme.palette.primary.main
+                      e.target.style.boxShadow = `0 0 0 4px ${theme.palette.primary.main}20`
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = digit ? theme.palette.primary.main : theme.palette.divider
+                      e.target.style.boxShadow = 'none'
+                    }}
+                  />
+                ))}
+              </Box>
 
-      <Box sx={{ mt: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1.5 }}>
-        <Typography variant="caption" color="text.secondary" sx={{ textAlign: 'center' }}>
-          {t('Protected by Lumina Security • High-grade encryption')}
-        </Typography>
-        <Box sx={{ display: 'flex', gap: 2 }}>
-          <ShieldIcon fontSize="small" sx={{ color: 'text.secondary' }} />
-          <LockIcon fontSize="small" sx={{ color: 'text.secondary' }} />
-          <VerifiedUserIcon fontSize="small" sx={{ color: 'text.secondary' }} />
-        </Box>
-      </Box>
-    </Paper>
+              <Button
+                variant="contained"
+                fullWidth
+                type="submit"
+                size="large"
+                disabled={isSending || code.join('').length !== 4}
+                sx={{
+                  py: 1.6,
+                  borderRadius: 2.5,
+                  fontWeight: 600,
+                  fontSize: '1rem',
+                  textTransform: 'none',
+                  boxShadow: `0 8px 20px ${theme.palette.primary.main}40`,
+                  '&:hover': {
+                    boxShadow: `0 12px 24px ${theme.palette.primary.main}50`
+                  }
+                }}
+              >
+                {isSending ? (
+                  <CircularProgress size={24} color="inherit" />
+                ) : (
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <span>{t('Verify Code')}</span>
+                    <CheckCircleOutlineOutlinedIcon fontSize="small" />
+                  </Box>
+                )}
+              </Button>
+
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 2.5 }}>
+                <Typography variant="body2" color="text.secondary">
+                  {t("Didn't receive code?")}
+                </Typography>
+                <Button
+                  onClick={handleResend}
+                  disabled={isSending}
+                  variant="text"
+                  size="small"
+                  sx={{
+                    fontWeight: 700,
+                    color: 'primary.main',
+                    textTransform: 'none',
+                    p: 0,
+                    minWidth: 'auto',
+                    '&:hover': { backgroundColor: 'transparent', textDecoration: 'underline' }
+                  }}
+                >
+                  {t('Resend')}
+                </Button>
+              </Box>
+
+              <Button
+                component={Link}
+                to="/login"
+                startIcon={<ArrowBackIcon fontSize="small" />}
+                sx={{
+                  mt: 2,
+                  color: 'text.secondary',
+                  textTransform: 'none',
+                  fontWeight: 500,
+                  borderRadius: 2,
+                  '&:hover': { color: 'text.primary', backgroundColor: 'action.hover' }
+                }}
+              >
+                {t('Back to Login')}
+              </Button>
+            </Box>
+          </Paper>
+
+          <Stack spacing={1} alignItems="center">
+            <Typography variant="caption" color="text.secondary" sx={{ opacity: 0.8 }}>
+              {t('Protected by Lumina Security • High-grade encryption')}
+            </Typography>
+            <Stack direction="row" spacing={2} color="text.disabled" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <ShieldOutlinedIcon fontSize="small" />
+              <LockPersonOutlinedIcon fontSize="small" />
+              <VerifiedUserOutlinedIcon fontSize="small" />
+            </Stack>
+          </Stack>
+        </Stack>
+      </Container>
+    </Box>
   )
 }
