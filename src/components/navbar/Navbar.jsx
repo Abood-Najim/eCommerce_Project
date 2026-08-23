@@ -48,7 +48,7 @@ export default function Navbar() {
 
   const [profileMenu, setProfileMenu] = useState(null);
   const isProfileMenuOpen = Boolean(profileMenu);
-  
+
   const handleProfileMenuOpen = (event) => {
     setProfileMenu(event.currentTarget);
   };
@@ -78,13 +78,19 @@ export default function Navbar() {
     handleProfileMenuClose()
     setDrawerOpen(false)
   }
-
+  const handleCartClick = (e) => {
+    if (!token) {
+      e.preventDefault()
+      toast.error(t('Please log in to view your cart'))
+      navigate('/login')
+    }
+  }
   return (
-    <AppBar 
-      position="sticky" 
-      color="default" 
-      elevation={0} 
-      sx={{ 
+    <AppBar
+      position="sticky"
+      color="default"
+      elevation={0}
+      sx={{
         backgroundColor: theme.palette.background.default,
         borderBottom: `1px solid ${theme.palette.divider}`,
         borderRadius: 0
@@ -92,12 +98,12 @@ export default function Navbar() {
     >
       <Container maxWidth="xl" disableGutters>
         <Toolbar sx={{ justifyContent: 'space-between' }}>
-          
+
           <Typography
             variant="h4"
             component={Link}
             to="/"
-            sx={{textDecoration: 'none',color: theme.palette.primary.main,fontWeight: 700,letterSpacing: '-0.5px',}}>
+            sx={{ textDecoration: 'none', color: theme.palette.primary.main, fontWeight: 700, letterSpacing: '-0.5px', }}>
             Lumina Luxe
           </Typography>
           <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 4 }}>
@@ -116,12 +122,12 @@ export default function Navbar() {
           </Box>
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-            
+
             <IconButton color="inherit">
               <SearchIcon />
             </IconButton>
             <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 1.5 }}>
-              <IconButton component={Link} to="/cart" color="inherit">
+              <IconButton component={Link} to="/cart" onClick={handleCartClick} color="inherit">
                 <Badge badgeContent={cartCount} color="error" overlap="circular">
                   <BagIcon />
                 </Badge>
@@ -201,10 +207,10 @@ export default function Navbar() {
         open={drawerOpen}
         onClose={toggleDrawer(false)}
       >
-        <Box 
-          sx={{ width: 250, p: 3, display: 'flex', flexDirection: 'column', gap: 2 }} 
-          role="presentation" 
-          onClick={toggleDrawer(false)} 
+        <Box
+          sx={{ width: 250, p: 3, display: 'flex', flexDirection: 'column', gap: 2 }}
+          role="presentation"
+          onClick={toggleDrawer(false)}
           onKeyDown={toggleDrawer(false)}
         >
           <Link to="/products" style={{ textDecoration: 'none', color: theme.palette.text.primary, fontWeight: 500 }}>
@@ -219,10 +225,10 @@ export default function Navbar() {
           <Link to="/aboutus" style={{ textDecoration: 'none', color: theme.palette.text.primary, fontWeight: 500 }}>
             {t('About')}
           </Link>
-          
+
           <Divider />
 
-          <Link to="/cart" style={{ textDecoration: 'none', color: theme.palette.text.primary, fontWeight: 500 }}>
+          <Link to="/cart" onClick={handleCartClick} style={{ textDecoration: 'none', color: theme.palette.text.primary, fontWeight: 500 }}>
             {t('Cart')} ({cartCount})
           </Link>
 
@@ -231,11 +237,11 @@ export default function Navbar() {
               <Link to="/profile" style={{ textDecoration: 'none', color: theme.palette.text.primary, fontWeight: 500 }}>
                 {t('Profile')}
               </Link>
-              <Box 
-                onClick={handleLogout} 
-                sx={{ 
-                  color: 'error.main', 
-                  fontWeight: 500, 
+              <Box
+                onClick={handleLogout}
+                sx={{
+                  color: 'error.main',
+                  fontWeight: 500,
                   cursor: 'pointer',
                   textDecoration: 'none'
                 }}

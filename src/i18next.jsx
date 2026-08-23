@@ -409,7 +409,9 @@ i18n
           "Minimalist aesthetic, flawless integration with my workspace, and lighting speed delivery. Absolutely world-class experience.": "Minimalist aesthetic, flawless integration with my workspace, and lighting speed delivery. Absolutely world-class experience.",
           "From customer support to product unboxing, Lumina Luxe sets the gold standard for premium tech stores.": "From customer support to product unboxing, Lumina Luxe sets the gold standard for premium tech stores.",
           "No recent orders to show.": "No recent orders to show.",
-          "View All Products": "View All Products"
+          "View All Products": "View All Products",
+          "Please log in to view your cart": "Please log in to view your cart",
+
         }
       },
       ar: {
@@ -810,7 +812,9 @@ i18n
           "Minimalist aesthetic, flawless integration with my workspace, and lighting speed delivery. Absolutely world-class experience.": "جمالية بسيطة، وتكامل مثالي مع مساحة عملي، وتسليم بسرعة البرق. تجربة عالمية المستوى بالتأكيد.",
           "From customer support to product unboxing, Lumina Luxe sets the gold standard for premium tech stores.": "من دعم العملاء إلى فتح صندوق المنتج، تحدد لومينا لوكس المعيار الذهبي لمتاجر التقنية المتميزة.",
           "No recent orders to show.": "لا توجد طلبات حديثة لعرضها.",
-          "View All Products": "عرض جميع المنتجات"
+          "View All Products": "عرض جميع المنتجات",
+          "Please log in to view your cart": "يرجى تسجيل الدخول لعرض سلة التسوق",
+          
         }
       },
       fallbackLng: "en",
