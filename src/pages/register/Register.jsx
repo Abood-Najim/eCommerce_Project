@@ -1,9 +1,9 @@
-import { Box, Button, CircularProgress, TextField, Typography, InputAdornment, Checkbox, FormControlLabel, useTheme, Paper, Container, Stack, Avatar, Fade, Zoom, Slide } from '@mui/material'
+import { Box, Button, CircularProgress, TextField, Typography, InputAdornment, Checkbox, FormControlLabel, useTheme, Paper, Container, Stack, Avatar, Fade, Zoom, Slide, IconButton } from '@mui/material'
 import axios from 'axios'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from "@hookform/resolvers/yup"
-import { registerSchema } from '../../validations/RegisterSchema'
+import registerSchema from '../../validations/RegisterSchema'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined'
@@ -12,6 +12,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined'
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useTranslation } from 'react-i18next'
 
 export default function Register() {
@@ -28,15 +30,18 @@ export default function Register() {
     resolver: yupResolver(registerSchema),
     mode: 'onChange'
   })
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword((prev) => !prev);
+  const handleMouseDownPassword = (event) => event.preventDefault();
 
-  const RigisterForm = async (data) => {
+  const RegisterForm = async (data) => {
     try {
       const response = await axios.post(`${import.meta.env.VITE_BURL}/auth/Account/Register`, data)
       toast.success(t('Account created successfully!'))
       navigate('/login')
     } catch (err) {
       const serverErrors = err.response?.data?.errors || err.response?.data?.message
-      
+
       if (Array.isArray(serverErrors)) {
         serverErrors.forEach((errMsg) => toast.error(t(errMsg)))
       } else if (serverErrors) {
@@ -109,7 +114,7 @@ export default function Register() {
 
               <Box
                 component="form"
-                onSubmit={handleSubmit(RigisterForm)}
+                onSubmit={handleSubmit(RegisterForm)}
                 sx={{
                   width: '100%',
                   display: 'flex',
@@ -125,13 +130,6 @@ export default function Register() {
                     variant="outlined"
                     error={!!errors.UserName}
                     helperText={errors.UserName ? t(errors.UserName.message) : ""}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <PersonOutlinedIcon color="action" />
-                        </InputAdornment>
-                      ),
-                    }}
                   />
                 </Fade>
 
@@ -143,13 +141,6 @@ export default function Register() {
                     variant="outlined"
                     error={!!errors.FullName}
                     helperText={errors.FullName ? t(errors.FullName.message) : ""}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <PersonOutlinedIcon color="action" />
-                        </InputAdornment>
-                      ),
-                    }}
                   />
                 </Fade>
 
@@ -161,13 +152,6 @@ export default function Register() {
                     variant="outlined"
                     error={!!errors.PhoneNumber}
                     helperText={errors.PhoneNumber ? t(errors.PhoneNumber.message) : ""}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <PhoneOutlinedIcon color="action" />
-                        </InputAdornment>
-                      ),
-                    }}
                   />
                 </Fade>
 
@@ -179,13 +163,6 @@ export default function Register() {
                     variant="outlined"
                     error={!!errors.Email}
                     helperText={errors.Email ? t(errors.Email.message) : ""}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <EmailOutlinedIcon color="action" />
-                        </InputAdornment>
-                      ),
-                    }}
                   />
                 </Fade>
 
@@ -194,16 +171,25 @@ export default function Register() {
                     fullWidth
                     {...register("Password")}
                     label={t('Password')}
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     variant="outlined"
                     error={!!errors.Password}
                     helperText={errors.Password ? t(errors.Password.message) : ""}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <LockOutlinedIcon color="action" />
-                        </InputAdornment>
-                      ),
+                    slotProps={{
+                      input: {
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowPassword}
+                                onMouseDown={handleMouseDownPassword}
+                                edge="end"
+                              >
+                                {showPassword ? <VisibilityOffIcon fontSize='small' sx={{ color: 'primary.main' }}/> : <VisibilityIcon fontSize='small' sx={{ color: 'primary.main' }}/>}
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        },
                     }}
                   />
                 </Fade>
@@ -283,7 +269,7 @@ export default function Register() {
           </Slide>
 
           <Fade in timeout={2800}>
-            <Typography variant="caption" color="text.secondary" sx={{ opacity: 0.8 ,display:'flex',alignItems:'center',justifyContent:'center' }}>
+            <Typography variant="caption" color="text.secondary" sx={{ opacity: 0.8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               &copy; 2024 Lumina Luxe. {t('All rights reserved.')}
             </Typography>
           </Fade>

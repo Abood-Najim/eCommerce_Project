@@ -3,15 +3,15 @@ import axios from 'axios'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from "@hookform/resolvers/yup"
-import { loginSchema } from '../../validations/LoginSchema'
+import loginSchema from '../../validations/LoginSchema'
 import useAuthStore from '../../store/useAuthStore'
 import { useNavigate, Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
-import Visibility from '@mui/icons-material/Visibility'
-import VisibilityOff from '@mui/icons-material/VisibilityOff'
+import VisibilityIcon from '@mui/icons-material/Visibility'
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import { useTranslation } from 'react-i18next'
 
 export default function Login() {
@@ -22,15 +22,15 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false)
   const setToken = useAuthStore((state) => state.setToken)
 
-  const { register, handleSubmit, watch, formState: { errors, isSubmitting, isValid } } = useForm({
+  const { register, handleSubmit, formState: { errors, isSubmitting, isValid } } = useForm({
     resolver: yupResolver(loginSchema),
     mode: 'onChange'
   })
 
-  const emailValue = watch("Email")
+  const emailValue = localStorage.getItem('email')
 
   const handleForgotPasswordClick = () => {
-    if (emailValue) {
+    if (emailValue && !errors.Email) {
       localStorage.setItem("resetPasswordEmail", emailValue)
     }
   }
@@ -134,13 +134,6 @@ export default function Login() {
                     placeholder="name@example.com"
                     error={!!errors.Email}
                     helperText={errors.Email?.message}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <EmailOutlinedIcon color="action" />
-                        </InputAdornment>
-                      ),
-                    }}
                   />
                 </Fade>
 
@@ -155,24 +148,21 @@ export default function Login() {
                       placeholder="********"
                       error={!!errors.Password}
                       helperText={errors.Password?.message}
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <LockOutlinedIcon color="action" />
-                          </InputAdornment>
-                        ),
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <IconButton
-                              aria-label="toggle password visibility"
-                              onClick={handleClickShowPassword}
-                              onMouseDown={handleMouseDownPassword}
-                              edge="end"
-                            >
-                              {showPassword ? <VisibilityOff /> : <Visibility />}
-                            </IconButton>
-                          </InputAdornment>
-                        )
+                      slotProps={{
+                        input: {
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowPassword}
+                                onMouseDown={handleMouseDownPassword}
+                                edge="end"
+                              >
+                                {showPassword ? <VisibilityOffIcon fontSize='small' sx={{ color: 'primary.main' }}/> : <VisibilityIcon fontSize='small' sx={{ color: 'primary.main' }}/>}
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        },
                       }}
                     />
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 0.5 }}>
@@ -251,7 +241,7 @@ export default function Login() {
           </Slide>
 
           <Fade in timeout={2200}>
-            <Typography variant="caption" color="text.secondary" sx={{ opacity: 0.8 ,display:'flex',alignItems:'center',justifyContent:'center' }}>
+            <Typography variant="caption" color="text.secondary" sx={{ opacity: 0.8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               &copy; {new Date().getFullYear()} Lumina Luxe. {t('All rights reserved.')}
             </Typography>
           </Fade>

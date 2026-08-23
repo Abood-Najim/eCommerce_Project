@@ -1,4 +1,4 @@
-import React, { useState, Fade, Zoom, Slide, Grow } from 'react'
+import React, { useState,} from 'react'
 import {
   Box,
   Container,
@@ -22,7 +22,8 @@ import {
   Button,
   alpha,
   Badge,
-  Tooltip
+  Tooltip,
+   Fade
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import i18n from '../../i18next'
@@ -253,9 +254,6 @@ export default function ProductsPage() {
               margin: 0
             }
           }}
-          InputProps={{
-            startAdornment: <InputAdornment position="start" sx={{ '& .MuiTypography-root': { fontSize: '0.8rem', color: 'text.secondary' } }}>$</InputAdornment>
-          }}
         />
         <Typography color="text.secondary" sx={{ fontSize: '0.8rem', fontWeight: 500 }}>{t('to')}</Typography>
         <TextField
@@ -284,9 +282,6 @@ export default function ProductsPage() {
               WebkitAppearance: 'none',
               margin: 0
             }
-          }}
-          InputProps={{
-            startAdornment: <InputAdornment position="start" sx={{ '& .MuiTypography-root': { fontSize: '0.8rem', color: 'text.secondary' } }}>$</InputAdornment>
           }}
         />
       </Box>

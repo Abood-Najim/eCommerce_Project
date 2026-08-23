@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import {
   Box,
   Button,
@@ -32,8 +32,15 @@ export default function VerifyCode() {
   const [code, setCode] = useState(['', '', '', ''])
   const inputRefs = useRef([])
 
-  const savedEmail = localStorage.getItem('resetPasswordEmail') || 'user@example.com'
+  const savedEmail = localStorage.getItem('resetPasswordEmail')
   const { mutate: sendCode, isPending: isSending } = useSendCode()
+
+  useEffect(() => {
+    if (!savedEmail) {
+      toast.error(t('Please request a password reset code first.'))
+      navigate('/resetPassword')
+    }
+  }, [savedEmail, navigate, t])
 
   const handleChange = (index, value) => {
     if (isNaN(value)) return
@@ -42,13 +49,23 @@ export default function VerifyCode() {
     setCode(newCode)
 
     if (value && index < 3) {
-      inputRefs.current[index + 1].focus()
+      inputRefs.current[index + 1]?.focus()
     }
   }
 
   const handleKeyDown = (index, e) => {
     if (e.key === 'Backspace' && !code[index] && index > 0) {
-      inputRefs.current[index - 1].focus()
+      inputRefs.current[index - 1]?.focus()
+    }
+  }
+
+  const handlePaste = (e) => {
+    e.preventDefault()
+    const pasteData = e.clipboardData.getData('text').trim()
+    if (/^\d{4}$/.test(pasteData)) {
+      const newCode = pasteData.split('')
+      setCode(newCode)
+      inputRefs.current[3]?.focus()
     }
   }
 
@@ -185,12 +202,15 @@ export default function VerifyCode() {
                     {code.map((digit, index) => (
                       <input
                         key={index}
-                        ref={(el) => (inputRefs.current[index] = el)}
+                        ref={(el) => {
+                          inputRefs.current[index] = el
+                        }}
                         type="text"
                         maxLength={1}
                         value={digit}
                         onChange={(e) => handleChange(index, e.target.value)}
                         onKeyDown={(e) => handleKeyDown(index, e)}
+                        onPaste={handlePaste}
                         style={{
                           width: 56,
                           height: 64,

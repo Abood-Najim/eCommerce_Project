@@ -8,6 +8,11 @@ import {
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import updateProfileSchema from '../../validations/updateProfileSchema'
+import updateEmailSchema from '../../validations/updateEmailSchema'
+import changePasswordSchema from '../../validations/changePasswordSchema'
 import useProfile from '../../hooks/useProfile'
 import useUpdateProfile from '../../hooks/useUpdateProfile'
 import useUpdateEmail from '../../hooks/useUpdateEmail'
@@ -39,24 +44,24 @@ export default function ProfileInfo() {
   const { mutate: updateEmail, isPending: emailPending } = useUpdateEmail()
   const { mutate: changePassword, isPending: passwordPending } = useChangePassword()
 
-  const [formData, setFormData] = useState({
-    fullName: '',
-    phoneNumber: ''
-  })
-
-  const [emailData, setEmailData] = useState({
-    newEmail: ''
-  })
-
-  const [passwordData, setPasswordData] = useState({
-    currentPassword: '',
-    newPassword: '',
-    confirmNewPassword: ''
-  })
-
   const [showCurrent, setShowCurrent] = useState(false)
   const [showNew, setShowNew] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
+
+  const profileForm = useForm({
+    resolver: yupResolver(updateProfileSchema),
+    mode: 'onChange'
+  })
+
+  const emailForm = useForm({
+    resolver: yupResolver(updateEmailSchema),
+    mode: 'onChange'
+  })
+
+  const passwordForm = useForm({
+    resolver: yupResolver(changePasswordSchema),
+    mode: 'onChange'
+  })
 
   if (isLoading) {
     return (
@@ -78,7 +83,7 @@ export default function ProfileInfo() {
   const orders = profile.orders || []
 
   const recentOrders = [...orders]
-    .sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate))
+    .sort((a, b) => new Date(b.orderDate || 0) - new Date(a.orderDate || 0))
     .slice(0, 5)
 
   const handleOpen = () => {
@@ -86,34 +91,40 @@ export default function ProfileInfo() {
       openLoginPrompt()
       return
     }
-    setFormData({
+    profileForm.reset({
       fullName: profile.fullName || '',
       phoneNumber: profile.phoneNumber || ''
     })
     setOpen(true)
   }
 
-  const handleClose = () => setOpen(false)
+  const handleClose = () => {
+    profileForm.reset()
+    setOpen(false)
+  }
 
   const handleEmailOpen = () => {
     if (!token) {
       openLoginPrompt()
       return
     }
-    setEmailData({
+    emailForm.reset({
       newEmail: profile.email || ''
     })
     setEmailOpen(true)
   }
 
-  const handleEmailClose = () => setEmailOpen(false)
+  const handleEmailClose = () => {
+    emailForm.reset()
+    setEmailOpen(false)
+  }
 
   const handlePasswordOpen = () => {
     if (!token) {
       openLoginPrompt()
       return
     }
-    setPasswordData({
+    passwordForm.reset({
       currentPassword: '',
       newPassword: '',
       confirmNewPassword: ''
@@ -121,10 +132,12 @@ export default function ProfileInfo() {
     setPasswordOpen(true)
   }
 
-  const handlePasswordClose = () => setPasswordOpen(false)
+  const handlePasswordClose = () => {
+    passwordForm.reset()
+    setPasswordOpen(false)
+  }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
+  const handleSubmit = (formData) => {
     updateProfile(formData, {
       onSuccess: () => {
         toast.success(t('Profile updated successfully!'))
@@ -137,8 +150,7 @@ export default function ProfileInfo() {
     })
   }
 
-  const handleEmailSubmit = (e) => {
-    e.preventDefault()
+  const handleEmailSubmit = (emailData) => {
     updateEmail(emailData, {
       onSuccess: () => {
         toast.success(t('Email updated successfully!'))
@@ -151,13 +163,7 @@ export default function ProfileInfo() {
     })
   }
 
-  const handlePasswordSubmit = (e) => {
-    e.preventDefault()
-    if (passwordData.newPassword !== passwordData.confirmNewPassword) {
-      toast.error(t('Passwords do not match'))
-      return
-    }
-
+  const handlePasswordSubmit = (passwordData) => {
     changePassword(passwordData, {
       onSuccess: () => {
         toast.success(t('Password changed successfully!'))
@@ -276,7 +282,6 @@ export default function ProfileInfo() {
           </Grid>
         </Grid>
 
-        {/* Recent Orders Section */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
           <Typography variant="h6" sx={{ fontWeight: 700, color: 'text.primary' }}>
             {t('Recent Orders')}
@@ -326,18 +331,18 @@ export default function ProfileInfo() {
                 </TableHead>
                 <TableBody>
                   {recentOrders.map((order, index) => (
-                    <Fade in timeout={400 + index * 100} key={order.id}>
+                    <Fade in timeout={400 + index * 100} key={order.id || index}>
                       <TableRow hover sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                         <TableCell sx={{ py: 1.5 }}>#{order.id}</TableCell>
                         <TableCell sx={{ py: 1.5 }}>
-                          {new Date(order.orderDate).toLocaleDateString()}
+                          {order.orderDate ? new Date(order.orderDate).toLocaleDateString() : '—'}
                         </TableCell>
                         <TableCell sx={{ py: 1.5, fontWeight: 600, color: 'primary.main' }}>
                           ${order.amountPaid}
                         </TableCell>
                         <TableCell sx={{ py: 1.5 }}>
                           <Chip
-                            label={order.status || '—'}
+                            label={order.status ? t(order.status) : '—'}
                             size="small"
                             color={order.status === 'Active' ? 'success' : 'default'}
                             sx={{ fontWeight: 500, fontSize: '0.75rem' }}
@@ -364,23 +369,29 @@ export default function ProfileInfo() {
                 </IconButton>
               </Box>
 
-              <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <Box
+                component="form"
+                onSubmit={profileForm.handleSubmit(handleSubmit)}
+                sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+              >
                 <TextField
                   fullWidth
                   label={t('Full Name')}
-                  value={formData.fullName}
-                  onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                  {...profileForm.register('fullName')}
+                  error={!!profileForm.formState.errors.fullName}
+                  helperText={profileForm.formState.errors.fullName?.message ? t(profileForm.formState.errors.fullName.message) : ''}
                 />
                 <TextField
                   fullWidth
                   label={t('Phone Number')}
-                  value={formData.phoneNumber}
-                  onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
+                  {...profileForm.register('phoneNumber')}
+                  error={!!profileForm.formState.errors.phoneNumber}
+                  helperText={profileForm.formState.errors.phoneNumber?.message ? t(profileForm.formState.errors.phoneNumber.message) : ''}
                 />
                 <Button
                   type="submit"
                   variant="contained"
-                  disabled={isPending}
+                  disabled={isPending || !profileForm.formState.isValid}
                   sx={{ mt: 1, textTransform: 'none', borderRadius: 2 }}
                 >
                   {isPending ? <CircularProgress size={24} color="inherit" /> : t('Save Changes')}
@@ -402,17 +413,22 @@ export default function ProfileInfo() {
                 </IconButton>
               </Box>
 
-              <Box component="form" onSubmit={handleEmailSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <Box
+                component="form"
+                onSubmit={emailForm.handleSubmit(handleEmailSubmit)}
+                sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+              >
                 <TextField
                   fullWidth
                   label={t('New Email Address')}
-                  value={emailData.newEmail}
-                  onChange={(e) => setEmailData({ ...emailData, newEmail: e.target.value })}
+                  {...emailForm.register('newEmail')}
+                  error={!!emailForm.formState.errors.newEmail}
+                  helperText={emailForm.formState.errors.newEmail?.message ? t(emailForm.formState.errors.newEmail.message) : ''}
                 />
                 <Button
                   type="submit"
                   variant="contained"
-                  disabled={emailPending}
+                  disabled={emailPending || !emailForm.formState.isValid}
                   sx={{ mt: 1, textTransform: 'none', borderRadius: 2 }}
                 >
                   {emailPending ? <CircularProgress size={24} color="inherit" /> : t('Save Changes')}
@@ -434,59 +450,70 @@ export default function ProfileInfo() {
                 </IconButton>
               </Box>
 
-              <Box component="form" onSubmit={handlePasswordSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <Box
+                component="form"
+                onSubmit={passwordForm.handleSubmit(handlePasswordSubmit)}
+                sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+              >
                 <TextField
                   fullWidth
                   label={t('Current Password')}
                   type={showCurrent ? 'text' : 'password'}
-                  value={passwordData.currentPassword}
-                  onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
-                  InputProps={{
+                  {...passwordForm.register('currentPassword')}
+                  error={!!passwordForm.formState.errors.currentPassword}
+                  helperText={passwordForm.formState.errors.currentPassword?.message ? t(passwordForm.formState.errors.currentPassword.message) : ''}
+                  slotProps={{
+                    input: {
                     endAdornment: (
                       <InputAdornment position="end">
                         <IconButton onClick={() => setShowCurrent(!showCurrent)} edge="end">
-                          {showCurrent ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                          {showCurrent ? <VisibilityIcon fontSize='small' sx={{ color: 'primary.main' }}/> : <VisibilityOffIcon fontSize='small' sx={{ color: 'primary.main' }}/>}
                         </IconButton>
                       </InputAdornment>
                     )
+                  },
                   }}
                 />
                 <TextField
                   fullWidth
                   label={t('New Password')}
                   type={showNew ? 'text' : 'password'}
-                  value={passwordData.newPassword}
-                  onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
-                  InputProps={{
+                  {...passwordForm.register('newPassword')}
+                  error={!!passwordForm.formState.errors.newPassword}
+                  helperText={passwordForm.formState.errors.newPassword?.message ? t(passwordForm.formState.errors.newPassword.message) : ''}
+                  slotProps={{
+                    input: {
                     endAdornment: (
                       <InputAdornment position="end">
                         <IconButton onClick={() => setShowNew(!showNew)} edge="end">
-                          {showNew ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                          {showNew ? <VisibilityIcon fontSize='small' sx={{ color: 'primary.main' }}/> : <VisibilityOffIcon fontSize='small' sx={{ color: 'primary.main' }}/>}
                         </IconButton>
                       </InputAdornment>
-                    )
+                    )},
                   }}
                 />
                 <TextField
                   fullWidth
                   label={t('Confirm New Password')}
                   type={showConfirm ? 'text' : 'password'}
-                  value={passwordData.confirmNewPassword}
-                  onChange={(e) => setPasswordData({ ...passwordData, confirmNewPassword: e.target.value })}
-                  InputProps={{
+                  {...passwordForm.register('confirmNewPassword')}
+                  error={!!passwordForm.formState.errors.confirmNewPassword}
+                  helperText={passwordForm.formState.errors.confirmNewPassword?.message ? t(passwordForm.formState.errors.confirmNewPassword.message) : ''}
+                  slotProps={{
+                    input: {
                     endAdornment: (
                       <InputAdornment position="end">
                         <IconButton onClick={() => setShowConfirm(!showConfirm)} edge="end">
-                          {showConfirm ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                          {showConfirm ? <VisibilityIcon fontSize='small' sx={{ color: 'primary.main' }}/> : <VisibilityOffIcon fontSize='small' sx={{ color: 'primary.main' }}/>}
                         </IconButton>
                       </InputAdornment>
-                    )
+                    )},
                   }}
                 />
                 <Button
                   type="submit"
                   variant="contained"
-                  disabled={passwordPending}
+                  disabled={passwordPending || !passwordForm.formState.isValid}
                   sx={{ mt: 1, textTransform: 'none', borderRadius: 2 }}
                 >
                   {passwordPending ? <CircularProgress size={24} color="inherit" /> : t('Change Password')}

@@ -21,7 +21,7 @@ import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useNavigate, Link } from "react-router-dom"
 import { toast } from "react-toastify"
-import { setNewPasswordSchema } from "../../validations/SetNewPasswordSchema"
+import setNewPasswordSchema from "../../validations/SetNewPasswordSchema"
 import useResetPassword from "../../hooks/useResetPassword"
 import LockResetIcon from '@mui/icons-material/LockReset'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
@@ -38,6 +38,14 @@ export default function SetNewPassword() {
 
   const [showNewPassword, setShowNewPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const handleClickShowPassword = (target) => {
+  if (target === 'new') {
+    setShowNewPassword((prev) => !prev);
+  } else if (target === 'confirm') {
+    setShowConfirmPassword((prev) => !prev);
+  }
+};
+  const handleMouseDownPassword = (event) => event.preventDefault();
 
   const savedEmail = localStorage.getItem('resetPasswordEmail') || ''
   const savedCode = localStorage.getItem('resetPasswordCode') || ''
@@ -170,13 +178,6 @@ export default function SetNewPassword() {
                     label={t("Email Address")}
                     variant="outlined"
                     value={savedEmail}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <EmailOutlinedIcon color="action" />
-                        </InputAdornment>
-                      ),
-                    }}
                     sx={{
                       '& .MuiInputBase-root.Mui-disabled': {
                         backgroundColor: 'action.hover',
@@ -193,26 +194,24 @@ export default function SetNewPassword() {
                     label={t("New Password")}
                     type={showNewPassword ? "text" : "password"}
                     variant="outlined"
-                    placeholder="••••••••"
+                    placeholder="********"
                     error={!!errors.newPassword}
                     helperText={errors.newPassword ? t(errors.newPassword.message) : ""}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <LockOutlinedIcon color="action" />
-                        </InputAdornment>
-                      ),
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            onClick={() => setShowNewPassword((prev) => !prev)}
-                            edge="end"
-                            tabIndex={-1}
-                          >
-                            {showNewPassword ? <VisibilityIcon fontSize="small" /> : <VisibilityOffIcon fontSize="small" />}
-                          </IconButton>
-                        </InputAdornment>
-                      )
+                    slotProps={{
+                      input: {
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={() => handleClickShowPassword('new')}
+                                onMouseDown={handleMouseDownPassword}
+                                edge="end"
+                              >
+                                {showNewPassword ? <VisibilityOffIcon fontSize='small' sx={{ color: 'primary.main' }}/> : <VisibilityIcon fontSize='small' sx={{ color: 'primary.main' }}/>}
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        },
                     }}
                   />
                 </Fade>
@@ -227,23 +226,21 @@ export default function SetNewPassword() {
                     placeholder="••••••••"
                     error={!!errors.confirmPassword}
                     helperText={errors.confirmPassword ? t(errors.confirmPassword.message) : ""}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <LockOutlinedIcon color="action" />
-                        </InputAdornment>
-                      ),
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            onClick={() => setShowConfirmPassword((prev) => !prev)}
-                            edge="end"
-                            tabIndex={-1}
-                          >
-                            {showConfirmPassword ? <VisibilityIcon fontSize="small" /> : <VisibilityOffIcon fontSize="small" />}
-                          </IconButton>
-                        </InputAdornment>
-                      )
+                    slotProps={{
+                      input: {
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={()=> handleClickShowPassword('confirm')}
+                                onMouseDown={handleMouseDownPassword}
+                                edge="end"
+                              >
+                                {showConfirmPassword ? <VisibilityOffIcon fontSize='small' sx={{ color: 'primary.main' }}/> : <VisibilityIcon fontSize='small' sx={{ color: 'primary.main' }}/>}
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        },
                     }}
                   />
                 </Fade>

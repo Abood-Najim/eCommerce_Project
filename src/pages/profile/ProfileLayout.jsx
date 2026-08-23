@@ -132,7 +132,7 @@ export default function ProfileLayout() {
                 startIcon={<PersonOutlineOutlinedIcon />}
                 fullWidth
                 sx={{
-                  justify: 'flex-start',
+                  justifyContent: 'center',
                   textTransform: 'none',
                   fontWeight: 600,
                   py: 1.2,
@@ -154,7 +154,7 @@ export default function ProfileLayout() {
                 startIcon={<ReceiptLongOutlinedIcon />}
                 fullWidth
                 sx={{
-                  justify: 'flex-start',
+                  justifyContent: 'center',
                   textTransform: 'none',
                   fontWeight: 600,
                   py: 1.2,
