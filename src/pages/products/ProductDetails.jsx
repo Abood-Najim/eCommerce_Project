@@ -1271,7 +1271,7 @@ export default function ProductDetails() {
                       sx={{
                         width: '100%',
                         aspectRatio: '1 / 1',
-                        objectFit: 'cover',
+                        objectFit: 'contain',
                         mb: 1.5,
                         borderRadius: 1
                       }}
@@ -1330,7 +1330,7 @@ export default function ProductDetails() {
                     sx={{
                       width: '100%',
                       aspectRatio: '1 / 1',
-                      objectFit: 'cover',
+                      objectFit: 'contain',
                       mb: 1.5,
                       borderRadius: 1
                     }}

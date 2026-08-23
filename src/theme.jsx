@@ -1,7 +1,8 @@
 import { createTheme } from "@mui/material";
 
-const getTheme = (mode = "dark") => {
+const getTheme = (mode = "dark", dir = "ltr") => {
   return createTheme({
+    direction: dir,
     palette: {
       mode: mode,
       ...(mode === "light"

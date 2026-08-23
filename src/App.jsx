@@ -4,43 +4,58 @@ import { RouterProvider } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import './i18next'
 import { useTranslation } from 'react-i18next'
-import { ThemeProvider } from '@emotion/react'
+import { ThemeProvider } from '@mui/material/styles'
+import { CacheProvider } from '@emotion/react'
+import createCache from '@emotion/cache'
+import rtlPlugin from 'stylis-plugin-rtl'
+import { prefixer } from 'stylis'
 import getTheme from './theme'
 import { CssBaseline } from '@mui/material'
 import useThemeStore from './store/useThemeStore'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
+const cacheRtl = createCache({
+  key: 'muirtl',
+  stylisPlugins: [prefixer, rtlPlugin],
+})
+
+const cacheLtr = createCache({
+  key: 'mui',
+})
+
 export default function App() {
   const { i18n } = useTranslation()
   const mode = useThemeStore((state) => state.mode)
+  const isRtl = i18n.language === 'ar'
+  const dir = isRtl ? 'rtl' : 'ltr'
 
   useEffect(() => {
-    const dir = i18n.language === 'ar' ? 'rtl' : 'ltr'
     document.documentElement.dir = dir
-  }, [i18n.language])
+  }, [dir])
 
   const queryClient = new QueryClient()
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={getTheme(mode)}>
-        <CssBaseline />
-        <RouterProvider router={router} />
-        <ToastContainer
-          // position={i18n.language === 'ar' ? 'top-right' : 'top-left'}
-          position={'top-center'}
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={i18n.language === 'ar'}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme={mode === 'dark' ? 'dark' : 'light'}
-        />
-      </ThemeProvider>
+      <CacheProvider value={isRtl ? cacheRtl : cacheLtr}>
+        <ThemeProvider theme={getTheme(mode, dir)}>
+          <CssBaseline />
+          <RouterProvider router={router} />
+          <ToastContainer
+            position={'top-center'}
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={isRtl}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme={mode === 'dark' ? 'dark' : 'light'}
+          />
+        </ThemeProvider>
+      </CacheProvider>
     </QueryClientProvider>
   )
 }
