@@ -162,7 +162,7 @@ const Products = ({
   let currentError = '';
   if (Array.isArray(products)) {
     if (minPrice && maxPrice && Number(minPrice) > Number(maxPrice)) {
-      currentError = t("Min price can't be higher than Max price.");
+      currentError = t("Min price cannot be greater than Max price");
     } else {
       if (minPrice) products = products.filter((p) => p.price >= Number(minPrice));
       if (maxPrice) products = products.filter((p) => p.price <= Number(maxPrice));

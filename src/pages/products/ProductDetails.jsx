@@ -172,15 +172,15 @@ export default function ProductDetails() {
   const relatedProducts = useMemo(() => relatedData?.response?.data || [], [relatedData])
 
   const moreToLoveProducts = useMemo(() => [
-    { id: 1, name: 'BEST USB HUBS', price: 45, image: usbHubsImg },
-    { id: 2, name: 'Bluetooth Headphones', price: 85, image: headphonesImg },
-    { id: 3, name: 'Classic LS4', price: 120, image: classicLS4Img },
-    { id: 4, name: 'LED Desk Lamp', price: 40, image: deskLampImg },
-    { id: 5, name: 'Ergonomic Mouse', price: 35, image: mouseImg },
-    { id: 6, name: 'Power Bank', price: 50, image: powerBankImg },
-    { id: 7, name: 'Stainless Steel Cookware', price: 75, image: cookwareImg },
-    { id: 8, name: 'Thermal Travel Mug', price: 25, image: thermalMugImg },
-  ], [])
+  { id: 1, name: t('BEST USB HUBS'), price: 45, image: usbHubsImg },
+  { id: 2, name: t('Bluetooth Headphones'), price: 85, image: headphonesImg },
+  { id: 3, name: t('Classic LS4'), price: 120, image: classicLS4Img },
+  { id: 4, name: t('LED Desk Lamp'), price: 40, image: deskLampImg },
+  { id: 5, name: t('Ergonomic Mouse'), price: 35, image: mouseImg },
+  { id: 6, name: t('Power Bank'), price: 50, image: powerBankImg },
+  { id: 7, name: t('Stainless Steel Cookware'), price: 75, image: cookwareImg },
+  { id: 8, name: t('Thermal Travel Mug'), price: 25, image: thermalMugImg },
+], [t])
 
   const isFreeDeliveryEligible = (product.price * quantity) >= 500
   const amountNeededForFreeShipping = 500 - (product.price * quantity)

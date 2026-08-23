@@ -48,7 +48,31 @@ import heroImage from './assets/hero.jpg'
 import keyboardImage from './assets/keyboard.jpg'
 import deskImage from './assets/deskSetup.jpg'
 
-const STATIC_REVIEWS = [
+
+export default function Home() {
+  const { t, i18n } = useTranslation()
+  const theme = useTheme()
+  const isRtl = i18n.language === 'ar'
+
+  const [activeFeature, setActiveFeature] = useState(0)
+
+  const { data: categoriesData } = useCategories()
+  const categories = (categoriesData?.response?.data || []).filter((cat) => cat && cat.name)
+
+  const handleNewsletterSubmit = (e) => {
+    e.preventDefault()
+    const form = e.target
+    const emailInput = form.elements.email?.value
+
+    if (!emailInput) {
+      toast.error(t('Please enter a valid email address'))
+      return
+    }
+
+    toast.success(t('Successfully subscribed to newsletter!'))
+    form.reset()
+  }
+  const STATIC_REVIEWS = [
   {
     id: 1,
     name: 'Alex Rivera',
@@ -76,10 +100,10 @@ const STATIC_REVIEWS = [
 ]
 
 const BRAND_STATS = [
-  { value: '99.8%', label: 'Customer Satisfaction' },
-  { value: '50K+', label: 'Global Shipments' },
-  { value: '24/7', label: 'VIP Tech Support' },
-  { value: '2-Year', label: 'Hardware Warranty' }
+  { value: t('99.8%'), label: t('Customer Satisfaction') },
+  { value: t('50K+'), label: t('Global Shipments') },
+  { value: t('24/7'), label: t('VIP Tech Support') },
+  { value: t('2-Year'), label: t('Hardware Warranty') }
 ]
 
 const GALLERY_IMAGES = [
@@ -92,53 +116,29 @@ const GALLERY_IMAGES = [
 const FEATURED_PRODUCTS = [
   {
     id: 101,
-    name: 'Apex Pro Wireless Keyboard',
+    name: t('Apex Pro Wireless Keyboard'),
     price: '$189.00',
-    tag: 'Best Seller',
+    tag: t('Best Seller'),
     rating: 4.9,
     image: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500'
   },
   {
     id: 102,
-    name: 'Precision Master Ergonomic Mouse',
+    name: t('Precision Master Ergonomic Mouse'),
     price: '$99.00',
-    tag: 'Trending',
+    tag: t('Trending'),
     rating: 4.8,
     image: 'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=500'
   },
   {
     id: 103,
-    name: 'Minimalist Desk Mat (Dark Gray)',
+    name: t('Minimalist Desk Mat (Dark Gray)'),
     price: '$45.00',
-    tag: 'Popular',
+    tag: t('Popular'),
     rating: 4.7,
     image: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=500'
   }
 ]
-
-export default function Home() {
-  const { t, i18n } = useTranslation()
-  const theme = useTheme()
-  const isRtl = i18n.language === 'ar'
-
-  const [activeFeature, setActiveFeature] = useState(0)
-
-  const { data: categoriesData } = useCategories()
-  const categories = (categoriesData?.response?.data || []).filter((cat) => cat && cat.name)
-
-  const handleNewsletterSubmit = (e) => {
-    e.preventDefault()
-    const form = e.target
-    const emailInput = form.elements.email?.value
-
-    if (!emailInput) {
-      toast.error(t('Please enter a valid email address'))
-      return
-    }
-
-    toast.success(t('Successfully subscribed to newsletter!'))
-    form.reset()
-  }
 
   const featuresList = [
     {
@@ -180,25 +180,25 @@ export default function Home() {
   ]
 
   const techSpecs = [
-    {
-      icon: <DeveloperBoardOutlinedIcon sx={{ fontSize: 30 }} />,
-      metric: '< 1ms',
-      title: t('Polling Latency'),
-      desc: t('1000Hz polling rate over 2.4GHz wireless connection.')
-    },
-    {
-      icon: <BuildOutlinedIcon sx={{ fontSize: 30 }} />,
-      metric: '6063 Aluminum',
-      title: t('Chassis Rating'),
-      desc: t('Precision CNC-milled casing with bead-blasted finish.')
-    },
-    {
-      icon: <CompassCalibrationOutlinedIcon sx={{ fontSize: 30 }} />,
-      metric: '100M Clicks',
-      title: t('Switch Lifespan'),
-      desc: t('Custom lubricated optical switches with zero chatter.')
-    }
-  ]
+  {
+    icon: <DeveloperBoardOutlinedIcon sx={{ fontSize: 30 }} />,
+    metric: '< 1ms',
+    title: t('Polling Latency'),
+    desc: t('1000Hz polling rate over 2.4GHz wireless connection.')
+  },
+  {
+    icon: <BuildOutlinedIcon sx={{ fontSize: 30 }} />,
+    metric: t('6063 Aluminum'),
+    title: t('Chassis Rating'),
+    desc: t('Precision CNC-milled casing with bead-blasted finish.')
+  },
+  {
+    icon: <CompassCalibrationOutlinedIcon sx={{ fontSize: 30 }} />,
+    metric: t('100M Clicks'),
+    title: t('Switch Lifespan'),
+    desc: t('Custom lubricated optical switches with zero chatter.')
+  }
+]
 
   const faqs = [
     {
