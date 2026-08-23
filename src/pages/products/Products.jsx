@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, Fade, Zoom, Slide, Grow } from 'react'
 import {
   Box,
   Container,
@@ -389,126 +389,132 @@ export default function ProductsPage() {
 
   return (
     <Container maxWidth="xl" sx={{ py: { xs: 3, md: 5 }, px: { xs: 2, md: 4 } }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', mb: 3, gap: 0.5, color: 'text.secondary', fontSize: '0.85rem' }}>
-        <Link to="/" style={{ textDecoration: 'none', color: theme.palette.text.secondary, fontWeight: 500 }}>
-          {t('Home')}
-        </Link>
+      <Fade in timeout={500}>
+        <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', mb: 3, gap: 0.5, color: 'text.secondary', fontSize: '0.85rem' }}>
+          <Link to="/" style={{ textDecoration: 'none', color: theme.palette.text.secondary, fontWeight: 500 }}>
+            {t('Home')}
+          </Link>
 
-        <ChevronRightIcon
-          fontSize="small"
-          sx={{
-            color: 'text.secondary',
-            mx: 0.5,
-            transform: i18n.language === 'ar' ? 'rotate(180deg)' : 'none'
-          }}
-        />
+          <ChevronRightIcon
+            fontSize="small"
+            sx={{
+              color: 'text.secondary',
+              mx: 0.5,
+              transform: i18n.language === 'ar' ? 'rotate(180deg)' : 'none'
+            }}
+          />
 
-        {pathnames.map((name, index) => {
-          const isLast = index === pathnames.length - 1
-          return isLast ? (
-            <Typography key={name} component="span" sx={{ color: 'text.primary', fontWeight: 600, fontSize: '0.85rem' }}>
-              {t(name.charAt(0).toUpperCase() + name.slice(1))}
-            </Typography>
-          ) : null
-        })}
-      </Box>
+          {pathnames.map((name, index) => {
+            const isLast = index === pathnames.length - 1
+            return isLast ? (
+              <Typography key={name} component="span" sx={{ color: 'text.primary', fontWeight: 600, fontSize: '0.85rem' }}>
+                {t(name.charAt(0).toUpperCase() + name.slice(1))}
+              </Typography>
+            ) : null
+          })}
+        </Box>
+      </Fade>
 
       <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: { xs: 3, md: 4 }, alignItems: 'flex-start' }}>
-        <Paper
-          elevation={0}
-          sx={{
-            display: { xs: 'none', md: 'block' },
-            width: 270,
-            flexShrink: 0,
-            p: 3,
-            borderRadius: 3,
-            border: '1px solid',
-            borderColor: 'divider',
-            backgroundColor: 'background.paper',
-            position: 'sticky',
-            top: 90,
-            maxHeight: 'calc(100vh - 110px)',
-            overflowY: 'auto',
-            zIndex: 1
-          }}
-        >
-          {sidebarContent}
-        </Paper>
-        <Box sx={{ flex: 1, minWidth: 0, width: '100%' }}>
+        <Fade in timeout={600}>
           <Paper
             elevation={0}
             sx={{
-              p: { xs: 2.5, sm: 3 },
-              mb: 3,
+              display: { xs: 'none', md: 'block' },
+              width: 270,
+              flexShrink: 0,
+              p: 3,
               borderRadius: 3,
               border: '1px solid',
               borderColor: 'divider',
               backgroundColor: 'background.paper',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              flexWrap: 'wrap',
-              gap: 2
+              position: 'sticky',
+              top: 90,
+              maxHeight: 'calc(100vh - 110px)',
+              overflowY: 'auto',
+              zIndex: 1
             }}
           >
-            <Box>
-              <Typography variant="h5" sx={{ fontWeight: 700, color: 'text.primary', fontSize: { xs: '1.25rem', sm: '1.5rem' } }}>
-                {t('Shop')}
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.85rem', mt: 0.5 }}>
-                {t('Showing')} <strong style={{ color: theme.palette.text.primary }}>{totalCount}</strong> {t('products')}
-              </Typography>
-            </Box>
-
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap', justifyContent: 'center'}}>
-              <Badge
-                badgeContent={activeFiltersCount}
-                color="primary"
-                sx={{ display: { xs: 'inline-flex', md: 'none' } }}
-              >
-                <Button
-                  variant="outlined"
-                  size="small"
-                  startIcon={<FilterListIcon />}
-                  onClick={() => setDrawerOpen(true)}
-                  sx={{
-                    borderRadius: 2,
-                    textTransform: 'none',
-                    fontWeight: 600,
-                    py: 0.8
-                  }}
-                >
-                  {t('Filter')}
-                </Button>
-              </Badge>
-
-              <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500, fontSize: '0.85rem' }}>
-                {t('Sort by')}:
-              </Typography>
-              <FormControl size="small" sx={{ minWidth: 160 }}>
-                <Select
-                  value={`${sortBy}-${ascending ? 'asc' : 'desc'}`}
-                  onChange={handleSortChange}
-                  displayEmpty
-                  MenuProps={{ disableScrollLock: true }}
-                  sx={{
-                    borderRadius: 2,
-                    bgcolor: 'background.paper',
-                    color: 'text.primary',
-                    fontSize: '0.85rem',
-                    fontWeight: 500,
-                    '& .MuiOutlinedInput-notchedOutline': { borderColor: 'divider' },
-                    '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: theme.palette.primary.main },
-                    '& .MuiSelect-select': { py: 0.8 }
-                  }}
-                >
-                  <MenuItem value="price-desc">{t('Price: High to Low')}</MenuItem>
-                  <MenuItem value="price-asc">{t('Price: Low to High')}</MenuItem>
-                  <MenuItem value="name-asc">{t('Name: A to Z')}</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
+            {sidebarContent}
           </Paper>
+        </Fade>
+        <Box sx={{ flex: 1, minWidth: 0, width: '100%' }}>
+          <Fade in timeout={700}>
+            <Paper
+              elevation={0}
+              sx={{
+                p: { xs: 2.5, sm: 3 },
+                mb: 3,
+                borderRadius: 3,
+                border: '1px solid',
+                borderColor: 'divider',
+                backgroundColor: 'background.paper',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flexWrap: 'wrap',
+                gap: 2
+              }}
+            >
+              <Box>
+                <Typography variant="h5" sx={{ fontWeight: 700, color: 'text.primary', fontSize: { xs: '1.25rem', sm: '1.5rem' } }}>
+                  {t('Shop')}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.85rem', mt: 0.5 }}>
+                  {t('Showing')} <strong style={{ color: theme.palette.text.primary }}>{totalCount}</strong> {t('products')}
+                </Typography>
+              </Box>
+
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap', justifyContent: 'center'}}>
+                <Badge
+                  badgeContent={activeFiltersCount}
+                  color="primary"
+                  sx={{ display: { xs: 'inline-flex', md: 'none' } }}
+                >
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    startIcon={<FilterListIcon />}
+                    onClick={() => setDrawerOpen(true)}
+                    sx={{
+                      borderRadius: 2,
+                      textTransform: 'none',
+                      fontWeight: 600,
+                      py: 0.8
+                    }}
+                  >
+                    {t('Filter')}
+                  </Button>
+                </Badge>
+
+                <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500, fontSize: '0.85rem' }}>
+                  {t('Sort by')}:
+                </Typography>
+                <FormControl size="small" sx={{ minWidth: 160 }}>
+                  <Select
+                    value={`${sortBy}-${ascending ? 'asc' : 'desc'}`}
+                    onChange={handleSortChange}
+                    displayEmpty
+                    MenuProps={{ disableScrollLock: true }}
+                    sx={{
+                      borderRadius: 2,
+                      bgcolor: 'background.paper',
+                      color: 'text.primary',
+                      fontSize: '0.85rem',
+                      fontWeight: 500,
+                      '& .MuiOutlinedInput-notchedOutline': { borderColor: 'divider' },
+                      '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: theme.palette.primary.main },
+                      '& .MuiSelect-select': { py: 0.8 }
+                    }}
+                  >
+                    <MenuItem value="price-desc">{t('Price: High to Low')}</MenuItem>
+                    <MenuItem value="price-asc">{t('Price: Low to High')}</MenuItem>
+                    <MenuItem value="name-asc">{t('Name: A to Z')}</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+            </Paper>
+          </Fade>
 
           <ProductsComponent
             page={page}
@@ -524,21 +530,23 @@ export default function ProductsPage() {
           />
 
           {totalPages > 1 && (
-            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-              <Pagination
-                count={totalPages}
-                page={page}
-                onChange={handlePageChange}
-                color="primary"
-                shape="rounded"
-                size="medium"
-                sx={{
-                  '& .MuiPaginationItem-root': {
-                    borderRadius: 2
-                  }
-                }}
-              />
-            </Box>
+            <Fade in timeout={800}>
+              <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+                <Pagination
+                  count={totalPages}
+                  page={page}
+                  onChange={handlePageChange}
+                  color="primary"
+                  shape="rounded"
+                  size="medium"
+                  sx={{
+                    '& .MuiPaginationItem-root': {
+                      borderRadius: 2
+                    }
+                  }}
+                />
+              </Box>
+            </Fade>
           )}
         </Box>
       </Box>

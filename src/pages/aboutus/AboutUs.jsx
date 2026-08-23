@@ -10,7 +10,8 @@ import {
   Avatar,
   Fade,
   Grow,
-  Slide
+  Slide,
+  Zoom
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
@@ -123,19 +124,21 @@ export default function AboutUs() {
       <Container maxWidth="lg">
         <Fade in timeout={800}>
           <Box sx={{ textAlign: 'center', mb: 6, maxWidth: 700, mx: 'auto' }}>
-            <Typography
-              variant="caption"
-              sx={{
-                color: 'primary.main',
-                fontWeight: 700,
-                letterSpacing: 1.5,
-                display: 'block',
-                mb: 1,
-                textTransform: 'uppercase'
-              }}
-            >
-              {t('About Lumina Luxe')}
-            </Typography>
+            <Zoom in timeout={1000}>
+              <Typography
+                variant="caption"
+                sx={{
+                  color: 'primary.main',
+                  fontWeight: 700,
+                  letterSpacing: 1.5,
+                  display: 'block',
+                  mb: 1,
+                  textTransform: 'uppercase'
+                }}
+              >
+                {t('About Lumina Luxe')}
+              </Typography>
+            </Zoom>
             <Typography
               variant="h4"
               sx={{
@@ -168,21 +171,22 @@ export default function AboutUs() {
             }}
           >
             {stats.map((stat, index) => (
-              <Box
-                key={index}
-                sx={{
-                  flex: { xs: '1 1 40%', sm: '1 1 20%' },
-                  textAlign: 'center',
-                  py: 0.5
-                }}
-              >
-                <Typography variant="h5" sx={{ fontWeight: 800, color: 'primary.main', mb: 0.2 }}>
-                  {stat.value}
-                </Typography>
-                <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 500 }}>
-                  {stat.label}
-                </Typography>
-              </Box>
+              <Zoom in timeout={800 + index * 200} key={index}>
+                <Box
+                  sx={{
+                    flex: { xs: '1 1 40%', sm: '1 1 20%' },
+                    textAlign: 'center',
+                    py: 0.5
+                  }}
+                >
+                  <Typography variant="h5" sx={{ fontWeight: 800, color: 'primary.main', mb: 0.2 }}>
+                    {stat.value}
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 500 }}>
+                    {stat.label}
+                  </Typography>
+                </Box>
+              </Zoom>
             ))}
           </Box>
         </Grow>
@@ -434,9 +438,11 @@ export default function AboutUs() {
               gap: 2
             }}
           >
-            <Typography variant="h5" sx={{ fontWeight: 700 }}>
-              {t('Ready to Experience Lumina Luxe?')}
-            </Typography>
+            <Zoom in timeout={1500}>
+              <Typography variant="h5" sx={{ fontWeight: 700 }}>
+                {t('Ready to Experience Lumina Luxe?')}
+              </Typography>
+            </Zoom>
             <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 480, mb: 0.5 }}>
               {t('Explore our curated catalog of exclusive luxury products and elevate your personal lifestyle today.')}
             </Typography>

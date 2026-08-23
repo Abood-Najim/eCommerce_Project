@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, TextField, Typography, InputAdornment, Checkbox, FormControlLabel, useTheme, Paper, Container, Stack, Avatar, IconButton } from '@mui/material'
+import { Box, Button, CircularProgress, TextField, Typography, InputAdornment, Checkbox, FormControlLabel, useTheme, Paper, Container, Stack, Avatar, IconButton, Fade, Zoom, Slide } from '@mui/material'
 import axios from 'axios'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -72,169 +72,189 @@ export default function Login() {
     >
       <Container maxWidth="xs">
         <Stack spacing={3} alignItems="center">
-          <Paper
-            elevation={0}
-            sx={{
-              width: '100%',
-              p: { xs: 3.5, sm: 4.5 },
-              borderRadius: 4,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              backgroundColor: 'background.paper',
-              border: `1px solid ${theme.palette.divider}`,
-              boxShadow: theme.palette.mode === 'dark'
-                ? '0px 20px 50px rgba(0, 0, 0, 0.4)'
-                : '0px 20px 50px rgba(0, 0, 0, 0.05)'
-            }}
-          >
-            <Avatar
-              sx={{
-                mb: 2,
-                bgcolor: 'primary.main',
-                color: 'primary.contrastText',
-                width: 52,
-                height: 52,
-                boxShadow: `0 8px 16px ${theme.palette.primary.main}33`
-              }}
-            >
-              <AutoAwesomeIcon fontSize="medium" />
-            </Avatar>
-
-            <Typography variant="h5" sx={{ fontWeight: 700, mb: 0.5, color: 'text.primary', textAlign: 'center' }}>
-              {t('Welcome Back')}
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 3.5, textAlign: 'center' }}>
-              {t('Welcome back. Please enter your details.')}
-            </Typography>
-
-            <Box
-              component="form"
-              onSubmit={handleSubmit(LoginForm)}
+          <Slide direction="up" in timeout={600}>
+            <Paper
+              elevation={0}
               sx={{
                 width: '100%',
+                p: { xs: 3.5, sm: 4.5 },
+                borderRadius: 4,
                 display: 'flex',
                 flexDirection: 'column',
-                gap: 2.5
+                alignItems: 'center',
+                backgroundColor: 'background.paper',
+                border: `1px solid ${theme.palette.divider}`,
+                boxShadow: theme.palette.mode === 'dark'
+                  ? '0px 20px 50px rgba(0, 0, 0, 0.4)'
+                  : '0px 20px 50px rgba(0, 0, 0, 0.05)'
               }}
             >
-              <TextField
-                fullWidth
-                {...register("Email")}
-                label={t('Email Address')}
-                variant="outlined"
-                placeholder="name@example.com"
-                error={!!errors.Email}
-                helperText={errors.Email?.message}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <EmailOutlinedIcon color="action" />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-                <TextField
-                  fullWidth
-                  {...register("Password")}
-                  label={t('Password')}
-                  type={showPassword ? 'text' : 'password'}
-                  variant="outlined"
-                  placeholder="********"
-                  error={!!errors.Password}
-                  helperText={errors.Password?.message}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <LockOutlinedIcon color="action" />
-                      </InputAdornment>
-                    ),
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
-                          edge="end"
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    )
+              <Zoom in timeout={800}>
+                <Avatar
+                  sx={{
+                    mb: 2,
+                    bgcolor: 'primary.main',
+                    color: 'primary.contrastText',
+                    width: 52,
+                    height: 52,
+                    boxShadow: `0 8px 16px ${theme.palette.primary.main}33`
                   }}
-                />
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 0.5 }}>
-                  <Link
-                    to="/resetPassword"
-                    onClick={handleForgotPasswordClick}
-                    style={{ fontSize: '0.875rem', fontWeight: 500, color: theme.palette.primary.main, textDecoration: 'none' }}
-                  >
-                    {t('Forgot Password?')}
-                  </Link>
-                </Box>
-              </Box>
+                >
+                  <AutoAwesomeIcon fontSize="medium" />
+                </Avatar>
+              </Zoom>
 
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                    sx={{
-                      color: 'text.secondary',
-                      '&.Mui-checked': { color: 'primary.main' }
-                    }}
-                  />
-                }
-                label={
-                  <Typography variant="body2" color="text.secondary">
-                    {t('Remember me for 30 days')}
+              <Fade in timeout={1000}>
+                <Box sx={{ textAlign: 'center' }}>
+                  <Typography variant="h5" sx={{ fontWeight: 700, mb: 0.5, color: 'text.primary', textAlign: 'center' }}>
+                    {t('Welcome Back')}
                   </Typography>
-                }
-                sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}
-              />
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 3.5, textAlign: 'center' }}>
+                    {t('Welcome back. Please enter your details.')}
+                  </Typography>
+                </Box>
+              </Fade>
 
-              <Button
-                variant="contained"
-                fullWidth
-                type="submit"
-                size="large"
-                disabled={isSubmitting || !isValid}
+              <Box
+                component="form"
+                onSubmit={handleSubmit(LoginForm)}
                 sx={{
-                  py: 1.6,
-                  mt: 0.5,
-                  borderRadius: 2.5,
-                  fontWeight: 600,
-                  fontSize: '1rem',
-                  textTransform: 'none',
-                  boxShadow: isValid ? `0 8px 20px ${theme.palette.primary.main}40` : 'none',
-                  '&:hover': {
-                    boxShadow: isValid ? `0 12px 24px ${theme.palette.primary.main}50` : 'none'
-                  }
+                  width: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 2.5
                 }}
               >
-                {isSubmitting ? (
-                  <CircularProgress size={24} color="inherit" />
-                ) : (
-                  t('Sign In')
-                )}
-              </Button>
+                <Fade in timeout={1200}>
+                  <TextField
+                    fullWidth
+                    {...register("Email")}
+                    label={t('Email Address')}
+                    variant="outlined"
+                    placeholder="name@example.com"
+                    error={!!errors.Email}
+                    helperText={errors.Email?.message}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <EmailOutlinedIcon color="action" />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Fade>
 
-              <Box sx={{ textAlign: 'center', mt: 1 }}>
-                <Typography variant="body2" color="text.secondary">
-                  {t("Don't have an account?")}{' '}
-                  <Link to="/register" style={{ color: theme.palette.primary.main, fontWeight: 600, textDecoration: 'none' }}>
-                    {t('Create an account')}
-                  </Link>
-                </Typography>
+                <Fade in timeout={1400}>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                    <TextField
+                      fullWidth
+                      {...register("Password")}
+                      label={t('Password')}
+                      type={showPassword ? 'text' : 'password'}
+                      variant="outlined"
+                      placeholder="********"
+                      error={!!errors.Password}
+                      helperText={errors.Password?.message}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <LockOutlinedIcon color="action" />
+                          </InputAdornment>
+                        ),
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={handleClickShowPassword}
+                              onMouseDown={handleMouseDownPassword}
+                              edge="end"
+                            >
+                              {showPassword ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                          </InputAdornment>
+                        )
+                      }}
+                    />
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 0.5 }}>
+                      <Link
+                        to="/resetPassword"
+                        onClick={handleForgotPasswordClick}
+                        style={{ fontSize: '0.875rem', fontWeight: 500, color: theme.palette.primary.main, textDecoration: 'none' }}
+                      >
+                        {t('Forgot Password?')}
+                      </Link>
+                    </Box>
+                  </Box>
+                </Fade>
+
+                <Fade in timeout={1600}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={rememberMe}
+                        onChange={(e) => setRememberMe(e.target.checked)}
+                        sx={{
+                          color: 'text.secondary',
+                          '&.Mui-checked': { color: 'primary.main' }
+                        }}
+                      />
+                    }
+                    label={
+                      <Typography variant="body2" color="text.secondary">
+                        {t('Remember me for 30 days')}
+                      </Typography>
+                    }
+                    sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}
+                  />
+                </Fade>
+
+                <Fade in timeout={1800}>
+                  <Button
+                    variant="contained"
+                    fullWidth
+                    type="submit"
+                    size="large"
+                    disabled={isSubmitting || !isValid}
+                    sx={{
+                      py: 1.6,
+                      mt: 0.5,
+                      borderRadius: 2.5,
+                      fontWeight: 600,
+                      fontSize: '1rem',
+                      textTransform: 'none',
+                      boxShadow: isValid ? `0 8px 20px ${theme.palette.primary.main}40` : 'none',
+                      '&:hover': {
+                        boxShadow: isValid ? `0 12px 24px ${theme.palette.primary.main}50` : 'none'
+                      }
+                    }}
+                  >
+                    {isSubmitting ? (
+                      <CircularProgress size={24} color="inherit" />
+                    ) : (
+                      t('Sign In')
+                    )}
+                  </Button>
+                </Fade>
+
+                <Fade in timeout={2000}>
+                  <Box sx={{ textAlign: 'center', mt: 1 }}>
+                    <Typography variant="body2" color="text.secondary">
+                      {t("Don't have an account?")}{' '}
+                      <Link to="/register" style={{ color: theme.palette.primary.main, fontWeight: 600, textDecoration: 'none' }}>
+                        {t('Create an account')}
+                      </Link>
+                    </Typography>
+                  </Box>
+                </Fade>
               </Box>
-            </Box>
-          </Paper>
+            </Paper>
+          </Slide>
 
-          <Typography variant="caption" color="text.secondary" sx={{ opacity: 0.8 ,display:'flex',alignItems:'center',justifyContent:'center' }}>
-            &copy; {new Date().getFullYear()} Lumina Luxe. {t('All rights reserved.')}
-          </Typography>
+          <Fade in timeout={2200}>
+            <Typography variant="caption" color="text.secondary" sx={{ opacity: 0.8 ,display:'flex',alignItems:'center',justifyContent:'center' }}>
+              &copy; {new Date().getFullYear()} Lumina Luxe. {t('All rights reserved.')}
+            </Typography>
+          </Fade>
         </Stack>
       </Container>
     </Box>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Container, Typography, Button, Paper, useTheme, Stack } from '@mui/material'
+import { Box, Container, Typography, Button, Paper, useTheme, Stack, Fade, Zoom, Slide, Grow } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { alpha } from '@mui/material/styles'
@@ -55,130 +55,140 @@ export default function NotFound() {
           textAlign: 'center'
         }}
       >
-        <Box
-          sx={{
-            position: 'relative',
-            mb: 3,
-            mx: 'auto',
-            maxWidth: 400,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}
-        >
-          <Typography
-            variant="h1"
-            sx={{
-              fontSize: { xs: '6.5rem', sm: '9rem', md: '11rem' },
-              fontWeight: 900,
-              color: alpha(theme.palette.text.primary, 0.06),
-              letterSpacing: '-5px',
-              position: 'relative',
-              zIndex: 1,
-              userSelect: 'none'
-            }}
-          >
-            404
-          </Typography>
+        <Fade in timeout={600}>
           <Box
             sx={{
-              position: 'absolute',
-              top: { xs: 10, md: 15 },
-              right: isRtl ? 'auto' : { xs: 15, md: 25 },
-              left: isRtl ? { xs: 15, md: 25 } : 'auto',
-              width: { xs: 50, md: 75 },
-              height: { xs: 50, md: 75 },
-              borderRadius: '50%',
-              backgroundColor: alpha(theme.palette.primary.main, 0.15),
-              filter: 'blur(8px)',
-              zIndex: 0
-            }}
-          />
-        </Box>
-
-        <Typography
-          variant="h3"
-          component="h1"
-          sx={{
-            fontWeight: 700,
-            color: 'text.primary',
-            mb: 1.5,
-            fontSize: { xs: '1.75rem', sm: '2.25rem', md: '2.5rem' }
-          }}
-        >
-          {t('Lost in Luxury?')}
-        </Typography>
-
-        <Typography
-          variant="body1"
-          sx={{
-            mb: 5,
-            maxWidth: 520,
-            mx: 'auto',
-            lineHeight: 1.6,
-            px: 2,
-            color: 'text.secondary',
-            fontSize: { xs: '0.95rem', md: '1rem' }
-          }}
-        >
-          {t('The page you are looking for might have been moved, removed, or is temporarily unavailable.')}
-        </Typography>
-
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: { xs: 'column', sm: 'row' },
-            gap: 2,
-            justifyContent: 'center',
-            alignItems: 'center',
-            mb: 6,
-            width: '100%',
-            maxWidth: 500
-          }}
-        >
-          <Button
-            component={Link}
-            to="/"
-            variant="contained"
-            size="large"
-            disableElevation
-            sx={{
-              px: 4,
-              py: 1.5,
-              borderRadius: 2.5,
-              textTransform: 'none',
-              fontWeight: 600,
-              width: { xs: '100%', sm: 'auto' },
-              flex: 1
+              position: 'relative',
+              mb: 3,
+              mx: 'auto',
+              maxWidth: 400,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center'
             }}
           >
-            {t('Back to Home')}
-          </Button>
+            <Zoom in timeout={1000}>
+              <Typography
+                variant="h1"
+                sx={{
+                  fontSize: { xs: '6.5rem', sm: '9rem', md: '11rem' },
+                  fontWeight: 900,
+                  color: alpha(theme.palette.text.primary, 0.06),
+                  letterSpacing: '-5px',
+                  position: 'relative',
+                  zIndex: 1,
+                  userSelect: 'none'
+                }}
+              >
+                404
+              </Typography>
+            </Zoom>
+            <Box
+              sx={{
+                position: 'absolute',
+                top: { xs: 10, md: 15 },
+                right: isRtl ? 'auto' : { xs: 15, md: 25 },
+                left: isRtl ? { xs: 15, md: 25 } : 'auto',
+                width: { xs: 50, md: 75 },
+                height: { xs: 50, md: 75 },
+                borderRadius: '50%',
+                backgroundColor: alpha(theme.palette.primary.main, 0.15),
+                filter: 'blur(8px)',
+                zIndex: 0
+              }}
+            />
+          </Box>
+        </Fade>
 
-          <Button
-            component={Link}
-            to="/categories"
-            variant="outlined"
-            size="large"
+        <Fade in timeout={800}>
+          <Typography
+            variant="h3"
+            component="h1"
             sx={{
-              px: 4,
-              py: 1.5,
-              borderRadius: 2.5,
-              textTransform: 'none',
-              fontWeight: 600,
-              borderColor: theme.palette.divider,
+              fontWeight: 700,
               color: 'text.primary',
-              width: { xs: '100%', sm: 'auto' },
-              flex: 1,
-              '&:hover': {
-                borderColor: theme.palette.primary.main,
-                bgcolor: alpha(theme.palette.primary.main, 0.04)
-              }
+              mb: 1.5,
+              fontSize: { xs: '1.75rem', sm: '2.25rem', md: '2.5rem' }
             }}
           >
-            {t('Browse Categories')}
-          </Button>
-        </Box>
+            {t('Lost in Luxury?')}
+          </Typography>
+        </Fade>
+
+        <Fade in timeout={1000}>
+          <Typography
+            variant="body1"
+            sx={{
+              mb: 5,
+              maxWidth: 520,
+              mx: 'auto',
+              lineHeight: 1.6,
+              px: 2,
+              color: 'text.secondary',
+              fontSize: { xs: '0.95rem', md: '1rem' }
+            }}
+          >
+            {t('The page you are looking for might have been moved, removed, or is temporarily unavailable.')}
+          </Typography>
+        </Fade>
+
+        <Fade in timeout={1200}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: { xs: 'column', sm: 'row' },
+              gap: 2,
+              justifyContent: 'center',
+              alignItems: 'center',
+              mb: 6,
+              width: '100%',
+              maxWidth: 500
+            }}
+          >
+            <Button
+              component={Link}
+              to="/"
+              variant="contained"
+              size="large"
+              disableElevation
+              sx={{
+                px: 4,
+                py: 1.5,
+                borderRadius: 2.5,
+                textTransform: 'none',
+                fontWeight: 600,
+                width: { xs: '100%', sm: 'auto' },
+                flex: 1
+              }}
+            >
+              {t('Back to Home')}
+            </Button>
+
+            <Button
+              component={Link}
+              to="/categories"
+              variant="outlined"
+              size="large"
+              sx={{
+                px: 4,
+                py: 1.5,
+                borderRadius: 2.5,
+                textTransform: 'none',
+                fontWeight: 600,
+                borderColor: theme.palette.divider,
+                color: 'text.primary',
+                width: { xs: '100%', sm: 'auto' },
+                flex: 1,
+                '&:hover': {
+                  borderColor: theme.palette.primary.main,
+                  bgcolor: alpha(theme.palette.primary.main, 0.04)
+                }
+              }}
+            >
+              {t('Browse Categories')}
+            </Button>
+          </Box>
+        </Fade>
 
         <Box
           sx={{
@@ -194,37 +204,38 @@ export default function NotFound() {
           }}
         >
           {quickLinks.map((item, idx) => (
-            <Paper
-              key={idx}
-              elevation={0}
-              component={Link}
-              to={item.to}
-              sx={{
-                p: 3,
-                borderRadius: 3,
-                border: `1px solid ${theme.palette.divider}`,
-                textAlign: isRtl ? 'right' : 'left',
-                bgcolor: 'background.paper',
-                textDecoration: 'none',
-                transition: 'all 0.2s ease',
-                display: 'flex',
-                flexDirection: 'column',
-                '&:hover': {
-                  borderColor: theme.palette.primary.main,
-                  transform: 'translateY(-3px)'
-                }
-              }}
-            >
-              <Box sx={{ mb: 1.5, display: 'flex', alignItems: 'center' }}>
-                {item.icon}
-              </Box>
-              <Typography variant="subtitle1" sx={{ fontWeight: 600, color: 'text.primary', mb: 0.5 }}>
-                {item.title}
-              </Typography>
-              <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '0.875rem', lineHeight: 1.5 }}>
-                {item.description}
-              </Typography>
-            </Paper>
+            <Grow in timeout={600 + idx * 200} key={idx}>
+              <Paper
+                elevation={0}
+                component={Link}
+                to={item.to}
+                sx={{
+                  p: 3,
+                  borderRadius: 3,
+                  border: `1px solid ${theme.palette.divider}`,
+                  textAlign: isRtl ? 'right' : 'left',
+                  bgcolor: 'background.paper',
+                  textDecoration: 'none',
+                  transition: 'all 0.2s ease',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  '&:hover': {
+                    borderColor: theme.palette.primary.main,
+                    transform: 'translateY(-3px)'
+                  }
+                }}
+              >
+                <Box sx={{ mb: 1.5, display: 'flex', alignItems: 'center' }}>
+                  {item.icon}
+                </Box>
+                <Typography variant="subtitle1" sx={{ fontWeight: 600, color: 'text.primary', mb: 0.5 }}>
+                  {item.title}
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '0.875rem', lineHeight: 1.5 }}>
+                  {item.description}
+                </Typography>
+              </Paper>
+            </Grow>
           ))}
         </Box>
       </Container>
