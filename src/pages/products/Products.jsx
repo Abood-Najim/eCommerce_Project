@@ -13,8 +13,9 @@ import {
   FormControl,
   Checkbox,
   FormControlLabel,
+  Radio,
+  RadioGroup,
   TextField,
-  InputAdornment,
   Divider,
   Rating,
   Drawer,
@@ -23,7 +24,7 @@ import {
   alpha,
   Badge,
   Tooltip,
-   Fade
+  Fade
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import i18n from '../../i18next'
@@ -305,18 +306,21 @@ export default function ProductsPage() {
       <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1.5, fontSize: '0.85rem', letterSpacing: '0.5px', color: 'text.secondary', textTransform: 'uppercase' }}>
         {t('Rating')}
       </Typography>
-      <Stack spacing={0.5} sx={{ mb: 3 }}>
+      <RadioGroup
+        value={selectedRating}
+        onChange={(e) => setSelectedRating(e.target.value)}
+        sx={{ mb: 3 }}
+      >
         {[4, 3, 2].map((stars) => {
           const isSelected = selectedRating === String(stars)
           return (
             <FormControlLabel
               key={stars}
+              value={String(stars)}
               control={
-                <Checkbox
+                <Radio
                   size="small"
                   sx={{ p: 0.5 }}
-                  checked={isSelected}
-                  onChange={() => setSelectedRating(isSelected ? '' : String(stars))}
                 />
               }
               label={
@@ -341,7 +345,7 @@ export default function ProductsPage() {
             />
           )
         })}
-      </Stack>
+      </RadioGroup>
 
       <Stack spacing={1.5} sx={{ mt: 2 }}>
         <Tooltip title={isApplyDisabled ? t('Select a filter to apply') : ''} arrow placement="top">

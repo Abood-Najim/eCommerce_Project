@@ -430,6 +430,7 @@ i18n
           "FEATURE 01": "FEATURE 01",
           "FEATURE 02": "FEATURE 02",
           "FEATURE 03": "FEATURE 03",
+          "No active filters to clear": "No active filters to clear",
         }
       },
       ar: {
@@ -867,6 +868,8 @@ i18n
           "50K+": "+٥٠ ألف",
           "24/7": "٢٤/٧",
           "2-Year": "سنتان",
+          "No active filters to clear": "لا توجد فلاتر نشطة لمسحها",
+          
         }
       },
       fallbackLng: "en",

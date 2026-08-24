@@ -9,13 +9,6 @@ const axiosInstance = axios.create(
 );
 axiosInstance.interceptors.request.use((config)=>{
   config.headers["Accept-Language"] = i18n.language;
-  config.params = {
-      ...config.params,
-      lang: i18n.language
-    };
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
+  return config;
 })
 export default axiosInstance;
