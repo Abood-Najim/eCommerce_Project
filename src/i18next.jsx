@@ -431,6 +431,8 @@ i18n
           "FEATURE 02": "FEATURE 02",
           "FEATURE 03": "FEATURE 03",
           "No active filters to clear": "No active filters to clear",
+          "Please login to access this page":"Please login to access this page",
+          
         }
       },
       ar: {
@@ -869,7 +871,7 @@ i18n
           "24/7": "٢٤/٧",
           "2-Year": "سنتان",
           "No active filters to clear": "لا توجد فلاتر نشطة لمسحها",
-          
+          "Please login to access this page":"الرجاء تسجيل الدخول للوصول الى هذه الصفحة"
         }
       },
       fallbackLng: "en",

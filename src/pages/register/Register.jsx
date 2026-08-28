@@ -6,10 +6,6 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import registerSchema from '../../validations/RegisterSchema'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined'
-import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined'
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
-import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
