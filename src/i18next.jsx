@@ -432,6 +432,10 @@ i18n
           "FEATURE 03": "FEATURE 03",
           "No active filters to clear": "No active filters to clear",
           "Please login to access this page":"Please login to access this page",
+          "You are currently offline. Some features may be unavailable.":"You are currently offline. Some features may be unavailable.",
+          "Offline - Cannot Checkout":"Offline - Cannot Checkout",
+          "Offline":"Offline",
+          "Processing...":"Processing...",
           
         }
       },
@@ -871,7 +875,13 @@ i18n
           "24/7": "٢٤/٧",
           "2-Year": "سنتان",
           "No active filters to clear": "لا توجد فلاتر نشطة لمسحها",
-          "Please login to access this page":"الرجاء تسجيل الدخول للوصول الى هذه الصفحة"
+          "Please login to access this page":"الرجاء تسجيل الدخول للوصول الى هذه الصفحة",
+          "You are currently offline. Some features may be unavailable.":"أنت غير متصل بالإنترنت حاليًا. قد لا تتوفر بعض الميزات.",
+          "Recent Orders":"احدث الطلبات",
+          "Offline - Cannot Checkout":"غير متصل - لا يمكن إتمام عملية الشراء",
+          "Offline":"غير متصل",
+          "Processing...":"الرجاء الانتظار",
+          
         }
       },
       fallbackLng: "en",

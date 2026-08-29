@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
 import authAxiosInstance from '../api/authAxiosInstance'
-import i18n from '../i18next'
 
 export default function useProfile() {
   const getProfile = async () => {
@@ -9,7 +8,7 @@ export default function useProfile() {
   }
 
   const query = useQuery({
-    queryKey: ['profile', i18n.language],
+    queryKey: ['profile'],
     queryFn: getProfile,
     staleTime: 1000 * 60 * 5
   })

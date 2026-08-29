@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import useProducts from '../../hooks/useProducts';
 import useProductsByCategory from '../../hooks/useProductsByCategory';
+import useNetworkStatus from '../../hooks/useNetworkStatus'
 import { 
   Box, 
   Card, 
@@ -42,7 +43,7 @@ const Products = ({
   const [priceError, setPriceError] = useState('');
   const token = useAuthStore((state) => state.token);
   const openLoginPrompt = useLoginPromptStore((state) => state.openLoginPrompt);
-
+  const isOnline = useNetworkStatus();
   const { data, isLoading, isError, error } = categoryId
     ? useProductsByCategory(categoryId)
     : useProducts(page, limit, sortBy, ascending);
@@ -55,6 +56,7 @@ const Products = ({
 
   const handleAddToCart = (productId, e) => {
     e.preventDefault();
+    if (!isOnline) return;
     if (!token) {
       toast.warning(t('Please login to add items to your cart.'));
       openLoginPrompt();
@@ -75,6 +77,7 @@ const Products = ({
 
   const handleAddToWishlist = (e) => {
     e.preventDefault();
+    if (!isOnline) return;
     if (!token) {
       toast.warning(t('Please login to save items to your wishlist.'));
       openLoginPrompt();
@@ -239,6 +242,7 @@ const Products = ({
                 <IconButton
                   size="small"
                   onClick={handleAddToWishlist}
+                  disabled={!isOnline}
                   sx={{
                     position: 'absolute',
                     top: 10,
@@ -341,6 +345,7 @@ const Products = ({
                       endIcon={isRtl ? iconElement : undefined}
                       fullWidth
                       disableElevation
+                      disabled={!isOnline}
                       sx={{
                         textTransform: 'none',
                         borderRadius: 2,
@@ -354,7 +359,7 @@ const Products = ({
                       }}
                       onClick={(e) => handleAddToCart(product.id, e)}
                     >
-                      {t('Add to Cart')}
+                      {!isOnline ? t('Offline') : t('Add to Cart')}
                     </Button>
                   </Box>
                 </CardContent>

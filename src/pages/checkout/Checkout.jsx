@@ -25,6 +25,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import useCheckout from '../../hooks/useCheckout'
+import useNetworkStatus from '../../hooks/useNetworkStatus'
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined'
 import PaymentsIcon from '@mui/icons-material/Payments'
 import CreditCardIcon from '@mui/icons-material/CreditCard'
@@ -36,7 +37,7 @@ export default function Checkout() {
   const theme = useTheme()
   const navigate = useNavigate()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
-
+  const isOnline = useNetworkStatus()
   const { data, isLoading, isError, error } = useCart()
   const { mutate: checkOut, isPending } = useCheckout()
   const [paymentMethod, setPaymentMethod] = useState('')
@@ -275,7 +276,7 @@ export default function Checkout() {
             </Button>
             <Button
               variant="contained"
-              disabled={!paymentMethod || isPending}
+              disabled={!isOnline || !paymentMethod || isPending}
               onClick={handleCheckout}
               sx={{
                 textTransform: 'none',
@@ -286,6 +287,7 @@ export default function Checkout() {
                 fontWeight: 600
               }}
             >
+              {!isOnline ? t('Offline') : isPending ? t('Processing...') : t('Pay Now')}
               {t('Pay Now')}
             </Button>
           </Box>

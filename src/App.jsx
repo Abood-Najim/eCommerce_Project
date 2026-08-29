@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import router from './routes'
 import { RouterProvider } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
@@ -10,6 +10,7 @@ import createCache from '@emotion/cache'
 import rtlPlugin from 'stylis-plugin-rtl'
 import { prefixer } from 'stylis'
 import getTheme from './theme'
+import OfflineBanner from './components/common/OfflineBanner'
 import { CssBaseline } from '@mui/material'
 import useThemeStore from './store/useThemeStore'
 import { ToastContainer } from 'react-toastify'
@@ -30,13 +31,30 @@ export default function App() {
   const isRtl = i18n.language === 'ar'
   const dir = isRtl ? 'rtl' : 'ltr'
 
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            retry: false,
+            refetchOnWindowFocus: false,
+            networkMode: 'always'
+          },
+          mutations: {
+            retry: false,
+            networkMode: 'always'
+          }
+        }
+      })
+  )
+
   useEffect(() => {
     document.documentElement.dir = dir
   }, [dir])
 
-  const queryClient = new QueryClient()
-
   return (
+  <>
+    <OfflineBanner />
     <QueryClientProvider client={queryClient}>
       <CacheProvider value={isRtl ? cacheRtl : cacheLtr}>
         <ThemeProvider theme={getTheme(mode, dir)}>
@@ -53,9 +71,11 @@ export default function App() {
             draggable
             pauseOnHover
             theme={mode === 'dark' ? 'dark' : 'light'}
-          />
+            
+            />
         </ThemeProvider>
       </CacheProvider>
     </QueryClientProvider>
+  </>
   )
 }

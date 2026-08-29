@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import useAuthStore from '../../store/useAuthStore'
 import useLoginPromptStore from '../../store/useLoginPromptStore'
 import useCart from '../../hooks/useCart'
+import useNetworkStatus from '../../hooks/useNetworkStatus'
 import Typography from '@mui/material/Typography'
 import {
   Box,
@@ -38,6 +39,7 @@ import useClearCart from '../../hooks/useClearCart'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined'
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined'
 import ImageIcon from '@mui/icons-material/Image'
@@ -46,6 +48,7 @@ export default function Cart() {
   const navigate = useNavigate()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const isOnline = useNetworkStatus()
   const { data, isLoading, isError, error } = useCart()
   const { mutate: removeItem, isPending } = useRemoveFromCart()
   const { mutate: updateQuantity, isPending: updateQuantityPend } = useUpdateQuantity()
@@ -400,9 +403,10 @@ export default function Cart() {
                   variant="contained"
                   fullWidth
                   onClick={handleCheckout}
+                  disabled={!isOnline || isPending}
                   sx={{ textTransform: 'none', borderRadius: 2, py: 1.2, fontWeight: 600 }}
                 >
-                  {t('Proceed To Checkout')}
+                  {!isOnline ? t('Offline - Cannot Checkout') : t('Proceed To Checkout')}
                 </Button>
                 <Button
                   variant="outlined"

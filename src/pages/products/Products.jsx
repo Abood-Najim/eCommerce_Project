@@ -35,6 +35,7 @@ import FilterListIcon from '@mui/icons-material/FilterList'
 import CloseIcon from '@mui/icons-material/Close'
 import ProductsComponent from '../../components/products/Products'
 import useCategories from '../../hooks/useCategories'
+import useNetworkStatus from '../../hooks/useNetworkStatus'
 
 export default function ProductsPage() {
   const { t } = useTranslation()
@@ -54,7 +55,7 @@ export default function ProductsPage() {
   const [ascending, setAscending] = useState(false)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [priceError, setPriceError] = useState('')
-
+  const isOnline = useNetworkStatus()
   const [selectedCategory, setSelectedCategory] = useState(urlCategoryId || '')
   const [minPrice, setMinPrice] = useState(urlMinPrice || '')
   const [maxPrice, setMaxPrice] = useState(urlMaxPrice || '')
@@ -354,7 +355,7 @@ export default function ProductsPage() {
               variant="contained"
               fullWidth
               disableElevation
-              disabled={isApplyDisabled}
+              disabled={!isOnline || isApplyDisabled}
               onClick={handleApplyFilters}
               sx={{ textTransform: 'none', borderRadius: 2, py: 1.1, fontWeight: 600, fontSize: '0.875rem' }}
             >
@@ -368,7 +369,7 @@ export default function ProductsPage() {
             <Button
               variant="outlined"
               fullWidth
-              disabled={isClearDisabled}
+              disabled={!isOnline || isClearDisabled}
               onClick={handleClearFilters}
               sx={{
                 textTransform: 'none',

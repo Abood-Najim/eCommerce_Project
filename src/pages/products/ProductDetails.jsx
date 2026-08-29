@@ -33,6 +33,7 @@ import {
 import useAddToCart from '../../hooks/useAddToCart'
 import useAddReview from '../../hooks/useAddReview'
 import useAuthStore from '../../store/useAuthStore'
+import useNetworkStatus from '../../hooks/useNetworkStatus'
 import useLoginPromptStore from '../../store/useLoginPromptStore'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
@@ -148,7 +149,7 @@ export default function ProductDetails() {
   const { mutate: addReview, isPending: reviewPending } = useAddReview()
   const { data, isLoading, isError, error } = useProduct(id)
   const { data: relatedData, isLoading: isRelatedLoading } = useProducts({ limit: 4 })
-
+  const isOnline = useNetworkStatus()
   const [quantity, setQuantity] = useState(1)
   const [tabValue, setTabValue] = useState(0)
   const [reviewRating, setReviewRating] = useState(0)
@@ -826,7 +827,7 @@ export default function ProductDetails() {
                     >
                       <IconButton
                         size="small"
-                        disabled={quantity <= 1}
+                        disabled={!isOnline || quantity <= 1}
                         onClick={() => handleQuantityChange(-1)}
                         sx={{ px: 1.5, py: 1, borderRadius: 0, '&:hover': { bgcolor: 'action.hover' } }}
                       >
@@ -838,7 +839,7 @@ export default function ProductDetails() {
                       <IconButton
                         size="small"
                         onClick={() => handleQuantityChange(1)}
-                        disabled={quantity >= (product.quantity || 99)}
+                        disabled={!isOnline || quantity >= (product.quantity || 99)}
                         sx={{ px: 1.5, py: 1, borderRadius: 0, '&:hover': { bgcolor: 'action.hover' } }}
                       >
                         <AddIcon fontSize="small" />
@@ -855,7 +856,7 @@ export default function ProductDetails() {
                     disableElevation
                     startIcon={product.quantity > 0 ? <ShoppingBagOutlinedIcon /> : null}
                     onClick={handleAddToCart}
-                    disabled={product.quantity === 0 || cartPending}
+                    disabled={!isOnline || cartPending || product.quantity === 0}
                     sx={{
                       py: 1.5,
                       textTransform: 'none',
@@ -961,7 +962,7 @@ export default function ProductDetails() {
               disableElevation
               startIcon={product.quantity > 0 ? <ShoppingBagOutlinedIcon /> : null}
               onClick={handleAddToCart}
-              disabled={product.quantity === 0 || cartPending}
+              disabled={!isOnline || cartPending || product.quantity === 0}
               sx={{
                 textTransform: 'none',
                 borderRadius: 2,

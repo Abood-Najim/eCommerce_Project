@@ -14,6 +14,7 @@ import updateProfileSchema from '../../validations/updateProfileSchema'
 import updateEmailSchema from '../../validations/updateEmailSchema'
 import changePasswordSchema from '../../validations/changePasswordSchema'
 import useProfile from '../../hooks/useProfile'
+import useNetworkStatus from '../../hooks/useNetworkStatus'
 import useUpdateProfile from '../../hooks/useUpdateProfile'
 import useUpdateEmail from '../../hooks/useUpdateEmail'
 import useChangePassword from '../../hooks/useChangePassword'
@@ -38,7 +39,7 @@ export default function ProfileInfo() {
   const [open, setOpen] = useState(false)
   const [emailOpen, setEmailOpen] = useState(false)
   const [passwordOpen, setPasswordOpen] = useState(false)
-
+  const isOnline = useNetworkStatus()
   const { data, isLoading, isError, error } = useProfile()
   const { mutate: updateProfile, isPending } = useUpdateProfile()
   const { mutate: updateEmail, isPending: emailPending } = useUpdateEmail()
@@ -391,7 +392,7 @@ export default function ProfileInfo() {
                 <Button
                   type="submit"
                   variant="contained"
-                  disabled={isPending || !profileForm.formState.isValid}
+                  disabled={!isOnline || isPending || !profileForm.formState.isValid}
                   sx={{ mt: 1, textTransform: 'none', borderRadius: 2 }}
                 >
                   {isPending ? <CircularProgress size={24} color="inherit" /> : t('Save Changes')}
@@ -428,7 +429,7 @@ export default function ProfileInfo() {
                 <Button
                   type="submit"
                   variant="contained"
-                  disabled={emailPending || !emailForm.formState.isValid}
+                  disabled={!isOnline || emailPending || !emailForm.formState.isValid}
                   sx={{ mt: 1, textTransform: 'none', borderRadius: 2 }}
                 >
                   {emailPending ? <CircularProgress size={24} color="inherit" /> : t('Save Changes')}
@@ -513,7 +514,7 @@ export default function ProfileInfo() {
                 <Button
                   type="submit"
                   variant="contained"
-                  disabled={passwordPending || !passwordForm.formState.isValid}
+                  disabled={!isOnline || passwordPending || !passwordForm.formState.isValid}
                   sx={{ mt: 1, textTransform: 'none', borderRadius: 2 }}
                 >
                   {passwordPending ? <CircularProgress size={24} color="inherit" /> : t('Change Password')}
